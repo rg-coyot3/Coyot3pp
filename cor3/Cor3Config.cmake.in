@@ -1,2 +1,0 @@
-include(${CMAKE_CURRENT_LIST_DIR}/Coyot3ppCor3ConfigVersion.cmake)
-include(${CMAKE_CURRENT_LIST_DIR}/Coyot3ppCor3Targets.cmake)

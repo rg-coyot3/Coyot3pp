@@ -1,0 +1,1222 @@
+/**
+* 
+* 
+* - ISFM -
+*   File: MqttManagerBase.cpp
+*   2021 
+*   Project : 
+* 
+*   Dev/Maintain : Ricardo GONZALEZ ALMEIDA
+*     ricardogonalm@ltlab.net
+* 
+*   gplv2 +
+* 
+* 
+*/
+
+#include <Coyot3pp/Mqtt/Gateway/MqttManagerBase.hpp>
+
+
+
+
+
+namespace milla{
+namespace connapp{
+namespace mqtt{
+
+const bool    MqttManagerBase::AcrpConfig::Defaults::acrp_is_active                          = true;
+const char*   MqttManagerBase::AcrpConfig::Defaults::acrp_default_posftix_request            = "crp_req";
+const char*   MqttManagerBase::AcrpConfig::Defaults::acrp_default_postfix_response           = "crp_req";
+const int64_t MqttManagerBase::AcrpConfig::Defaults::acrp_timeout_packet_resend              = 1000;
+const int64_t MqttManagerBase::AcrpConfig::Defaults::acrp_timeout_packet_send_failed         = 15000;
+const int64_t MqttManagerBase::AcrpConfig::Defaults::acrp_automatic_resend_time              = 13999;
+const int64_t MqttManagerBase::AcrpConfig::Defaults::acrp_timeout_receiver_alive_checkpacket = 15000;
+const int64_t MqttManagerBase::AcrpConfig::Defaults::acrp_noprot_msg_noactivity_timeout      = 30000;
+const int64_t MqttManagerBase::AcrpConfig::Defaults::acrp_publish_dynop_interval             = 2000;
+
+
+
+const char* MqttManagerBase::AcrpConfig::JsField::acrp_is_active                          = "acrp_is_active";
+const char* MqttManagerBase::AcrpConfig::JsField::acrp_default_posftix_request            = "acrp_default_posftix_request";
+const char* MqttManagerBase::AcrpConfig::JsField::acrp_default_postfix_response           = "acrp_default_postfix_response";
+const char* MqttManagerBase::AcrpConfig::JsField::acrp_timeout_packet_resend              = "acrp_timeout_packet_resend";
+const char* MqttManagerBase::AcrpConfig::JsField::acrp_timeout_packet_send_failed         = "acrp_timeout_packet_send_failed";
+const char* MqttManagerBase::AcrpConfig::JsField::acrp_automatic_resend_time              = "acrp_automatic_resend_time";
+const char* MqttManagerBase::AcrpConfig::JsField::acrp_timeout_receiver_alive_checkpacket = "acrp_timeout_receiver_alive_checkpacket";
+const char* MqttManagerBase::AcrpConfig::JsField::acrp_noprot_msg_noactivity_timeout      = "acrp_noprot_msg_noactivity_timeout";
+const char* MqttManagerBase::AcrpConfig::JsField::acrp_publish_dynop_interval             = "acrp_publish_dynop_interval";
+
+
+MqttManagerBase::AcrpConfig::AcrpConfig()
+{
+  acrp_is_active = Defaults::acrp_is_active;
+  acrp_timeout_packet_resend = Defaults::acrp_timeout_packet_resend;
+  acrp_timeout_packet_send_failed = Defaults::acrp_timeout_packet_send_failed;
+  acrp_automatic_resend_time = Defaults::acrp_automatic_resend_time;
+  acrp_timeout_receiver_alive_checkpacket = Defaults::acrp_timeout_receiver_alive_checkpacket;
+  acrp_noprot_msg_noactivity_timeout = Defaults::acrp_noprot_msg_noactivity_timeout;
+  acrp_publish_dynop_interval = Defaults::acrp_publish_dynop_interval;
+  acrp_default_posftix_request = Defaults::acrp_default_posftix_request;
+  acrp_default_postfix_response = Defaults::acrp_default_postfix_response;
+}
+MqttManagerBase::AcrpConfig::AcrpConfig(const MqttManagerBase::AcrpConfig& o)
+{
+  *this = o;
+}
+MqttManagerBase::AcrpConfig::~AcrpConfig(){}
+
+MqttManagerBase::AcrpConfig& MqttManagerBase::AcrpConfig::operator=(const MqttManagerBase::AcrpConfig& o)
+{
+  acrp_is_active = o.acrp_is_active;
+  acrp_timeout_packet_resend = o.acrp_timeout_packet_resend;
+  acrp_timeout_packet_send_failed = o.acrp_timeout_packet_send_failed;
+  acrp_automatic_resend_time = o.acrp_automatic_resend_time;
+  acrp_timeout_receiver_alive_checkpacket = o.acrp_timeout_receiver_alive_checkpacket;
+  acrp_noprot_msg_noactivity_timeout = o.acrp_noprot_msg_noactivity_timeout;
+  acrp_publish_dynop_interval = o.acrp_publish_dynop_interval;
+  acrp_default_posftix_request = o.acrp_default_posftix_request;
+  acrp_default_postfix_response = o.acrp_default_postfix_response;
+
+  return *this;
+}
+bool MqttManagerBase::AcrpConfig::operator==(const MqttManagerBase::AcrpConfig& o)
+{
+  return (
+       (acrp_is_active == o.acrp_is_active)
+    && (acrp_timeout_packet_resend == o.acrp_timeout_packet_resend)
+    && (acrp_timeout_packet_send_failed == o.acrp_timeout_packet_send_failed)
+    && (acrp_automatic_resend_time == o.acrp_automatic_resend_time)
+    && (acrp_timeout_receiver_alive_checkpacket == o.acrp_timeout_receiver_alive_checkpacket)
+    && (acrp_noprot_msg_noactivity_timeout == o.acrp_noprot_msg_noactivity_timeout)
+    && (acrp_publish_dynop_interval == o.acrp_publish_dynop_interval)
+    && (acrp_default_posftix_request.compare(o.acrp_default_posftix_request) == 0)
+    && (acrp_default_postfix_response.compare(o.acrp_default_postfix_response) == 0)
+  );
+}
+
+bool        MqttManagerBase::AcrpConfig::fromJson(const Json::Value& o)
+{
+  if(
+         !(coyot3::tools::json_contains_member(o,JsField::acrp_is_active))
+      || !(coyot3::tools::json_contains_member(o,JsField::acrp_timeout_packet_resend))
+      || !(coyot3::tools::json_contains_member(o,JsField::acrp_timeout_packet_send_failed))
+      || !(coyot3::tools::json_contains_member(o,JsField::acrp_automatic_resend_time))
+      || !(coyot3::tools::json_contains_member(o,JsField::acrp_timeout_receiver_alive_checkpacket))
+      || !(coyot3::tools::json_contains_member(o,JsField::acrp_noprot_msg_noactivity_timeout))
+      || !(coyot3::tools::json_contains_member(o,JsField::acrp_publish_dynop_interval))
+      || !(coyot3::tools::json_contains_member(o,JsField::acrp_default_posftix_request))
+      || !(coyot3::tools::json_contains_member(o,JsField::acrp_default_postfix_response))
+      
+  ){
+    return false;
+  }
+  try{
+    acrp_is_active = o[JsField::acrp_is_active].asBool();
+    acrp_timeout_packet_resend = o[JsField::acrp_timeout_packet_resend].asLargestInt();
+    acrp_timeout_packet_send_failed = o[JsField::acrp_timeout_packet_send_failed].asLargestInt();
+    acrp_automatic_resend_time = o[JsField::acrp_automatic_resend_time].asLargestInt();
+    acrp_timeout_receiver_alive_checkpacket = o[JsField::acrp_timeout_receiver_alive_checkpacket].asLargestInt();
+    acrp_noprot_msg_noactivity_timeout = o[JsField::acrp_noprot_msg_noactivity_timeout].asLargestInt();
+    acrp_publish_dynop_interval = o[JsField::acrp_publish_dynop_interval].asLargestInt();
+    acrp_default_posftix_request = o[JsField::acrp_default_posftix_request].asString();
+    acrp_default_postfix_response = o[JsField::acrp_default_postfix_response].asString();
+  }catch(const Json::Exception& e)
+  {
+    CLOG_WARN("mqtt-manager-base : config : from-json : error parsing data [" << e.what() << "]");
+    return false;
+  }catch(...){
+    CLOG_WARN("mqtt-manager-base : config : from-json : error parsing data [unknown-exception]");
+    return false;
+  }
+
+  //CLOG_INFO("*** to-delete : acrp_is_active : " << acrp_is_active);
+  //CLOG_INFO("*** to-delete : acrp_timeout_packet_resend : " << acrp_timeout_packet_resend);
+  //CLOG_INFO("*** to-delete : acrp_timeout_packet_send_failed : " << acrp_timeout_packet_send_failed);
+  //CLOG_INFO("*** to-delete : acrp_automatic_resend_time : " << acrp_automatic_resend_time);
+  //CLOG_INFO("*** to-delete : acrp_timeout_receiver_alive_checkpacket : " << acrp_timeout_receiver_alive_checkpacket);
+  //CLOG_INFO("*** to-delete : acrp_noprot_msg_noactivity_timeout : " << acrp_noprot_msg_noactivity_timeout);
+  //CLOG_INFO("*** to-delete : acrp_publish_dynop_interval : " << acrp_publish_dynop_interval);
+  //CLOG_INFO("*** to-delete : acrp_default_posftix_request : " << acrp_default_posftix_request);
+  //CLOG_INFO("*** to-delete : acrp_default_postfix_response : " << acrp_default_postfix_response);
+
+  return true;
+}
+Json::Value MqttManagerBase::AcrpConfig::toJson() const
+{
+  Json::Value js;
+
+  js[JsField::acrp_is_active] = acrp_is_active;
+  js[JsField::acrp_timeout_packet_resend] = static_cast<Json::LargestInt>(acrp_timeout_packet_resend);
+  js[JsField::acrp_timeout_packet_send_failed] = static_cast<Json::LargestInt>(acrp_timeout_packet_send_failed);
+  js[JsField::acrp_automatic_resend_time] = static_cast<Json::LargestInt>(acrp_automatic_resend_time);
+  js[JsField::acrp_timeout_receiver_alive_checkpacket] = static_cast<Json::LargestInt>(acrp_timeout_receiver_alive_checkpacket);
+  js[JsField::acrp_noprot_msg_noactivity_timeout] = static_cast<Json::LargestInt>(acrp_noprot_msg_noactivity_timeout);
+  js[JsField::acrp_publish_dynop_interval] = static_cast<Json::LargestInt>(acrp_publish_dynop_interval);
+  js[JsField::acrp_default_posftix_request] = acrp_default_posftix_request;
+  js[JsField::acrp_default_postfix_response] = acrp_default_postfix_response;
+  return js;
+}
+
+const char* MqttManagerBase::StateToString(State s)
+{
+  switch(s)
+  {
+    case State::CREATED:return "CREATED";break;
+    case State::INITIATED:return "INITIATED";break;
+    case State::STARTED:return "STARTED";break;
+    case State::ERROR:return "ERROR";break;
+    default:
+      return "state-decode-error";
+  }
+}
+
+
+bool MqttManagerBase::AcrpConfig::setAtmiConfig(AcrpTopicManagementInfo::Config& cfg)
+{
+  cfg.acrp_is_active = acrp_is_active; //ignore this parameter
+  cfg.acrp_automatic_resend_time = acrp_automatic_resend_time;
+  cfg.acrp_timeout_packet_resend = acrp_timeout_packet_resend;
+  cfg.acrp_timeout_packet_send_failed = acrp_timeout_packet_send_failed;
+  cfg.acrp_noprot_msg_noactivity_timeout = acrp_noprot_msg_noactivity_timeout;
+  cfg.acrp_publish_dynop_interval = acrp_publish_dynop_interval;
+
+
+
+  //CLOG_INFO("*** to-delete: cfg.acrp_is_active : " << cfg.acrp_is_active );
+  //CLOG_INFO("*** to-delete: cfg.acrp_automatic_resend_time : " << cfg.acrp_automatic_resend_time );
+  //CLOG_INFO("*** to-delete: cfg.acrp_timeout_packet_resend : " << cfg.acrp_timeout_packet_resend );
+  //CLOG_INFO("*** to-delete: cfg.acrp_timeout_packet_send_failed : " << cfg.acrp_timeout_packet_send_failed );
+  //CLOG_INFO("*** to-delete: cfg.acrp_noprot_msg_noactivity_timeout : " << cfg.acrp_noprot_msg_noactivity_timeout );
+  //CLOG_INFO("*** to-delete: cfg.acrp_publish_dynop_interval : " << cfg.acrp_publish_dynop_interval );
+  return true;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+MqttManagerBase::MqttManagerBase(const std::string& name,QObject* parent)
+:QObject(parent)
+,gateway(nullptr)
+,gateway_owner(false)
+
+,manager_name(name)
+,state(State::ERROR)
+
+,acrpConfig()
+
+,timerManagerChecker(nullptr)
+{
+    CLOG_INFO("mqtt-manager-base : constructor : creating instance for manager [" << manager_name << "]");
+    birth_ts = coyot3::tools::get_current_timestamp();    
+
+}
+
+
+MqttManagerBase::~MqttManagerBase()
+{
+  CLOG_INFO("mqtt-manager-base : destructor : destroying instance for manager [" << manager_name <<"]");
+  if((gateway_owner == true) && (gateway != nullptr))
+  {
+    CLOG_INFO("mqtt-manager-base : destructor : this manager owns the mqtt-gateway. Now Destroying");
+    gateway->Stop();
+    delete gateway;
+  }
+  if(timerManagerChecker != nullptr)
+  {
+    timerManagerChecker->stop();
+    delete timerManagerChecker;
+  }
+
+}
+
+
+std::string& MqttManagerBase::Name(){return this->manager_name;}
+
+/**
+ * @brief sets the configuration at the structure from json
+ * 
+ * @param config 
+ * @return true 
+ * @return false 
+ */
+bool MqttManagerBase::setAcrpConfig(const Json::Value& config)
+{
+  CLOG_INFO("MQTT MANAGER BASE : set-acrp-config : setting module acrp-config "
+    "from json");
+  if(!acrpConfig.fromJson(config))
+  {
+    CLOG_WARN("MQTT MANAGER BASE : set-acrp-config : setting module acrp-config "
+    "from json : ERROR");  
+    return false;
+  }
+  CLOG_INFO("MQTT MANAGER BASE : set-acrp-config : setting module acrp-config "
+    "from json : DONE");
+  return true;
+}
+
+bool MqttManagerBase::create_own_gateway(const Json::Value& config)
+{
+  CLOG_DEBUG(3,"MQTT MANAGER BASE : create own gateway : begin");
+  bool res = true;
+  if(gateway != nullptr)
+  {
+    CLOG_WARN("MQTT MANAGER BASE : create own gateway : ERROR : gateway seems "
+      "to be already set!. ");
+    return false;
+  }
+  gateway = new(std::nothrow) MqttGateway(config);
+  if(!gateway)
+  {
+    CLOG_ERROR("MQTT MANAGER BASE : create own gateway : ERROR : IMPOSSIBLE TO"
+      "ALLOCATE GATEWAY! NO MEM?");
+    return false;
+  }
+  gateway_owner = true;
+  CLOG_INFO("MQTT MANAGER BASE : create own gateway : OK");
+  return res;
+}
+
+
+bool MqttManagerBase::set_gateway(MqttGateway* gw)
+{
+  gateway = gw;
+  if(gateway == nullptr)
+  {
+      CLOG_WARN("mqtt-manager-base : set_gateway : unsetting gateway for manager [" 
+        << manager_name << "]");
+      return false;
+  }
+  gateway_owner = false;
+  return true;
+}
+
+bool MqttManagerBase::unset_gateway()
+{
+  
+  if(gateway==nullptr)return false;
+  if(gateway_owner==true)
+  {
+    gateway->Stop();
+    delete gateway;
+    gateway = nullptr;
+    gateway_owner = false;
+    return true;
+  }
+
+  gateway = nullptr;
+  return true;
+}
+
+bool MqttManagerBase::acrp_register_publisher(const std::string& topic_base
+                                    ,bool is_active
+                                    ,const std::string& topic_postfix_req
+                                    ,const std::string& topic_postfix_res)
+{
+  CLOG_DEBUG(3,"mqtt-manager-base : acrp register publisher - no callback : topic "
+    "base [" << topic_base << "], postfix-req[" << topic_postfix_req << "], "
+    "postfix-res[" << topic_postfix_res << "]. IS ACTIVE? : "
+    << (is_active == true?"[true]":"[false]"));
+
+  bool res;
+  
+  res = tmiStack.addPublisher(topic_base
+                    ,topic_postfix_req
+                    ,topic_postfix_res
+                    ,std::bind(&MqttManagerBase::on_publisher_operation_result_callback
+                            ,this
+                            ,std::placeholders::_1
+                            ,std::placeholders::_2
+                            ,std::placeholders::_3));
+  if(!res){
+    CLOG_WARN("mqtt-manager-base : acrp register publisher - no callback : topic "
+      "base [" << topic_base << "] error registering topic!");
+      return false;
+  }
+  acrpConfig.setAtmiConfig(tmiStack.getByBase(topic_base)->getConfig());
+  tmiStack.getByBase(topic_base)->isActive(is_active);
+    
+  CLOG_INFO("mqtt-manager-base : acrp register publisher : topic base [" 
+    << topic_base << "] : registered OK");
+  return true;
+}
+bool MqttManagerBase::acrp_register_publisher(const std::string& topic_base
+                    ,bool is_active
+                    ,AcrpTopicManagementInfo::OnPublisherOperationResultCallbackType onPublishResultCallback
+                    ,const std::string& topic_postfix_req
+                    ,const std::string& topic_postfix_res)
+{
+  CLOG_DEBUG(3,"mqtt-manager-base : acrp register publisher - with callback : topic "
+    "base [" << topic_base << "], postfix-req[" << topic_postfix_req << "], "
+    "postfix-res[" << topic_postfix_res << "]. IS ACTIVE? : "
+    << (is_active == true?"[true]":"[false]"));
+  bool res;
+  
+  res = tmiStack.addPublisher(topic_base
+                    ,topic_postfix_req
+                    ,topic_postfix_res
+                    ,onPublishResultCallback);
+  if(!res){
+    CLOG_WARN("mqtt-manager-base : acrp register publisher : topic base ["
+      << topic_base << "] error registering topic!");
+      return false;
+  }
+  acrpConfig.setAtmiConfig(tmiStack.getByBase(topic_base)->getConfig());
+  tmiStack.getByBase(topic_base)->isActive(is_active);
+  
+  CLOG_INFO("mqtt-manager-base : acrp register publisher : topic base [" 
+    << topic_base << "] : registered OK");
+  return true;
+
+}
+/**
+ * @brief 
+ * 
+ * @param topic_base 
+ * @param callback 
+ * @param parsedDataCallback 
+ * @param is_active 
+ * @param topic_postfix_req 
+ * @param topic_postfix_res 
+ * @return true 
+ * @return false 
+ */
+bool MqttManagerBase::acrp_register_subscriber(const std::string& topic_base
+                ,AcrpTopicManagementInfo::OnSubscriberDataCallbackType callback
+                ,AcrpTopicManagementInfo::OnSubscriberParsedDataCallbackType parsedDataCallback
+                , bool is_active
+                ,const std::string& topic_postfix_req
+                ,const std::string& topic_postfix_res)
+{
+  CLOG_DEBUG(3,"mqtt-manager-base : acrp register subscriber : topic "
+    "base [" << topic_base << "], postfix-req[" << topic_postfix_req << "], "
+    "postfix-res[" << topic_postfix_res << "]. IS ACTIVE? : "
+    << (is_active == true?"[true]":"[false]"));
+  bool res;
+  res = tmiStack.addSubscriber(
+       topic_base
+      ,topic_postfix_req
+      ,topic_postfix_res
+      ,callback
+      ,parsedDataCallback);
+  
+  if(!res){
+    CLOG_WARN("mqtt-manager-base : acrp register subscriber : topic base ["
+      << topic_base << "] error registering topic!");
+      return false;
+  }
+  acrpConfig.setAtmiConfig(tmiStack.getByBase(topic_base)->getConfig());
+  tmiStack.getByBase(topic_base)->isActive(is_active);
+  CLOG_INFO("mqtt-manager-base : acrp register subscriber : topic base [" 
+    << topic_base << "] : registered OK");
+  return true;
+}
+
+
+/**
+ * @brief : it acrp is not active, just make the subscriptions of subscribers, 
+ *          and links them to the on_data_callback. in other case, makes full
+ *          acrp init by invoking mqtt_gateway_init_acrtp
+ * 
+ * @return true 
+ * @return false 
+ */
+
+
+bool MqttManagerBase::acrpInitialize()
+{
+  CLOG_DEBUG(3,"mqtt-manager-base : acrp initialize : begin");
+  if(gateway == nullptr)
+  {
+    CLOG_ERROR("mqtt-manager-base : acrp-initialize : FATAL ERROR : gateway is not "
+      "set for this manager!");
+    exit(1);
+  }
+  // if(acrpConfig.acrp_is_active == false)
+  // {
+    // if acrp is not active, we only need to make subscriptions and set-up
+    //  the callbacks to the raw-topic
+    CLOG_DEBUG(2, "mqtt-manager-base : acrp initialize : acrp is INACTIVE : "
+      "searching for subscribers");
+    size_t resd;
+    resd = tmiStack.forEach([&](AcrpTopicManagementInfo* tmi){
+      CLOG_DEBUG(2, "mqtt-manager-base : acrp initialize : checking TMI : [" 
+        << tmi->getTopicBase() << "]");
+      if(tmi->getRole() == AcrpTopicManagementInfo::Role::SUBSCRIBER)
+      {
+        //directly subscribe the topic to the final callback
+        CLOG_INFO("MQTT MANAGER BASE : acrp initialize : ACRP OFF : preparing "
+          "subscription to topic [" << tmi->getTopicBase() << "](raw-data)");
+        if(gateway->subscribe_to_topic(tmi->getTopicBase()
+          , tmi->on_data_callback
+          , tmi->getPriority())== false)
+        {
+          CLOG_WARN("MQTT MAANGER BASE : acrp-initialize : ACRP OFF : error "
+            "preparing subscription to base topic [" 
+            << tmi->getTopicBase() << "](raw-data)");
+          return false;
+        }
+      }
+      return true;
+    });
+    if(resd != tmiStack.size())
+    {
+      CLOG_WARN("MQTT MANAGER BASE : acrp-initialize : ACRP OFF : error "
+        "making raw subscriptions");
+      return false;
+    }
+    CLOG_INFO("MQTT MANAGER BASE : acrp initialize : ACRP OFF : prepared.");
+  //   return true;
+  // }
+  //if acrp is active, we set-up the gateway.
+  if(acrpConfig.acrp_is_active == false)
+  {
+    CLOG_INFO("MQTT MANAGER BASE : acrp is not initialized : all ended ok");
+    return true;
+  }
+
+  bool res;
+  res = mqtt_gateway_init_acrp();
+  if(!res)
+  {
+    CLOG_WARN("MQTT MANAGER BASE : acrp initialize : error initializing the "
+      "mqtt-gateway for ACRP communication");
+  }
+  acrp_start_check();
+  return res;
+}
+
+
+/// MQTT GATEWAY INITIALIZATION OF ACRP
+bool MqttManagerBase::mqtt_gateway_init_acrp()
+{
+  //distribute the acrp topics initialization to the correct method, depending
+  // on the role of the topic.
+  size_t res = 0;
+  res = tmiStack.forEach([&](AcrpTopicManagementInfo* tmi){
+    switch(tmi->getRole())
+    {
+      case AcrpTopicManagementInfo::Role::SUBSCRIBER:
+        return mqtt_gateway_init_acrp_subscriber(tmi);
+        break;
+      case AcrpTopicManagementInfo::Role::EMITTER:
+        return mqtt_gateway_init_acrp_publisher(tmi);
+        break;
+      default:
+        CLOG_WARN("MQTT MANAGER BASE : start mqtt gateway init acrp : error "
+          "obtaining the role of acrp-topic-management-info for ["
+          << tmi->getTopicBase() << "]");
+        return false;
+    }
+  });
+  if(res != tmiStack.size())
+  {
+    CLOG_WARN("MQTT MANAGER BASE : mqtt-gateway-init-acrp : not all atmis were "
+      "correctly initialized!!! You may need to check the configuration");
+  }
+  return (res == tmiStack.size());
+}
+
+bool MqttManagerBase::mqtt_gateway_init_acrp_publisher(AcrpTopicManagementInfo* tmi)
+{
+  //the acrp publisher will subscribe to the ACK topic, and concentrate it to
+  // a common 
+  
+  bool res;
+  CLOG_DEBUG(3,"MQTT MANAGER BASE : set mqtt gateway init acrp publisher : "
+    "registering publisher [" << tmi->getTopicBase() << "] at the mqtt gateway");
+  if(tmi->isActive() == false)
+  {
+    CLOG_INFO("MQTT MANAGER BASE : set mqtt gateway init acrp publisher : "
+      "publisher is not acrp. Ignoring further data for this publisher : ["
+      << tmi->getTopicBase() << "]");
+    return true;
+  }
+  CLOG_INFO("MQTT MANAGER BASE : set mqtt gateway init acrp publisher : "
+      "publisher is acrp. Subcribing to response topic : ["
+      << tmi->getTopicCrpRes() << "]");
+  res = gateway->subscribe_to_topic(tmi->getTopicCrpRes()
+      ,std::bind(&MqttManagerBase::acrp_publisher_ack_common_callback
+      ,this
+      ,std::placeholders::_1
+      ,std::placeholders::_2
+      ,std::placeholders::_3)
+      ,tmi->getPriority());
+
+
+
+  if(res == true)
+  {
+    CLOG_INFO("MQTT MANAGER BASE : start mqtt gateway : registered [" 
+          << tmi->getTopicBase() 
+          << "]");
+  }else{
+    CLOG_WARN("MQTT MANAGER BASE : start mqtt gateway : reg acrp publisher : "
+      "error registering subscription to ACRP-RES topic [" 
+      << tmi->getTopicCrpRes() << "]");
+    return false;
+  }
+  return true;
+}
+
+
+
+/**
+ * @brief     If the acrp is not active for this topic, subscribes the on-data
+ *  callback directly to the user's will; if ACRP is active for this topic, then
+ *  then it subscribes to the local on-data callback, for the packet to be parsed
+ *  and finally invoke the owner's on-parsed-data callback.
+ * 
+ * @param tmi 
+ * @return true 
+ * @return false 
+ */
+bool MqttManagerBase::mqtt_gateway_init_acrp_subscriber(AcrpTopicManagementInfo* tmi)
+{
+  //subscribe to ACK
+  CLOG_DEBUG(4,"MQTT MANAGER BASE : start mqtt gateway init acrp subscriber : "
+    "topic base : [" << tmi->getTopicBase() << "]");
+  bool res;
+  if(tmi->isActive() == false)
+  {
+    //not managed. link directly done to the user class
+    CLOG_INFO("MQTT MANAGER BASE : set mqtt gateway init acrp subscriber : not "
+     "active for topic [" << tmi->getTopicBase() << "]");
+    res = gateway->subscribe_to_topic(tmi->getTopicBase()
+                                ,tmi->on_data_callback
+                                ,tmi->getPriority());
+    if(res == false)
+    {
+      CLOG_WARN("MQTT MANAGER BASE : set mqtt gateway init acrp subscriber : "
+        "error making subscription to gateway for topic ["
+        << tmi->getTopicBase() << "]");
+      return false;
+    }
+    return true;
+  }
+
+
+  res = gateway->subscribe_to_topic(tmi->getTopicCrpReq()
+          ,std::bind(&MqttManagerBase::acrp_subscription_common_callback
+            ,this
+            ,std::placeholders::_1
+            ,std::placeholders::_2
+            ,std::placeholders::_3)
+          ,tmi->getPriority());
+  if(!res)
+  {
+    CLOG_WARN("MQTT MANAGER BASE : set mqtt gateway init acrp subscriber : "
+      "error preparing the subscription to topic [" << tmi->getTopicCrpReq() 
+      << "]");
+    return false;
+  }
+  CLOG_INFO("MQTT MANAGER BASE : start mqtt gateway init acrp subscriber : "
+    "OK : topic base : [" << tmi->getTopicBase() << "]");
+  return true;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * @brief If the topic is not registered, just publishes; if it is registered 
+ *  but inactive, it publishes at the topic base and invokes the callback; if
+ *  it is registered and active, it publishes at the req topic, and registers
+ *  an acrp packet to possibly resend.
+ * 
+ * @param topic 
+ * @param packet 
+ * @param p 
+ * @return true 
+ * @return false 
+ */
+bool MqttManagerBase::acrp_publish(const std::string& topic
+              ,const Json::Value& packet
+              ,MqttGateway::Priority p)
+{
+  AcrpTopicManagementInfo* atmi;
+  if(acrpConfig.acrp_is_active==false)
+  {
+    CLOG_DEBUG(5,"MQTT MANAGER BASE : acrp publish : acrp is off. Direct "
+      "publish at [" << topic << "]");
+    return gateway->publish(topic,packet,p);
+  }
+  atmi = tmiStack.getByBase(topic);
+  if(atmi == nullptr)
+  {
+    //topic is not managed. will not publish.
+    CLOG_WARN("MQTT MANAGER BASE : acrp publish : error sending. topic is not "
+      "registered! publishing at raw input topic [" << topic << "]");
+    return gateway->publish(topic,packet,p);
+  }
+  
+  //if(atmi->isActive() == false){
+    //topic is inactive. publishing at base topic.
+    bool res = true;
+    CLOG_DEBUG(5,"MQTT MANAGER BASE : acrp publish : acrp off for a publication"
+      "at topic [" << topic << "]");
+    res &= gateway->publish(topic,packet,p);
+    //invoking callback if exists.
+    
+  //  return res;
+  //}
+  // topic is active
+  //bool       res;
+  if(atmi->isActive() == false)
+  {
+    atmi->publish_op_result_callback(atmi->getTopicBase(),res,packet);
+    return res;
+  }
+  AcrpPacket acrp(packet);
+  
+  CLOG_DEBUG(5,"MQTT MANAGER BASE : acrp publish : acrp on : registering " 
+    " for a publication addressed to a topic base ["
+    << atmi->getTopicBase() << "]=>[" << atmi->getTopicCrpReq() << "] ");
+  
+  res = gateway->publish(
+                  atmi->getTopicCrpReq()
+                  ,acrp.to_json()
+                  ,p);
+  
+  //register the packet.
+  if(!atmi->registerPacket(acrp))
+  {
+    //error registering packet.
+    CLOG_WARN("MQTT MANAGER BASE : acrp publish : acrp on : impossible to store"
+      " a copy of the acrp packet for further use");
+    return false;
+  }
+  return res;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * @brief Checks the existence of the 'topic-res', and gets the atmi; create 
+ *  acrp input from raw; from the atmi, checks the existence of the token base;
+ *  if the source packet has been treated, ignores the rest; if the source 
+ *  packet has not yet been treated, it checks it as treated and invoke the 
+ *  callback 'on-publish-ack'
+ * 
+ * @param topic_response 
+ * @param data 
+ * @param data_length 
+ * @return true : keep found packet on queue
+ * @return false : remove found packet from queue
+ */
+bool MqttManagerBase::acrp_publisher_ack_common_callback(const std::string& topic_response
+                        ,const uint8_t* data
+                        ,size_t data_length)
+{
+  AcrpTopicManagementInfo* atmi;
+  atmi = tmiStack.getByRes(topic_response);
+  //CLOG_INFO("*** to-delete : pub common ack : searching [" << topic_response << "]");
+  if(!atmi)
+  {
+    CLOG_WARN("MQTT MANAGER BASE : acrp publisher ack common callback : warning"
+      " : received acknowledge packet but there's no registered topic at [" 
+      << topic_response << "] but there ");
+    return true;
+  }
+  //CLOG_INFO("*** to-delete : received message at topic [" << topic_response << "]");
+  atmi->markIncomingActivity();
+  //
+  CLOG_DEBUG(4,"MQTT MANAGER BASE : acrp publisher ack common callback : "
+    "received data for related publisher [" << atmi->getTopicBase() << "]");
+  AcrpPacket acrp;
+  bool res;
+  res = acrp.from_stream(data,data_length);
+  if(!res)
+  {
+    CLOG_WARN("MQTT MANAGER BASE : acrp publisher ack common callback : "
+      "received corrupted data at publisher-ack-topic for base: [" 
+      << atmi->getTopicBase() << "]");
+    return true;
+  }
+  if(acrp.timestampOrigToken == 0)
+  {
+    //CLOG_INFO("*** to-delete : received message at topic IS DYNOP [" << topic_response << "]");
+    CLOG_DEBUG(5,"mqtt-manager-base : acrp-publisher-ack-common-callback : "
+      "dynamic timeout optimization packet");
+    return true;
+  }
+  //search if has been treated.
+  AcrpPacket* acrpPtr;
+  acrpPtr = atmi->getPacket(acrp.timestampOrigToken,acrp.tokenSec);
+
+  if(acrpPtr == nullptr)
+  {
+    //already managed??
+    CLOG_DEBUG(6,"MQTT MANAGER BASE : acrp publisher ack common callback : "
+      "received acknowledge of reception for packet [" 
+      << acrp.timestampOrigToken << "," << acrp.tokenSec << "], but may be "
+      "redundant");
+    return true;
+  }
+  if(acrpPtr->isTreated()== false)
+  {
+    
+    //call the result callback.  
+    atmi->publish_op_result_callback(atmi->getTopicBase(),true,acrpPtr->getPayload());
+  }
+  acrpPtr->jobDone(); // sets isTreated as true. (the packet will be "forgotten" at some moment)
+  return true; //don't keep it at stack.
+}
+
+
+
+bool MqttManagerBase::on_publisher_operation_result_callback(const std::string& topic
+                                      ,bool result
+                                      ,const Json::Value& payload)
+{
+  CLOG_DEBUG(3,"MQTT MANAGER BASE : on publisher operation result callback : "
+    " result [" << (result == true?"true":"false") << "] for topic : ["
+    << topic << "]");
+  return true;
+}
+
+
+
+/**
+ * @brief     Checks the existence of the topic at the registered atmi-stack;
+ *  parses the input; sends an ACK throw the topic_res; checks if the token is 
+ *  already treated by the stack; if it's treated, it ignores further actions; 
+ *  if not treated, it invokes the 'on-parsed-data' callback
+ * 
+ * @param topic 
+ * @param data 
+ * @param dataSize 
+ * @return true 
+ * @return false 
+ */
+bool MqttManagerBase::acrp_subscription_common_callback(const std::string& topic
+                              ,const uint8_t* data
+                              ,size_t dataSize)
+{
+  AcrpTopicManagementInfo* atmi;
+  atmi = tmiStack.getByReq(topic);
+  bool res;
+  if(!atmi){
+    CLOG_WARN("MQTT MANAGER BASE : acrp subscription common callback : error "
+      "obtaining current ATMI for topic-req [" << topic << "]");
+    return true;
+  }
+
+  atmi->markIncomingActivity();
+  AcrpPacket acrp;
+  res = acrp.from_stream(data,dataSize);
+  if(!res){
+    CLOG_WARN("MQTT MANAGER BASE : acrp subscription common callback : error "
+      "parsing ACRP packet for subscription-topic-base [" 
+      << atmi->getTopicBase() << "]");
+    return true;
+  }
+
+  //send ack
+  AcrpPacketAcknowledgement acrpAck(acrp);
+  CLOG_DEBUG(3,"MQTT MANAGER BASE : acrp subscription common callback : "
+    "sending acknowledgement for packet [" << acrp.timestampOrigToken
+    << "] : iteration [" << acrp.getIteration() << "]");
+  if(gateway->publish(atmi->getTopicCrpRes(),acrpAck.to_json(),atmi->getPriority())== true)
+  {
+    atmi->markLastPacketSend();
+  }
+  
+  //5.4 of the document : timestampOrigToken = 0
+  if(acrpAck.timestampOrigToken == 0){
+    CLOG_DEBUG(5,"MQTT MANAGER BASE : acrp subscription common callback : "
+      "this is just a dyn-opt packet for acrp. doing nothing");
+    return true;
+  }
+  
+  AcrpPacket* acrpSourcePtr;
+  acrpSourcePtr = atmi->getPacket(acrp);
+  if(!acrpSourcePtr){
+    //first incoming packet for this request...
+    acrpSourcePtr = atmi->registerPacket(acrp);
+    if(!acrpSourcePtr)
+    {
+      CLOG_ERROR("MQTT MANAGER BASE : acrp subscription common callback : error"
+        " registering Acrp packet for topic base [" << atmi->getTopicBase()
+        << "]");
+
+      //TO-DO : INCLUDE SOME KIND OF ON-FATAL-ERROR CALLBACK HERE
+      return false;
+    }
+    //invoke the callback
+    atmi->on_parsed_data_callback(atmi->getTopicBase(),acrp.getPayload());
+    acrpSourcePtr->jobDone();
+  }
+  return true;
+}
+
+
+/**
+ * @brief to be invoked at Start
+ * 
+ * @return true 
+ * @return false 
+ */
+bool MqttManagerBase::acrp_start_check()
+{
+  if(acrpConfig.acrp_is_active == false)
+  {
+    CLOG_INFO("MQTT MANAGER BASE : acrp-start-check : acrp is disabled for "
+      "this module. Ignoring stage");
+    return true;
+  }
+  if(!timerManagerChecker)
+  {
+    timerManagerChecker = new(std::nothrow) QTimer(this);  
+    if(!timerManagerChecker)
+    {
+      CLOG_ERROR("MQTT MANAGER BASE : acrp start check : ERROR : FATAL? "
+        "impossible to allocate timer");
+      exit(1);
+    }
+    if(!connect(timerManagerChecker,&QTimer::timeout
+            ,this,&MqttManagerBase::acrp_management_pulse))
+    {
+      CLOG_ERROR("MQTT MANAGER BASE : acrp start check : ERROR : FATAL : "
+        "impossible to connect acrp checker timer to this instance");
+      exit(1);
+    }
+    timerManagerChecker->setInterval(std::min(
+               acrpConfig.acrp_timeout_packet_resend/2
+              ,acrpConfig.acrp_publish_dynop_interval/2));
+  }
+    
+  timerManagerChecker->start();
+  CLOG_INFO("MQTT MANAGER BASE : acrp start check : timer initiated");
+  return true;
+}
+
+/**
+ * @brief to be invoked at Stop
+ * 
+ * @return true 
+ * @return false 
+ */
+bool MqttManagerBase::acrp_stop_check()
+{
+  if(!timerManagerChecker)
+  {
+    CLOG_WARN("MQTT MANAGER BASE : acrp-stop-check : there's no active timer");
+    return false;
+  }
+  CLOG_INFO("MQTT MANAGER BASE : acrp-stop-check : stopping check");
+  timerManagerChecker->stop();
+  return true;
+}
+
+/**
+ * @brief: check one by one every topic
+ *              for subscribers:
+ *                    - remove messages without activity
+ *              for publishers : 
+ *                    - republish if not acknowledged
+ *                    - remove acknowledged with no activity
+ *      
+ * */
+void MqttManagerBase::acrp_management_pulse()
+{
+  //CLOG_INFO("*** to delete : acrp management pulse");
+  tmiStack.forEach([&](AcrpTopicManagementInfo* atmi){
+    std::vector<std::pair<int64_t,int64_t>> toDel;
+
+    switch(atmi->getRole())
+    {
+      case AcrpTopicManagementInfo::Role::EMITTER:
+        {
+          //remember: foreachMessage is mutually exclusive
+          toDel.clear();
+          //CLOG_INFO("*** to delete : checking emitter [" << atmi->getTopicBase() << "]");
+          atmi->forEachMessage([&](AcrpPacket* packet){
+            //CLOG_INFO("*** to delete : checking emitter [" << atmi->getTopicBase() << "] ::: message [" << packet->timestampOrigToken << "," << packet->tokenSec << "]");
+            bool res;
+            res = acrp_management_pulse_check_msg_publisher(atmi,packet);
+            if(res == false)
+            {
+              //prepare to delete.
+              toDel.push_back(std::make_pair(packet->timestampOrigToken,packet->tokenSec));
+            }
+            return true;
+          });
+          //delete olds
+          for(const std::pair<int64_t,int64_t>& p:toDel)
+          {
+            //CLOG_INFO("*** TO DELETE : unregistering publisher packet [" << p.first << "," << p.second << "]");
+            atmi->unregisterPacket(p.first,p.second);
+          }
+        }
+        break;
+      case AcrpTopicManagementInfo::Role::SUBSCRIBER:
+        {
+          toDel.clear();
+          //remember: foreachMessage is mutually exclusive
+          atmi->forEachMessage([&](AcrpPacket* packet){
+            bool res;
+            res = acrp_management_pulse_check_msg_subscriber(atmi,packet);
+            if(res == false){
+              //prepare message for deletion
+              toDel.push_back({packet->timestampOrigToken,packet->tokenSec});
+            }
+            return true;
+          });
+          //delete messages
+          for(const std::pair<int64_t,int64_t>& p : toDel)
+          {
+            atmi->unregisterPacket(p.first,p.second);
+          }
+        }
+        break;
+      default:
+        CLOG_ERROR("MQTT MANAGER BASE : acrp management pulse : error "
+          "error evaluating topic role. Base=[" << atmi->getTopicBase() << "]");
+    }
+
+    for(std::vector<std::pair<int64_t,int64_t>>::iterator it = toDel.begin();it != toDel.end();++it)
+    {
+      bool res;
+      CLOG_DEBUG(4,"MQTT MANAGER BASE : acrp management pulse : removing "
+        "message [" << it->first << "] from stack of topic base [" 
+        << atmi->getTopicBase() << "]");
+      res = atmi->unregisterPacket(it->first,it->second);
+      if(!res)
+      {
+        CLOG_WARN("MQTT MANAGER BASE : acrp management pulse : warning : unable"
+          "to remove message [" << it->first << "] from stack of topic-base"
+          << atmi->getTopicBase() << "]");
+      }
+    }
+    return true;
+  });
+  acrp_dynopub_make_operations();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * @brief 
+ * 
+ * @param tmi 
+ * @param acrpPtr 
+ * @return true : keeps the packet in stack
+ * @return false : removes the packet from stack
+ */
+bool MqttManagerBase::acrp_management_pulse_check_msg_publisher(AcrpTopicManagementInfo* tmi, AcrpPacket* acrpPtr)
+{
+  bool toRet = false; //by default, delete this packet.
+  int64_t thisMoment = coyot3::tools::get_current_timestamp();
+  if(acrpPtr->isTreated() == true)
+  {
+    //packet already treated, remove from stack... no further evaluations are needed.
+    return false;
+  }
+  
+  //republish if(late)
+  //if packet too old - send of packet did not success
+  //CLOG_INFO("*** to delete : thismoment = " << thisMoment);
+  //CLOG_INFO("*** to delete : acrpPtr->timestampOrigToken = " << acrpPtr->timestampOrigToken);
+  //CLOG_INFO("*** to delete : diff = " << thisMoment - acrpPtr->timestampOrigToken);
+  //CLOG_INFO("*** to delete : tmi->getTimeoutPacketSendFailed() = " << tmi->getTimeoutPacketSendFailed());
+  if((thisMoment - acrpPtr->timestampOrigToken) > tmi->getTimeoutPacketSendFailed())
+  {
+    //invokes the virtual on-publish-op-result function.
+    //CLOG_INFO("*** to delete : error publishing message : abandon [" 
+      // << (thisMoment - acrpPtr->timestampOrigToken) << " > " << tmi->getTimeoutPacketSendFailed() << "]: ((" 
+      // << acrpPtr->to_json() << "))");
+    if(tmi->publish_op_result_callback)
+    {
+      CLOG_DEBUG(3,"MQTT MANAGER BASE : acrp-management-pulse-check-publisher : "
+        "packet [" << acrpPtr->timestampOrigToken << "," << acrpPtr->tokenSec 
+        << "] publish error, invoking on publish-error callback");
+      tmi->publish_op_result_callback(tmi->getTopicBase(),false,acrpPtr->to_json());
+    }
+    //removes the packet from the stack
+    return false;
+  }
+  //else if we are out of the interval when we are resending messages.
+  else if((thisMoment - acrpPtr->timestampOrigToken) > tmi->getAutomaticResendTime())
+  {
+    //nothing to do at this point.. just let the time go.
+    //CLOG_INFO("*** to delete : error publishing message : ignoring : ((" << acrpPtr->to_json() << "))");
+    CLOG_DEBUG(5,"MQTT MANAGER BASE : acrp pulse check publisher msg : "
+      "packet not acknowledged, out of resend window. doing nothing");
+    return true;
+  }
+  //else if it is needed to republish the message.
+  else if((thisMoment - acrpPtr->getLastInternalActivityTs()) > tmi->getTimeoutPacketResend())
+  {
+    bool res;
+    //CLOG_INFO("*** to delete : error publishing message : REPEATING SENDING : ((" << acrpPtr->to_json() << "))");
+    CLOG_DEBUG(3,"MQTT MANAGER BASE : acrp pulse check publisher msg : "
+      "for message token [" << acrpPtr->timestampOrigToken << "] republishing");
+    acrpPtr->updateIteration(); //and updates last internal activity
+    res = gateway->publish(tmi->getTopicCrpReq(),acrpPtr->to_json(),tmi->getPriority());
+    if(!res)
+    {
+      CLOG_WARN("MQTT MANAGER BASE : acrp pulse check publisher msg : "
+        "for messge token [" << acrpPtr->timestampOrigToken << "] ")
+    }
+    return true; // don't delete the packet
+  }
+  //no need to resend or treat in any way the packet
+  return true;
+}
+
+
+
+
+
+
+
+
+
+
+bool MqttManagerBase::acrp_management_pulse_check_msg_subscriber(AcrpTopicManagementInfo* tmi,AcrpPacket* acrpPtr)
+{
+  //The "only" thing to do is to remove messages with no activity.
+  int64_t thisMoment = coyot3::tools::get_current_timestamp();
+  if((thisMoment - acrpPtr->timestampOrigToken) < tmi->getPacketStoreExpirationTimeout())
+  {
+    return false;
+  }
+  return true;
+}
+
+int MqttManagerBase::acrp_dynopub_make_operations()
+{
+  int64_t thisMoment = coyot3::tools::get_current_timestamp();
+  int ret = 0;
+  tmiStack.forEach([&](AcrpTopicManagementInfo* tmi){
+    if(tmi->getRole() == AcrpTopicManagementInfo::Role::SUBSCRIBER)
+    {
+      ++ret;
+      return true;
+    }
+    if(tmi->isActive() == false)
+    {
+      ++ret;
+      return true;
+    }
+    AcrpPacketDynamicOptimization dynopt;
+    // if there
+    if(
+      ((thisMoment - tmi->getLastIncomingActivityTs()) > tmi->getDynopPublishInterval())
+      &&((thisMoment - tmi->getLastPacketSend()) > tmi->getDynopPublishInterval())
+    ){
+      CLOG_DEBUG(3,"MQTT MANAGER BASE : acrp dynopub_make_operations : "
+        "publishing acrp-dyn-timeout-optimization packet");
+      
+      this->gateway->publish(tmi->getTopicCrpReq()
+                          ,dynopt.to_json()
+                          ,MqttGateway::Priority::LOW);
+    }
+    
+
+    if((thisMoment - tmi->getLastIncomingActivityTs()) > 
+      CYTOOLS_MQTTACRP_DYNOP_NOCOMMFACYTOR * tmi->getDynopPublishInterval())
+    {
+      //CLOG_INFO("*** to-delete : TIEMPO DE ERROR DE ENVÍO OPTIMIZADO" << tmi->getTopicBase());
+      tmi->setTimeoutPacketResendReducedTime();
+    }else{
+      //CLOG_INFO("*** to-delete : TIEMPO DE ERROR DE ENVÍO COMO CONFIGURACIÓN [" << tmi->getTopicBase());
+      tmi->setTimeoutPacketResendConfigTime();
+    }
+    ++ret;
+    return true;
+  });
+  return ret;
+}
+
+
+
+
+
+//
+// MISC
+//
+
+void MqttManagerBase::debug_level_set(int level)
+{
+  CLOG_DEBUG_LEVEL_SET(level);
+}
+void MqttManagerBase::mqttGwDebugLevelSet(int debugLevel)
+{
+  if(gateway!=nullptr)
+  {
+    gateway->set_debug_level(debugLevel);
+  }
+}
+
+
+bool MqttManagerBase::acrpIsActive()
+{
+  return acrpConfig.acrp_is_active;
+}
+bool MqttManagerBase::acrpIsActive(bool state)
+{
+  return acrpConfig.acrp_is_active = state;
+}
+
+}
+}//end wrappers
+}//eons coyot3
+
+std::ostream& operator<<(std::ostream& o, coyot3::tools::mqtt::MqttManagerBase::State s)
+{
+  return (o << coyot3::tools::mqtt::MqttManagerBase::StateToString(s));
+}

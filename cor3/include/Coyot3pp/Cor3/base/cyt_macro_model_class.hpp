@@ -71,6 +71,7 @@
         CY_class_name(const CY_class_name & o); \
         CY_class_name(\
           cyt3macro_privdev_model_class_dec_constr_params(__VA_ARGS__)\
+          IFN(__VA_ARGS__)(IFN(PASS_PARAMETERS(CY_enumclass_deps))(COMMA()))\
           cyt3macro_privdev_model_class_dec_constr_params(PASS_PARAMETERS(CY_enumclass_deps))\
         );\
         virtual ~CY_class_name();\
@@ -191,6 +192,7 @@
   CY_class_name::~CY_class_name(){}\
   CY_class_name::CY_class_name(\
           cyt3macro_privdev_model_class_dec_constr_params(__VA_ARGS__)\
+          IFN(__VA_ARGS__)(IFN(PASS_PARAMETERS(CY_enumclass_deps))(COMMA()))\
           cyt3macro_privdev_model_class_dec_constr_params(PASS_PARAMETERS(CY_enumclass_deps))\
   ){\
     FOR_EACH_TRIPLES(cyt3macro_model_class_def_constr_assign_,__VA_ARGS__)\

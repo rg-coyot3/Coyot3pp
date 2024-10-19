@@ -33,7 +33,8 @@ set(LCOYOT3PPCORE_EXTERNAL_DEPENDENCES
   ${Pthread_LIBRARIES}
   ${Oping_LIBRARIES}
   ${GeographicLib_LIBRARIES}
-  )
+  ${YamlCPP_LIBRARIES}
+)
 
 
 
@@ -82,16 +83,16 @@ install(  EXPORT      ${PROJECT_NAME}${COYOT3PPCOMPONENT}Targets
 )
 
 
-file(WRITE  ${COYOT3PPCOMPONENT}Config.cmake.in "")
-file(APPEND ${COYOT3PPCOMPONENT}Config.cmake.in
+file(WRITE  ${CMAKE_BINARY_DIR}/${COYOT3PPCOMPONENT}Config.cmake.in "")
+file(APPEND ${CMAKE_BINARY_DIR}/${COYOT3PPCOMPONENT}Config.cmake.in
             "include(\$\{CMAKE_CURRENT_LIST_DIR\}/${PROJECT_NAME}${COYOT3PPCOMPONENT}ConfigVersion.cmake)\n"
-            "include(\$\{CMAKE_CURRENT_LIST_DIR\}/${PROJECT_NAME}${COYOT3PPCOMPONENT}Targets.cmake)\n")
-
-configure_file(${COYOT3PPCOMPONENT}Config.cmake.in
+            "include(\$\{CMAKE_CURRENT_LIST_DIR\}/${PROJECT_NAME}${COYOT3PPCOMPONENT}Targets.cmake)\n"
+)
+configure_file(${CMAKE_BINARY_DIR}/${COYOT3PPCOMPONENT}Config.cmake.in
                "${CMAKE_BINARY_DIR}/${PROJECT_NAME}${COYOT3PPCOMPONENT}Config.cmake"
-               @ONLY)
+               @ONLY
+)
 
-include(CMakePackageConfigHelpers)            
 write_basic_package_version_file(
         "${PROJECT_NAME}${COYOT3PPCOMPONENT}ConfigVersion.cmake"
         VERSION ${COYOT3PPCOMPONENTVERSION}
@@ -109,16 +110,11 @@ write_basic_package_version_file(
  COMPATIBILITY AnyNewerVersion
 )
 
-
-
 install(FILES 
         "${CMAKE_BINARY_DIR}/${PROJECT_NAME}${COYOT3PPCOMPONENT}Config.cmake"
         "${CMAKE_BINARY_DIR}/${PROJECT_NAME}${COYOT3PPCOMPONENT}ConfigVersion.cmake"
-        DESTINATION lib/cmake/${PROJECT_NAME})
-
-
-
-
+        DESTINATION lib/cmake/${PROJECT_NAME}
+)
 
 if(LCY_BUILD_WITH_MINIMAL_EXAMPLES)
   add_executable(base_hello_world

@@ -1,4 +1,4 @@
-#Coyot3pp lib
+# Coyot3pp lib
 
 ## INTRODUCTION
 
@@ -20,7 +20,7 @@ For me, having this in mind, at my *RAM* is a weight that, because of my needs a
 
 And so I realized that *for myself* I needed to create a toolkit that remembered for me all this stuff, the same way as a worker in a garage creates along the years its own toolkits...
 
-This *timestamp* example is a little one. I had many other needs: I needed to relay mqtt communications using just a "*connector*"; I want to be able to have a *QTimer* like tool that does not impose me to include all the `QtCoreApplication` just to ensure that I have a function that is triggered every *x* milliseconds...; If I have to make constants REST requests to a server I want to have a *component* or *agent* that makes it for me and *serves* the result to a callback function, or invokes to another callback if there is some kind of issue with the communications; I want to be able to manage a set of images coming from different sources and be able to manipulate them, so I develop
+This *timestamp* example is a little one. I had many other needs: I needed to relay mqtt communications using just a "*connector*"; I want to be able to have a *QTimer* like tool that does not impose me to include all the `QtCoreApplication` just to ensure that I have a function that is triggered every *x* milliseconds...; If I have to make constants REST requests to a server I want to have a *component* or *agent* that makes it for me and *serves* the result to a callback function, or invokes to another callback if there is some kind of issue with the communications; I want to be able to manage a set of images coming from different sources and be able to manipulate them, so I develop a set of wrappers that fulfills my basic needs (such adding a text to an image... or adding a black-and-white effect) and I use it as an object.
 
 All this library is about that: the way I have constructed a set of components that are built for *my particular way of thinking* (a very simple way of thinking, in fact) that I can reuse along different *projects*, with no need to remember specific implementations of *opencv*, *std::threads*, *chronos*, *jsons*, *files*...
 
@@ -28,11 +28,15 @@ As well, for many times I use it to recall myself some *stuffs* that I learned *
 
 Finally, I just called it *Coyot3pp* because *ACME* is just very used, *coyot3* is my nick and this library is FAR FAR FAR FAR FAR AWAY to be any kind of standard,...
 
+For all those that may have found this repo, may you find something useful.
+
 ## DOCUMENTS
 
 Each component has included its own documentation file:
 
 * [Cor3](./cor3/doc/README.md)
+* [R3st](./communication/rest_connector/README.md)
+* [Mqtt](./communication/mqtt/README.md)
 
 ## INSTALLATION
 
