@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.15)
 project(Coyot3pp LANGUAGES CXX VERSION 1.0)
 
-set(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_LIST_DIR}/../install/coyot3pp)
 set(COYOT3_INSTALL_PREFIX ${CMAKE_CURRENT_LIST_DIR}/../install/coyot3pp)
+set(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_LIST_DIR}/../install/coyot3pp)
 
 
 set(CMAKE_CXX_STANDARD 23)
@@ -13,7 +13,7 @@ set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror=return-type")
 
 
 option(LCY_BUILD_WITH_MINIMAL_EXAMPLES      "Build with minimal examples"   ON)
-
+option(LCY_BUILD_COMPONENT_REST             "Build with R3st components"    ON)
 
 
 include(CheckFunctionExists)
@@ -38,18 +38,21 @@ set(COYOT3PP_MINIMAL_EXAMPLES_SRC_DIR ${CMAKE_CURRENT_LIST_DIR}/minimal-examples
 set(COYOT3PPCOR3_INCLUDE_DIRS ${CMAKE_CURRENT_LIST_DIR}/cor3/include)
 message(" coyot3ppcore include dir : ${COYOT3PPCOR3_INCLUDE_DIRS}")
 
+# COMPONENTS DIRS INCLUDE - begin
+
 add_subdirectory(cor3)
-add_subdirectory(communication/rest_connector)
+
+if(LCY_BUILD_COMPONENT_REST)
+  add_subdirectory(communication/rest_connector)
+endif()
+
+# COMPONENTS DIRS INCLUDE - end
 
 
-file(WRITE  ${PROJECT_NAME}Config.cmake 
+file(WRITE ${CMAKE_BINARY_DIR}/${PROJECT_NAME}Config.cmake 
           "foreach(component \$\{${PROJECT_NAME}_FIND_COMPONENTS\})\n"
           "   include(\$\{CMAKE_CURRENT_LIST_DIR\}/${PROJECT_NAME}/${PROJECT_NAME}\$\{component\}Config.cmake)\n"
           "endforeach()")
-# file(APPEND ${PROJECT_NAME}Config.cmake           
-#           )
-# file(APPEND ${PROJECT_NAME}Config.cmake           
-#           )
           
 configure_file( ${PROJECT_NAME}Config.cmake
                 "${CMAKE_BINARY_DIR}/${PROJECT_NAME}Config.cmake"

@@ -30,7 +30,6 @@ include_directories(include)
 
 set(LCOYOT3PPCORE_EXTERNAL_DEPENDENCES
   ${JsonCPP_LIBRARIES}
-  ${YamlCPP_LIBRARIES}
   ${Pthread_LIBRARIES}
   ${Oping_LIBRARIES}
   ${GeographicLib_LIBRARIES}
