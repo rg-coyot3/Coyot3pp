@@ -14,7 +14,7 @@ set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror=return-type")
 
 option(LCY_BUILD_WITH_MINIMAL_EXAMPLES      "Build with minimal examples"   ON)
 option(LCY_BUILD_COMPONENT_REST             "Build with R3st components"    ON)
-
+option(LCY_BUILD_COMPONENT_MQTT             "Build with Mqtt components"    ON)
 
 include(CheckFunctionExists)
 include(CheckSymbolExists)
@@ -45,7 +45,9 @@ add_subdirectory(cor3)
 if(LCY_BUILD_COMPONENT_REST)
   add_subdirectory(communication/rest_connector)
 endif()
-
+if(LCY_BUILD_COMPONENT_MQTT)
+  add_subdirectory(communication/mqtt)
+endif()
 # COMPONENTS DIRS INCLUDE - end
 
 

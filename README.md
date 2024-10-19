@@ -35,6 +35,8 @@ For all those that may have found this repo, may you find something useful.
 Each component has included its own documentation file:
 
 * [Cor3](./cor3/doc/README.md)
+* [R3st](./communication/rest_connector/README.md)
+* [Mqtt](./communication/mqtt/README.md)
 
 ## INSTALLATION
 

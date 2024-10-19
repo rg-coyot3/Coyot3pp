@@ -1095,7 +1095,7 @@ int  MqttGatewayAcrp::acrp_dynopub_make_operations()
       
       publish(tmi->getTopicCrpReq()
                           ,dynopt.to_json()
-                          ,coyot3::tools::mqtt::MqttGateway::Priority::LOW);
+                          ,coyot3::communication::mqtt::MqttGateway::Priority::LOW);
     }
     
 

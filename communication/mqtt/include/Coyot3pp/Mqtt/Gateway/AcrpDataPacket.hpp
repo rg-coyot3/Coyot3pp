@@ -37,7 +37,7 @@ class AcrpPacket : public coyot3::tools::JsonSerializablePacketBase{
     template<typename T>
 
     AcrpPacket(const T& s)
-    :CommDataPacketBase()
+    :JsonSerializablePacketBase()
     ,timestampOrigToken(0)
     ,timestampGen(0)
     ,numRetry(0)
