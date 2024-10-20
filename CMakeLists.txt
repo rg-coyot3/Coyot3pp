@@ -1,21 +1,33 @@
 cmake_minimum_required(VERSION 3.15)
 project(Coyot3pp LANGUAGES CXX VERSION 1.0)
 
-set(COYOT3_INSTALL_PREFIX ${CMAKE_CURRENT_LIST_DIR}/../install/coyot3pp)
-set(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_LIST_DIR}/../install/coyot3pp)
+
+
+option(LCY_BUILD_WITH_MINIMAL_EXAMPLES   "Build with minimal examples"       ON)
+option(LCY_BUILD_COMPONENT_REST          "Build with R3st components"        ON)
+option(LCY_BUILD_COMPONENT_MQTT          "Build with Mqtt components"        ON)
+option(LCY_BUILD_COMPONENT_POSTGRESQL    "Build with PostgreSql components"  ON)
+option(LCY_BUILD_COMPONENT_QSQLITE       "Build with QSqlite    components"  ON)
+
 
 
 set(CMAKE_CXX_STANDARD 23)
 SET (CMAKE_VERBOSE_MAKEFILE 1)
 set(CMAKE_CXX_FLAGS "-fPIC ${CMAKE_CXX_FLAGS}")
-find_package(PkgConfig REQUIRED)
 set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror=return-type")
 
 
-option(LCY_BUILD_WITH_MINIMAL_EXAMPLES      "Build with minimal examples"   ON)
-option(LCY_BUILD_COMPONENT_REST             "Build with R3st components"    ON)
-option(LCY_BUILD_COMPONENT_MQTT             "Build with Mqtt components"    ON)
+if(NOT DEFINED COYOT3_INSTALL_PREFIX)
+  set(COYOT3_INSTALL_PREFIX ${CMAKE_CURRENT_LIST_DIR}/install/coyot3pp)
+endif()
 
+
+set(CMAKE_INSTALL_PREFIX ${COYOT3_INSTALL_PREFIX})
+message("install prefix set to : ${CMAKE_INSTALL_PREFIX}")
+
+
+
+find_package(PkgConfig REQUIRED)
 include(CheckFunctionExists)
 include(CheckSymbolExists)
 include(CheckIncludeFile)
@@ -48,6 +60,12 @@ endif()
 if(LCY_BUILD_COMPONENT_MQTT)
   add_subdirectory(communication/mqtt)
 endif()
+if(LCY_BUILD_COMPONENT_POSTGRESQL)
+  add_subdirectory(database/postgresql)
+endif()
+if(LCY_BUILD_COMPONENT_QSQLITE)
+  add_subdirectory(database/qsqlite)
+endif()
 # COMPONENTS DIRS INCLUDE - end
 
 
@@ -56,7 +74,7 @@ file(WRITE ${CMAKE_BINARY_DIR}/${PROJECT_NAME}Config.cmake
           "   include(\$\{CMAKE_CURRENT_LIST_DIR\}/${PROJECT_NAME}/${PROJECT_NAME}\$\{component\}Config.cmake)\n"
           "endforeach()")
           
-configure_file( ${PROJECT_NAME}Config.cmake
+configure_file( ${CMAKE_BINARY_DIR}/${PROJECT_NAME}Config.cmake
                 "${CMAKE_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
                 @ONLY)       
 
@@ -74,3 +92,11 @@ install(FILES
 )
 
 
+add_custom_target("uninstall" COMMENT "Uninstall installed files")
+add_custom_command(
+    TARGET "uninstall"
+    POST_BUILD
+    COMMENT "Uninstall files with install_manifest.txt"
+    COMMAND xargs rm -vf < install_manifest.txt || echo Nothing in
+            install_manifest.txt to be uninstalled!
+)

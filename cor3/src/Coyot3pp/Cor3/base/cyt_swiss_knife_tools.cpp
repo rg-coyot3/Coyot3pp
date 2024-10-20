@@ -371,8 +371,9 @@ std::string toLower(const std::string& source)
 
 std::string 
 to_string(const uint8_t* d, size_t s){
-  char* a = new char[s];
+  char* a = new char[s+1];
   memcpy(a,d,s);
+  a[s] = '\0';
   std::string r(a);
   delete[] a;
   return r;
