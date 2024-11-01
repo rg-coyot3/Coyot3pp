@@ -1,12 +1,6 @@
 /**
  * Creates a wrapper with the mosquitto mqtt client to abstract all
  *  operations to client instances.
- * 
- * @author : OBH - Ricardo GONZALEZ - Phong PHAM
- * @email : rga@obh.digital hong-phong.pham@isfm.fr
- * 
- * This sources belongs to ISFM and OBH.
- * It will not be used without the explicit permission of their owners
  * */
 
 

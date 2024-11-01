@@ -38,6 +38,7 @@ CytStringSetJsIO::CytStringSetJsIO():CytStringSet(){}
 CytStringSetJsIO::CytStringSetJsIO(const CytStringSet& o):CytStringSet(o){}
 CytStringSetJsIO::~CytStringSetJsIO(){}
 
+
 Json::Value CytStringSetJsIO::to_json() const {
   Json::Value js;
   for(const std::string& i : *this){
@@ -45,6 +46,8 @@ Json::Value CytStringSetJsIO::to_json() const {
   }
   return js;
 }
+
+
 bool CytStringSetJsIO::from_json(const Json::Value& source){
   if(source.type() != Json::arrayValue)return false;
   Json::ArrayIndex i, s = source.size();

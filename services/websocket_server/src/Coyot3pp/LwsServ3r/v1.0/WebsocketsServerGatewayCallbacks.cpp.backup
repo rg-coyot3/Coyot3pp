@@ -1,0 +1,383 @@
+#include <libcoyot3/services/websocket/server/WebsocketsServerGateway.hpp>
+
+#define _WSG_CHUNK_MAX_LENGTH 50
+
+
+namespace coyot3{
+namespace wrappers{
+
+
+
+bool HasUriArguments(struct ::lws* wsi)
+{
+  return (lws_hdr_total_length(wsi,WSI_TOKEN_HTTP_URI_ARGS) != 0);
+}
+UriArguments obtain_uri_arguments(struct ::lws* wsi)
+{
+  char buffer[1024];
+  UriArguments res;
+  int idx = 0;
+  int cl;
+  while(lws_hdr_copy_fragment(
+          wsi,(char*)&buffer,sizeof(buffer),WSI_TOKEN_HTTP_URI_ARGS,idx++) != -1
+  )
+  {
+    
+    CLOG_DEBUG(6, "WSG : obtain uri arguments : current index [" << idx 
+      << "], obtained [" << buffer << "]");
+    std::string buf(buffer);
+    std::string f,s;
+    f = buf.substr(0,buf.find("="));
+    s = buf.substr(buf.find("=")+1);
+    res.insert(std::make_pair(f,s));
+  }
+  return res;
+}
+size_t end_string_pos(const char* s,size_t l)
+{
+  
+  for(size_t i = 0; i<l ;++i)
+  {
+    if(s[i] == '\r')
+    {
+      if((++i) < l)
+      {
+        if(s[i] == '\n')
+        {
+          return (--i);
+        }
+      }
+    }
+  }
+  return -1;
+}
+
+std::string obtain_lws_header_uri(struct ::lws* wsi)
+{
+  std::string resp;
+  uint8_t buffer[LWS_PRE + 4000];
+  int n;
+  n = lws_hdr_copy(wsi,(char*)buffer,sizeof(buffer),WSI_TOKEN_GET_URI);
+  if(n == -1)
+  {
+    return "";
+  }
+  CLOG_DEBUG(5,"obtain lws_header uri : buffer size = " << n);
+  resp = (char*)buffer;
+  return resp;
+}
+std::string obtain_lws_peer(struct ::lws* wsi)
+{
+  std::string res;
+  char buffer[LWS_PRE + 4000];
+  CLOG_WARN("size of buff " << sizeof(buffer));
+  if(
+    lws_get_peer_simple(wsi,(char*)buffer,sizeof(buffer)) == nullptr
+  ){
+    return "";
+  }
+  res = buffer;
+  CLOG_DEBUG(5,"obtain lws peer ; serving " << res);
+  return res = buffer;
+}
+
+int WebsocketsServerGateway::callback_dyn_http(
+        struct ::lws* wsi,
+        enum ::lws_callback_reasons reason,
+        void* in,
+        size_t len,
+        const std::string& urlPath,
+        WsgConnectionStructure* dpr   
+){
+  CLOG_DEBUG(5,"CYTWSG : " << _name << " : on dyn http request : urlPath(" 
+  << urlPath << ")");
+  
+  uint8_t buffer[LWS_PRE + 4000]
+          ,*start = &buffer[LWS_PRE]
+          ,*p = start
+          ,*end=&buffer[sizeof(buffer) - LWS_PRE - 1];
+  char*   b;
+  int     n;
+  size_t  l;
+  size_t  pes,copylen;
+  int     bytesSent;
+  WsgClient* currentClient = nullptr;
+  UriArguments uriargs;
+
+  uint8_t* incoming_msg;
+
+
+  std::string basePath;
+  std::string sourcePeer;
+  
+
+  currentClient = get_client(dpr->ref_id);
+  if(currentClient)
+  {
+    CLOG_DEBUG(5,"WSG : " << _name << " : callback dyn http : flux for client ["
+    << currentClient->getConnectionID() << "] from peer [" << currentClient->getPeerInfo() << "]");
+  }
+  else
+  {
+
+    dpr->source_peer = obtain_lws_peer(wsi).c_str();
+    CLOG_DEBUG(2,"WSG : " << _name << " : callback dyn http : new connection "
+      "from peer [" << dpr->source_peer << "]");
+  }
+
+  switch(reason)
+  {
+    case LWS_CALLBACK_HTTP:
+        // n = lws_hdr_copy(wsi,(char*)buffer,sizeof(buffer),WSI_TOKEN_GET_URI);
+        // b = new char[n - strlen((const char*)in)];
+        // memcpy(b,buffer,n - strlen((const char*)in));
+      basePath = obtain_lws_header_uri(wsi);
+        // delete b;
+      CLOG_DEBUG(3,"CYTWSG : " << _name << " : callback dyn http : basepath [" << basePath << "]");
+      //lws_get_peer_simple(wsi,(char*)buffer,sizeof(buffer));
+      //sourcePeer = (char*)buffer;
+      //dpr->source_peer = sourcePeer;
+      dpr->source_peer = obtain_lws_peer(wsi);
+      if(lws_add_http_common_headers(wsi
+                                    ,HTTP_STATUS_OK
+                                    ,"text/html"
+                                    ,LWS_ILLEGAL_HTTP_CONTENT_LEN
+                                    ,&p
+                                    ,end))
+      {
+        CLOG_WARN("CYTWSG : " << _name << " : callback dyn http : " << urlPath 
+        << " : no content len for connection from [" << sourcePeer << "]");
+        return 1;
+      }
+      if(lws_finalize_write_http_header(wsi,start,&p,end))
+      {
+        CLOG_WARN("CYTWSG : " << _name << " : callback dyn http : " << urlPath
+        << " : error : finalize write http header");
+      }
+      lws_callback_on_writable(wsi);
+      return 0;
+      break;
+
+    
+    case LWS_CALLBACK_HTTP_WRITEABLE:
+      basePath = obtain_lws_header_uri(wsi);
+      //CLOG_INFO(" *** lws callback http writeable << base path << " << basePath);
+      if(HasUriArguments(wsi))
+      {
+        uriargs = obtain_uri_arguments(wsi);
+      } 
+
+      n = LWS_WRITE_HTTP;
+      currentClient = get_client(dpr->ref_id);
+      
+      if(dpr->response.size() == 0)
+      {
+        std::string r;
+
+        if(!callback_ondynhttpreq(currentClient,basePath,uriargs,r))
+        {
+          CLOG_WARN("CYTWSG : *** : callback on dyn httpreq : user callback resolved error");
+          return -1;
+        }
+        if(r.size() == 0)
+        {
+          r="empty";
+        }
+        //new connection
+        dpr->response = r;
+        dpr->response_total_length = r.size();
+        dpr->response_current_index = 0;
+        // CLOG_DEBUG(3,"CYTWSG : " << _name << " : callback dyn http : " 
+        //   "creating response. Size = " << dpr->response_total_length << ";");
+        //## INCLUDE CALLBACK TO CREATE RESPONSE HERE.
+      }
+      else
+      {
+        //CLOG_DEBUG(3,"CYTWSG : " << _name << " : callback dyn http : response already created");
+      }
+      //http session already created
+      if((dpr->response_current_index+_WSG_CHUNK_MAX_LENGTH) > dpr->response_total_length)
+      {
+        n = LWS_WRITE_HTTP_FINAL;
+        l = (dpr->response_total_length - dpr->response_current_index);
+      }else{
+        l = _WSG_CHUNK_MAX_LENGTH;
+      }
+      //CLOG_DEBUG(3,"CYTWSG : " << _name << " : callback dyn http : chunk size " 
+      //<< l << "; chunk content [" << dpr->response.substr(dpr->response_current_index,l)
+      //<< "]");
+    
+      memcpy(&buffer[LWS_PRE]
+            ,(const void*)dpr->response.substr(dpr->response_current_index,l).c_str()
+            ,l);
+      dpr->response_current_index+=l;
+      if(lws_write(wsi
+                  ,&buffer[LWS_PRE]
+                  //,l+LWS_PRE
+                  ,l
+                  ,static_cast<enum lws_write_protocol>(n)) != (l))
+      {
+        CLOG_ERROR("CYTWSG : " << _name << " : callback dyn http : " << urlPath 
+        << " : error sending chunk (size = " << (l + LWS_PRE) << ") to peer ["
+        << dpr->source_peer << "]");
+        return 1;
+      } 
+      else{
+        //CLOG_DEBUG(3,"CYTWSG : " << _name << " : callback dyn http : " << urlPath 
+        //<< "; written a total of [" << (l+LWS_PRE) << "] bytes");
+      }
+      if(n == LWS_WRITE_HTTP_FINAL)
+      {
+        if(lws_http_transaction_completed(wsi))
+        {
+          return -1;
+        }
+        
+      }else{
+          lws_callback_on_writable(wsi);
+        }
+      return 0;
+      break;
+
+
+    case LWS_CALLBACK_PROTOCOL_INIT:
+      CLOG_INFO("LWS_CALLBACK_PROTOCOL_INIT");
+      break;
+
+
+
+    case LWS_CALLBACK_ESTABLISHED:
+      CLOG_INFO("LWS_CALLBACK_ESTABLISHED");
+      if(!currentClient)
+      {
+        dpr->wsi = wsi;
+        currentClient = add_client(dpr);
+      }
+      callback_onwsconnects(currentClient);
+
+      break;
+
+
+
+    case LWS_CALLBACK_CLOSED:
+      
+      CLOG_INFO("LWS_CALLBACK_CLOSED");
+      
+      callback_onwsdisconnects(currentClient);
+      del_client(dpr->ref_id);
+
+
+      break;
+
+
+
+
+    case LWS_CALLBACK_RECEIVE:
+      CLOG_INFO("LWS_CALLBACK_RECEIVE");
+      pes = end_string_pos((const char*)in,len);
+      // incoming_msg = new uint8_t[len];
+      incoming_msg = (uint8_t*)in;
+      // memcpy(incoming_msg,in,len);
+      if(pes == size_t(-1))
+      {
+        CLOG_DEBUG(3,"no end string      : l[" << len << "]");
+        copylen = len;
+      }
+      else
+      {
+        CLOG_DEBUG(3,"detected end string: l[" << len << "] at [" << pes << "]");
+        copylen = pes;
+      }
+      //incoming_msg[len] = '\0';
+      for(size_t i=0;i<copylen;++i)
+      {
+        dpr->ws_input_stream.push_back(incoming_msg[i]);
+      }
+      
+      if(copylen<=(len-2))
+      {
+        callback_onwsmessage(currentClient,dpr->ws_input_stream.c_str(),dpr->ws_input_stream.size());
+        dpr->ws_input_stream.clear();
+      }
+      if(copylen < (len-2))
+      {
+        for(size_t i=(copylen+2);i<len;++i)
+        {
+          dpr->ws_input_stream.push_back(incoming_msg[i]);
+          dpr->ws_message_last_rx_ts = coyot3::tools::getCurrentTimestamp();
+        }
+      }
+      break;
+
+    case LWS_CALLBACK_SERVER_WRITEABLE:
+      if(!currentClient)
+      {
+        CLOG_WARN("WSG : " << _name << " : callback : on writeable : no associated client?!");
+        break;
+      }else if(!currentClient->getOutputBufferSize())
+      {
+        CLOG_WARN("WSG : " << _name << " : callback : on writeable : for client"
+        << currentClient->getConnectionID() << " : no output buffer to send");
+        break;
+      }
+      CLOG_INFO("WSG : " << _name << " : callback : on writeable for : " << currentClient->getConnectionID() << "]");
+      bytesSent = lws_write(wsi,&currentClient->getOutputBuffer()[LWS_PRE + currentClient->getOutputBufferIndex()],currentClient->getOutputBufferSize() - currentClient->getOutputBufferIndex(),LWS_WRITE_TEXT);
+      if(bytesSent == -1)
+      {
+        CLOG_WARN("WSG : " << _name << " : callback : on writeable for : " 
+        << currentClient->getConnectionID() << "] : fatal error sending data");
+
+        return -1;
+      }else if(bytesSent < currentClient->getOutputBufferSize()){
+        CLOG_DEBUG(4,"WSG : " << _name << " : callback : on writeable for :"
+        << currentClient->getConnectionID() << "] : sent [" << bytesSent << "/"
+        << currentClient->getOutputBufferSize() << "]");
+        currentClient->outputBufferIndexInc(bytesSent);
+        lws_callback_on_writable(wsi);
+      }else{
+        CLOG_DEBUG(4,"WSG : " << _name << " : callback : on writeable for :" 
+        << currentClient->getConnectionID() << "] : sent all buffer : cleaning");
+        currentClient->outputBufferClean();
+      }
+      break;
+    default:
+      CLOG_WARN("CYTWSG : " << _name << " : callback dyn http : " << urlPath
+      << " : callback reason not implemented");
+  }
+  return lws_callback_http_dummy(wsi, reason, (void*)dpr,in,len);
+}
+
+
+
+
+bool WebsocketsServerGateway::dummy_callback_on_dyn_http(coyot3::wrappers::WsgClient* client
+                                                        ,const std::string& originPath
+                                                        ,const UriArguments& uriargs
+                                                        ,std::string& response)
+{
+  CLOG_WARN("WSG :: dummy_callback_on_dyn_http : no callback set");
+  return true;
+}
+bool WebsocketsServerGateway::dummy_callback_on_ws_message(coyot3::wrappers::WsgClient* client,const uint8_t* buffer,size_t length)
+{
+  CLOG_WARN("WSG :: dummy_callback_on_ws_message : no callback set for buffer size [" << length << "]");
+  return true;
+}
+bool WebsocketsServerGateway::dummy_callback_on_ws_connects(coyot3::wrappers::WsgClient* client)
+{
+  CLOG_WARN("WSG :: dummy_callback_on_ws_connects : no callback set");
+  return true;
+}
+bool WebsocketsServerGateway::dummy_callback_on_ws_disconnects(coyot3::wrappers::WsgClient* client)
+{
+  CLOG_WARN("WSG :: dummy_callback_on_ws_disconnects : no callback set");
+  return true;
+}
+bool WebsocketsServerGateway::dummy_callback_on_error(coyot3::wrappers::WsgClient* client,const std::string& what){
+  CLOG_WARN("WSG :: dummy_callback_on_error : no callback set");
+  return true;
+}
+
+
+}// eons wrappers
+}// eons coyot3

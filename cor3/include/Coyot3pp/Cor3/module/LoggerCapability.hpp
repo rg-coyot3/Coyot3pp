@@ -66,8 +66,19 @@ class LoggerCapability{
     void log_err(const std::string& o);
     void log_debug(int vlevel,const std::ostringstream& o);
     void log_debug(int vlevel,const std::string& o);
+    template<typename T, typename U>
+    void log_eval(bool assertion, const T& cont_assert_ok, const U& cont_assert_ko){
+      if(assertion == true){
+        log_info(cont_assert_ok);
+      }else{
+        log_warn(cont_assert_ko);
+      }
+    }
+
     std::string instance_name() const;
     std::string instance_name(const std::string& in);
+    std::string class_name() const;
+    std::string class_name(const std::string& cn);
 
     LoggerLine::Level        modlog_verbosity() const;
     LoggerLine::Level        modlog_verbosity(LoggerLine::Level l);
@@ -76,6 +87,9 @@ class LoggerCapability{
 
   private:
     std::string       instance_name_;
+    std::string       class_name_;
+    std::string       prefix_;
+      void prefix_conf_();
     int               verbosity_;
     LoggerLine::Level level_;
 

@@ -1,17 +1,10 @@
 #pragma once
 
-
 #include "../Coyot3.hpp"
 #include "LoggerCapability.hpp"
 
-
-
 namespace coyot3{
 namespace mod{
-
-
-
-
 
   CYT3MACRO_enum_class_declarations(
     CytModuleState
@@ -30,22 +23,23 @@ namespace mod{
       , MAINTENANCE
       , MODULE_ERROR
   )
-
-  
   
   class ModuleBase
   : public LoggerCapability{
     public:
-      
-      ModuleBase(
-        const std::string& name = std::string("no-name"));
+
+      typedef std::function<bool()> ModuleTaskFunction;
+      typedef std::vector<ModuleTaskFunction> ModuleTaskFunctionStack;
+
+      ModuleBase(const std::string& name = std::string());
+
       virtual ~ModuleBase();
 
-      virtual bool Init()                 ;
-      virtual bool Start()                ;
-      virtual bool Pause()                ;
-      virtual bool Stop()                 ;
-      virtual bool End(bool force = false);
+              bool Init();
+              bool Start();
+              bool Pause();
+              bool Stop();
+              bool End(bool force = false);
 
               bool created();
               bool initialized();
@@ -59,31 +53,22 @@ namespace mod{
 
       std::string        name() const;
       std::string        name(const std::string& nn);
+      
     protected:
 
-      void module_states_configuration(
-        bool module_initializes,
-        bool module_starts,
-        bool module_pauses,
-        bool module_stops,
-        bool module_ends
-      );
-      
       ec::CytModuleState state(ec::CytModuleState state);
 
-      
-      virtual bool task_init();
-      virtual bool task_start();
-      virtual bool task_pause();
-      virtual bool task_stop();
-      virtual bool task_end(bool force = false);
-
-
-      
+      bool conf_task_init_(ModuleTaskFunction f,bool prepend = false);
+      bool conf_task_start_(ModuleTaskFunction f,bool prepend = false);
+      bool conf_task_pause_(ModuleTaskFunction f,bool prepend = false);
+      bool conf_task_stop_(ModuleTaskFunction f,bool prepend = false);
+      bool conf_task_end_(ModuleTaskFunction f,bool prepend = false);
 
     private:
       ec::CytModuleState state_;
       std::string        name_;
+
+      std::mutex         p_mtx_mod_transition;
 
       bool check_state_for_init();
       bool check_state_for_start();
@@ -96,6 +81,32 @@ namespace mod{
       bool _modconf_pauses;
       bool _modconf_stops;
       bool _modconf_ends;
+        std::string _mod_configuration();
+
+      bool _priv_init();
+      bool _priv_start();
+      bool _priv_pause();
+      bool _priv_stop();
+      bool _priv_end(bool force);
+
+
+      bool tasks_init_();
+      bool tasks_start_();
+      bool tasks_pause_();
+      bool tasks_stop_();
+      bool tasks_end_();
+
+
+      ModuleTaskFunctionStack   tasks_stack_init_;
+      ModuleTaskFunctionStack   tasks_stack_start_;
+      ModuleTaskFunctionStack   tasks_stack_pause_;
+      ModuleTaskFunctionStack   tasks_stack_stop_;
+      ModuleTaskFunctionStack   tasks_stack_end_;
+
+
+      
+
+
   };
 
 

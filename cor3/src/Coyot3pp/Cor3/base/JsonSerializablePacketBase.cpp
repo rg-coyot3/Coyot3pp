@@ -32,18 +32,18 @@ bool JsonSerializablePacketBase::from_stream(const uint8_t* payload,size_t paylo
     {
       s.push_back((char)(payload[n]));
     }
-    return (parsed_valid_ = from_rjson_string(s));
+    return (parsed_valid_ = from_json_string(s));
 }
 
-bool JsonSerializablePacketBase::from_rjson_string(const std::string& source)
-{
-  rapidjson::Document doc;
-  if(source.size() == 0)return false;
-  doc.Parse(source.c_str());
+// bool JsonSerializablePacketBase::from_rjson_string(const std::string& source)
+// {
+//   rapidjson::Document doc;
+//   if(source.size() == 0)return false;
+//   doc.Parse(source.c_str());
   
-  return (parsed_valid_ = from_json(doc));
+//   return (parsed_valid_ = from_json(doc));
 
-}
+// }
 
 bool JsonSerializablePacketBase::from_json_string(const std::string& source){
   if(source.size()== 0)return false;
@@ -63,9 +63,9 @@ bool JsonSerializablePacketBase::from_json(const Json::Value& source)
   return (parsed_valid_ = false);
 }
 
-bool JsonSerializablePacketBase::from_json(const rapidjson::Value& source){
-  return (parsed_valid_ = false);
-}
+// bool JsonSerializablePacketBase::from_json(const rapidjson::Value& source){
+//   return (parsed_valid_ = false);
+// }
 ByteStream JsonSerializablePacketBase::to_stream() const
 {
     ByteStream bs;
@@ -90,9 +90,9 @@ Json::Value  JsonSerializablePacketBase::to_json() const{
 bool JsonSerializablePacketBase::ok() const{
   return parsed_valid_;
 }
-rapidjson::Writer<rapidjson::StringBuffer> JsonSerializablePacketBase::to_rjson() const{
-  return rapidjson::Writer<rapidjson::StringBuffer>();
-}
+// rapidjson::Writer<rapidjson::StringBuffer> JsonSerializablePacketBase::to_rjson() const{
+//   return rapidjson::Writer<rapidjson::StringBuffer>();
+// }
 
 }
 }

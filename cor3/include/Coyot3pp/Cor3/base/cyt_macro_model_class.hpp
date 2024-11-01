@@ -52,6 +52,14 @@
         FOR_EACH_TRIPLES(cyt3macro_privdev_model_class_dec_constr_params_itr_, __VA_ARGS__ ) \
       )
 
+      #define cyt3macro_privdev_model_class_dec_tr_params_itr_(CY_prop_name,CY_type,CY_default_value)\
+        (CY_type p_##CY_prop_name)
+
+    #define cyt3macro_privdev_model_class_dec_tr_params(...)\
+      CHAIN_COMMA(\
+        FOR_EACH_TRIPLES(cyt3macro_privdev_model_class_dec_tr_params_itr_, __VA_ARGS__ ) \
+      )
+
   // ps-priv : begin
   #define cytemacro_privdec_model_class_common_priv_dev_(CY_class_name, CY_enumclass_deps, ...) \
         \
@@ -70,9 +78,9 @@
         CY_class_name(); \
         CY_class_name(const CY_class_name & o); \
         CY_class_name(\
-          cyt3macro_privdev_model_class_dec_constr_params(__VA_ARGS__)\
+          cyt3macro_privdev_model_class_dec_tr_params(__VA_ARGS__)\
           IFN(__VA_ARGS__)(IFN(PASS_PARAMETERS(CY_enumclass_deps))(COMMA()))\
-          cyt3macro_privdev_model_class_dec_constr_params(PASS_PARAMETERS(CY_enumclass_deps))\
+          cyt3macro_privdev_model_class_dec_tr_params(PASS_PARAMETERS(CY_enumclass_deps))\
         );\
         virtual ~CY_class_name();\
         \
@@ -181,9 +189,17 @@
     }
 
 
-  #define cyt3macro_model_class_def_constr_assign_(a1,a2,a3)\
+  #define cyt3macro_model_class_def_tr_assign_(a1,a2,a3)\
     a1##_ = p_##a1;
 
+
+
+/* constructor por parámetros, extraído para evitar el problema de asignación
+   const ptr* sobre ptr*
+
+
+
+*/
 
 #define CYT3MACRO_model_class_definitions(CY_class_name, CY_parent_class, CY_additional_methods, CY_enumclass_deps, ...) \
   CY_class_name::CY_class_name()\
@@ -191,12 +207,12 @@
   CY_class_name::CY_class_name(const CY_class_name & o){*this = o;}\
   CY_class_name::~CY_class_name(){}\
   CY_class_name::CY_class_name(\
-          cyt3macro_privdev_model_class_dec_constr_params(__VA_ARGS__)\
+          cyt3macro_privdev_model_class_dec_tr_params(__VA_ARGS__)\
           IFN(__VA_ARGS__)(IFN(PASS_PARAMETERS(CY_enumclass_deps))(COMMA()))\
-          cyt3macro_privdev_model_class_dec_constr_params(PASS_PARAMETERS(CY_enumclass_deps))\
+          cyt3macro_privdev_model_class_dec_tr_params(PASS_PARAMETERS(CY_enumclass_deps))\
   ){\
-    FOR_EACH_TRIPLES(cyt3macro_model_class_def_constr_assign_,__VA_ARGS__)\
-    FOR_EACH_TRIPLES(cyt3macro_model_class_def_constr_assign_,PASS_PARAMETERS(CY_enumclass_deps))\
+    FOR_EACH_TRIPLES(cyt3macro_model_class_def_tr_assign_,__VA_ARGS__)\
+    FOR_EACH_TRIPLES(cyt3macro_model_class_def_tr_assign_,PASS_PARAMETERS(CY_enumclass_deps))\
   }\
   CY_class_name & CY_class_name::operator=(const CY_class_name & o){ \
     IFN(CY_parent_class)(CY_parent_class::operator=(o);)\

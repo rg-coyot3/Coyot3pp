@@ -432,7 +432,6 @@ class MqttGateway
     typedef std::vector<std::function<void(bool)>> OnConnectFuncCollection;
 
     //singleton of callbacks for multiple instances
-    //static std::vector<AdccMqttGateway::TopicSubscription*> *topic_subscriptions;
 
     /**
      * @brief : constructor of the class. will also load the configuration from

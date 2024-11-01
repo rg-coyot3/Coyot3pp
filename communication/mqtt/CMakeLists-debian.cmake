@@ -1,11 +1,4 @@
 
-set(COYOT3PPCOMPONENT          Mqtt)
-set(COYOT3PPCOMPONENTVERSION   1.0)
-
-
-include_directories(include)
-include_directories(${COYOT3PPCOR3_INCLUDE_DIRS})
-
 
 
 set(LCOYOT3PPMQTT_EXTERNAL_DEPENDENCES
@@ -13,8 +6,6 @@ set(LCOYOT3PPMQTT_EXTERNAL_DEPENDENCES
 )
 
 
-file(GLOB LC3_SRCS_MQTT
-          src/${PROJECT_NAME}/${COYOT3PPCOMPONENT}/Gateway/*.cpp)
 
 
 
@@ -68,3 +59,16 @@ install(FILES
         "${CMAKE_BINARY_DIR}/${PROJECT_NAME}${COYOT3PPCOMPONENT}ConfigVersion.cmake"
         DESTINATION lib/cmake/${PROJECT_NAME}
 )
+
+
+if(LCY_BUILD_WITH_MINIMAL_EXAMPLES)
+  add_executable(mqtt_simple_client_example
+    ${COYOT3PP_MINIMAL_EXAMPLES_SRC_DIR}/Mqtt/mqtt_client_example.cpp
+  )
+  target_link_libraries(mqtt_simple_client_example
+    ${COYOT3PPCOMPONENT}
+    Cor3
+  )
+
+endif()
+

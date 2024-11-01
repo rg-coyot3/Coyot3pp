@@ -127,24 +127,24 @@ namespace mod{
     switch(l.level()){
       case LoggerLine::Level::CLC_ERROR:
         std::cout << __SIMPLELOGGER_COLOR_RED_ << ct::get_current_utc_string() 
-        << " : ERR : " << instance_name_ << " : " << l.str()
+        << " : ERR" << prefix_ << l.str() 
         << __SIMPLELOGGER_STDOUTCOLORS_RESET_ << std::endl;
         break;
       case LoggerLine::Level::CLC_WARN:
         std::cout << __SIMPLELOGGER_COLOR_YELLOW_ << ct::get_current_utc_string() 
-        << " : WRN : " << instance_name_ << " : " << l.str()
+        << " : WRN" << prefix_<< l.str()
         << __SIMPLELOGGER_STDOUTCOLORS_RESET_ << std::endl;
         break;
       case LoggerLine::Level::CLC_INFO:
         std::cout << __SIMPLELOGGER_COLOR_GREEN_ << ct::get_current_utc_string() 
-        << " : INF : " << instance_name_ << " : " << l.str()
+        << " : INF" << prefix_ << l.str()
         << __SIMPLELOGGER_STDOUTCOLORS_RESET_ << std::endl;
         break;
       case LoggerLine::Level::CLC_DEBUG:
       default:
         if(l.level() <= verbosity_)
         std::cout << __SIMPLELOGGER_COLOR_BLUE_ << ct::get_current_utc_string() 
-        << " : DBG(" << l.level() << ") : " << instance_name_ << " : " << l.str()
+        << " : DBG(" << l.level() << ")" << prefix_ << l.str()
         << __SIMPLELOGGER_STDOUTCOLORS_RESET_ << std::endl;
         break;
     }
@@ -184,7 +184,28 @@ namespace mod{
 
 
   std::string LoggerCapability::instance_name() const{return instance_name_;}
-  std::string LoggerCapability::instance_name(const std::string& in){return instance_name_ = in;return instance_name_;}
-
+  std::string LoggerCapability::instance_name(const std::string& in){
+    instance_name_ = in;
+    prefix_conf_();
+    return instance_name_;
+  }
+  std::string LoggerCapability::class_name() const{return class_name_;}
+  std::string LoggerCapability::class_name(const std::string& cn){
+    class_name_ = cn;
+    prefix_conf_();
+    return class_name_;
+  }
+  void LoggerCapability::prefix_conf_(){
+    if((instance_name_.size() != 0) && (class_name_.size() != 0)){
+      prefix_ = std::string(" : ") + instance_name_ + " : " + class_name_ + " : ";
+    }else if((instance_name_.size() == 0) && (class_name_.size() == 0)){
+      prefix_ = " : ";
+    }else if(instance_name_.size() == 0){
+      prefix_ = std::string(" : ") + class_name_ + " : ";
+    }else if(class_name_.size() == 0){
+      prefix_ = std::string(" : ") + instance_name_ + " : ";
+    }
+    prefix_ = " : WTF! :";
+  }
 }
 }
