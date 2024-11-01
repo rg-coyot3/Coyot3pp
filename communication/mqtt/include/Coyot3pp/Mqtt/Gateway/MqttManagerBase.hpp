@@ -293,3 +293,4 @@ class MqttManagerBase : public QObject{
 }//end namespace
 
 std::ostream& operator<<(std::ostream& o,coyot3::communication::mqtt::MqttManagerBase::State s);
+

@@ -25,6 +25,10 @@ endif()
 
 set(CMAKE_INSTALL_PREFIX ${COYOT3_INSTALL_PREFIX})
 message("install prefix set to : ${CMAKE_INSTALL_PREFIX}")
+option(LCY_BUILD_WITH_MINIMAL_EXAMPLES      "Build with minimal examples"   ON)
+option(LCY_BUILD_COMPONENT_REST             "Build with R3st components"    ON)
+option(LCY_BUILD_COMPONENT_MQTT             "Build with Mqtt components"    ON)
+
 
 
 
@@ -77,6 +81,7 @@ endif()
 if(LCY_BUILD_COMPONENT_LWSS)
   add_subdirectory(services/websocket_server)
 endif()
+
 # COMPONENTS DIRS INCLUDE - end
 
 

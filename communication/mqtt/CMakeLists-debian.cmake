@@ -1,8 +1,10 @@
 
 
+
 set(LCOYOT3PPMQTT_EXTERNAL_DEPENDENCES
   mosquitto
 )
+
 
 
 
@@ -58,6 +60,7 @@ install(FILES
         DESTINATION lib/cmake/${PROJECT_NAME}
 )
 
+
 if(LCY_BUILD_WITH_MINIMAL_EXAMPLES)
   add_executable(mqtt_simple_client_example
     ${COYOT3PP_MINIMAL_EXAMPLES_SRC_DIR}/Mqtt/mqtt_client_example.cpp
@@ -68,3 +71,4 @@ if(LCY_BUILD_WITH_MINIMAL_EXAMPLES)
   )
 
 endif()
+

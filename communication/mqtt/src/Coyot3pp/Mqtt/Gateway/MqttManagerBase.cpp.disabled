@@ -1,6 +1,7 @@
 /**
 * 
 * 
+
 *   Dev/Maintain : Ricardo GONZALEZ ALMEIDA
 *     ricardogonalm@ltlab.net
 * 
@@ -11,13 +12,10 @@
 
 #include <Coyot3pp/Mqtt/Gateway/MqttManagerBase.hpp>
 
-
-
-
-
 namespace coyot3{
 namespace communication{
 namespace mqtt{
+
 
 
 const bool    MqttManagerBase::AcrpConfig::Defaults::acrp_is_active                          = true;
