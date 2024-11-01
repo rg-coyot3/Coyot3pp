@@ -4,6 +4,8 @@
 
 This is a set of tools I have created to ease my development tasks.
 
+First of all... as I am doing my tasks for some years, it always arrives the moment when I feel I am writing the same code for different targets.
+
 When I start to write the code, I usually already have traced a *path* of what the code has to explain. Basically it is all about a global task or a project idea that has to be implemented. I use to call it the *high level requirements* (even if I know that in the professional environment it collides with other concepts). These *high level requirements* are implemented using a set of *low level requirements*, and even these *low level requirements* use to need lower level requirements, usually related to the standard c++ implementations.
 
 As time passed, I realized that it was a huge task to my mind to *store* all the *path* to implement the *high level requirements* and, at the same time, *store* the *lower level requirements* and the standard c++ implementations.

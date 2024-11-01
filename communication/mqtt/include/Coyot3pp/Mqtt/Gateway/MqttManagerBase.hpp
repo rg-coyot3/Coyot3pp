@@ -33,8 +33,8 @@
 #include "AcrpDataPacket.hpp"
 #include "AcrpTopicManagementInfoStack.hpp"
 
-namespace milla{
-namespace connapp{
+namespace coyot3{
+namespace communication{
 namespace mqtt{
 
 
@@ -288,8 +288,8 @@ class MqttManagerBase : public QObject{
 
 };
 
-}//end namespace mqtt
-}//end namespace connapp
-}//end namespace milla
+}//end namespace
+}//end namespace
+}//end namespace
 
-std::ostream& operator<<(std::ostream& o,milla::connapp::mqtt::MqttManagerBase::State s);
+std::ostream& operator<<(std::ostream& o,coyot3::communication::mqtt::MqttManagerBase::State s);

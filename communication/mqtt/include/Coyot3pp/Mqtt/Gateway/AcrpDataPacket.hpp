@@ -214,8 +214,8 @@ class AcrpPacketManagementStack {
 };
 
 
-} // namespace mqtt
-} // eons wrappers
-} // namespace milla
+} // namespace
+} // eons 
+} // namespace 
 
 std::ostream& operator<<(std::ostream& i,const coyot3::communication::mqtt::AcrpPacketManagementStack::PacketState& p);

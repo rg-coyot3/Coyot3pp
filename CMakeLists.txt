@@ -10,6 +10,7 @@ option(LCY_BUILD_COMPONENT_POSTGRESQL    "Build with PostgreSql components"  ON)
 option(LCY_BUILD_COMPONENT_QSQLITE       "Build with QSqlite    components"  ON)
 option(LCY_BUILD_COMPONENT_IMAG3         "Build with Imag3      components"  ON)
 OPTION(LCY_BUILD_COMPONENT_H264RTSP      "Build with H264Rtsp   components"  ON)
+OPTION(LCY_BUILD_COMPONENT_LWSS          "Build with LwsServer  components"  ON)
 
 set(CMAKE_CXX_STANDARD 23)
 SET (CMAKE_VERBOSE_MAKEFILE 1)
@@ -72,6 +73,9 @@ if(LCY_BUILD_COMPONENT_IMAG3 OR LCY_BUILD_COMPONENT_H264RTSP)
 endif()
 if(LCY_BUILD_COMPONENT_H264RTSP)
   add_subdirectory(av/rtsp_server)
+endif()
+if(LCY_BUILD_COMPONENT_LWSS)
+  add_subdirectory(services/websocket_server)
 endif()
 # COMPONENTS DIRS INCLUDE - end
 

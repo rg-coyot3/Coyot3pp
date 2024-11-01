@@ -1,11 +1,6 @@
 /**
 * 
 * 
-* - ISFM -
-*   File: MqttManagerBase.cpp
-*   2021 
-*   Project : 
-* 
 *   Dev/Maintain : Ricardo GONZALEZ ALMEIDA
 *     ricardogonalm@ltlab.net
 * 
@@ -20,9 +15,10 @@
 
 
 
-namespace milla{
-namespace connapp{
+namespace coyot3{
+namespace communication{
 namespace mqtt{
+
 
 const bool    MqttManagerBase::AcrpConfig::Defaults::acrp_is_active                          = true;
 const char*   MqttManagerBase::AcrpConfig::Defaults::acrp_default_posftix_request            = "crp_req";
