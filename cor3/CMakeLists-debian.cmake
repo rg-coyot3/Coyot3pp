@@ -2,7 +2,6 @@ set(COYOT3PPCOMPONENT          Cor3)
 set(COYOT3PPCOMPONENTVERSION   1.0)
 
 
-
 # base
 
 pkg_check_modules( JsonCPP    jsoncpp   REQUIRED)

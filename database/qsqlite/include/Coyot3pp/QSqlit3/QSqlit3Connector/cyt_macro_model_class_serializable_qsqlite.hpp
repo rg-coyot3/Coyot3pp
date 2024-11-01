@@ -36,7 +36,7 @@
  */
 
 #define CYT3MACRO_model_class_serializable_qsqlite_declarations(CY_class_name, CY_options , ...)\
-class CY_class_name##QSqliteIO : public coyot3::ddbb::sqlite::SqliteConnector{\
+class CY_class_name##QSqliteIO : public coyot3::ddbb::sqlite::QSqlit3Connector{\
   public:\
     enum class DataType{INTEGER,NUMERIC,TEXT,BLOB,NULL_T};\
     struct ColType{\
@@ -111,7 +111,7 @@ class CY_class_name##QSqliteIO : public coyot3::ddbb::sqlite::SqliteConnector{\
 
   #define cyt3macro_model_class_serializable_qsqlite_def_constr_destr_(CY_class_name, ...)\
     CY_class_name##QSqliteIO::CY_class_name##QSqliteIO(QObject* parent)\
-    :SqliteConnector(parent)\
+    :QSqlit3Connector(parent)\
     ,stack()\
     ,tablename_()\
     ,stack_exch_()\

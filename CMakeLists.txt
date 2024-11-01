@@ -8,8 +8,8 @@ option(LCY_BUILD_COMPONENT_REST          "Build with R3st components"        ON)
 option(LCY_BUILD_COMPONENT_MQTT          "Build with Mqtt components"        ON)
 option(LCY_BUILD_COMPONENT_POSTGRESQL    "Build with PostgreSql components"  ON)
 option(LCY_BUILD_COMPONENT_QSQLITE       "Build with QSqlite    components"  ON)
-
-
+option(LCY_BUILD_COMPONENT_IMAG3         "Build with Imag3      components"  ON)
+OPTION(LCY_BUILD_COMPONENT_H264RTSP      "Build with H264Rtsp   components"  ON)
 
 set(CMAKE_CXX_STANDARD 23)
 SET (CMAKE_VERBOSE_MAKEFILE 1)
@@ -48,6 +48,7 @@ list(APPEND CMAKE_MODULE_PATH "/usr/share")
 
 set(COYOT3PP_MINIMAL_EXAMPLES_SRC_DIR ${CMAKE_CURRENT_LIST_DIR}/minimal-examples)
 set(COYOT3PPCOR3_INCLUDE_DIRS ${CMAKE_CURRENT_LIST_DIR}/cor3/include)
+set(COYOT3PPIMG3_INCLUDE_DIRS ${CMAKE_CURRENT_LIST_DIR}/av/image_content/include)
 message(" coyot3ppcore include dir : ${COYOT3PPCOR3_INCLUDE_DIRS}")
 
 # COMPONENTS DIRS INCLUDE - begin
@@ -65,6 +66,12 @@ if(LCY_BUILD_COMPONENT_POSTGRESQL)
 endif()
 if(LCY_BUILD_COMPONENT_QSQLITE)
   add_subdirectory(database/qsqlite)
+endif()
+if(LCY_BUILD_COMPONENT_IMAG3 OR LCY_BUILD_COMPONENT_H264RTSP)
+  add_subdirectory(av/image_content)
+endif()
+if(LCY_BUILD_COMPONENT_H264RTSP)
+  add_subdirectory(av/rtsp_server)
 endif()
 # COMPONENTS DIRS INCLUDE - end
 

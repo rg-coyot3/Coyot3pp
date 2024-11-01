@@ -8,9 +8,9 @@
 #include <sstream>
 #include <jsoncpp/json/json.h>
 
-#include <rapidjson/document.h>
-#include <rapidjson/writer.h>
-#include <rapidjson/stringbuffer.h>
+// #include <rapidjson/document.h>
+// #include <rapidjson/writer.h>
+// #include <rapidjson/stringbuffer.h>
 
 namespace coyot3{
 namespace tools{
@@ -26,14 +26,14 @@ class JsonSerializablePacketBase {
   
   
   bool    from_json_string(const std::string& source);
-  bool    from_rjson_string(const std::string& source);
+  //bool    from_rjson_string(const std::string& source);
   
   virtual bool                                         from_json(const Json::Value& source);
-  virtual bool                                         from_json(const rapidjson::Value& doc);
+  //virtual bool                                         from_json(const rapidjson::Value& doc);
   virtual std::string                                  to_string() const;
   virtual ByteStream                                   to_stream() const;
   virtual Json::Value                                  to_json() const;
-  virtual rapidjson::Writer<rapidjson::StringBuffer>   to_rjson() const;
+  //virtual rapidjson::Writer<rapidjson::StringBuffer>   to_rjson() const;
 
   bool                      ok() const;
   std::string               deserialization_src() const;

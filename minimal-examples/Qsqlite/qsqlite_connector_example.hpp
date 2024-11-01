@@ -1,4 +1,4 @@
-#include <Coyot3pp/QSqlite/QSqliteConnector.hpp>
+#include <Coyot3pp/QSqlite/QQSqlit3Connector.hpp>
 
 
 
@@ -89,7 +89,7 @@
 
     protected:
       // master db connector
-      coyot3::ddbb::sqlite::SqliteConnector*  db_connector_;
+      coyot3::ddbb::sqlite::QSqlit3Connector*  db_connector_;
       QTimer*                                 manager_timer_;
       std::mutex                              mtx_connector_;
 

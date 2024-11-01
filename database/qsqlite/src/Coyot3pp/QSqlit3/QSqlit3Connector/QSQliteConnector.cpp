@@ -1,4 +1,4 @@
-#include <Coyot3pp/QSqlit3/QSqliteConnector/QSqliteConnector.hpp>
+#include <Coyot3pp/QSqlit3/QSqlit3Connector/QSqlit3Connector.hpp>
 
 
 
@@ -7,7 +7,7 @@ namespace ddbb{
 namespace sqlite{
 
 CYT3MACRO_model_class_definitions(
-  SqliteConnectorConfigObject
+  QSqlit3ConnectorConfigObject
   , 
   , ( )
   , ( )
@@ -17,7 +17,7 @@ CYT3MACRO_model_class_definitions(
 )
 
   CYT3MACRO_model_class_serializable_json_definitions(
-    SqliteConnectorConfigObject
+    QSqlit3ConnectorConfigObject
     , 
     , 
     , ( )
@@ -27,7 +27,7 @@ CYT3MACRO_model_class_definitions(
       , check_state_interval , "check_state_interval" ,
   )
 
-  SqliteConnector::SqliteConnector(QObject* parent)
+  QSqlit3Connector::QSqlit3Connector(QObject* parent)
   :QObject(parent)
 
   ,state(State::ERROR)
@@ -49,28 +49,28 @@ CYT3MACRO_model_class_definitions(
     CLOG_DEBUG_LEVEL_SET(7);
     
   }
-  SqliteConnector::~SqliteConnector()
+  QSqlit3Connector::~QSqlit3Connector()
   {
     CLOG_WARN("sqlite-connector : destroying instance")
     if(external_instance_ != nullptr){
       master_detach();
     }
-    for(std::map<SqliteConnector*,const SqliteConnector*>::iterator it = slaves_.begin();
+    for(std::map<QSqlit3Connector*,const QSqlit3Connector*>::iterator it = slaves_.begin();
         it != slaves_.end();++it){
       it->first->master_detach();
     }
     closeDatabase();
   }
 
-  void SqliteConnector::set_debug_level_(int level)
+  void QSqlit3Connector::set_debug_level_(int level)
   {
     CLOG_DEBUG_LEVEL_SET(level);
   }
 
-  bool SqliteConnector::setConfiguration(const Json::Value& cfg)
+  bool QSqlit3Connector::setConfiguration(const Json::Value& cfg)
   {
     
-    SqliteConnectorConfigObjectJsIO buffer;
+    QSqlit3ConnectorConfigObjectJsIO buffer;
     if(buffer.from_json(cfg) == false){
       CLOG_WARN("sqlite-connector : set-configuration : error importing configuration")
       return false;
@@ -78,14 +78,14 @@ CYT3MACRO_model_class_definitions(
     return setConfiguration(buffer);
   }
   bool 
-  SqliteConnector::setConfiguration(const SqliteConnectorConfigObject& cfg){
+  QSqlit3Connector::setConfiguration(const QSqlit3ConnectorConfigObject& cfg){
     config_ = cfg;
     dbname                = config_.db_location();
     connection_name_      = config_.connection_name();
     timer_status_interval = config_.check_state_interval();
     return true;
   }
-  // bool SqliteConnector::check_configuration_structure()
+  // bool QSqlit3Connector::check_configuration_structure()
   // {
   //   if( 
   //       !coyot3::tools::json_contains_member(config,Config::db_location)
@@ -114,7 +114,7 @@ CYT3MACRO_model_class_definitions(
   //   return true;
   // }
   bool 
-  SqliteConnector::Init()
+  QSqlit3Connector::Init()
   {
     //apply configuration
     if(external_instance_ != nullptr){
@@ -143,7 +143,7 @@ CYT3MACRO_model_class_definitions(
     }
     timerStatus = new QTimer(this);
     timerStatus->setInterval(timer_status_interval);
-    if(!connect(timerStatus,&QTimer::timeout,this,&SqliteConnector::evaluateState))
+    if(!connect(timerStatus,&QTimer::timeout,this,&QSqlit3Connector::evaluateState))
     {
       CLOG_ERROR("SQLITE CONNECTOR : init : error connecting qtimer");
       state = State::ERROR;
@@ -156,7 +156,7 @@ CYT3MACRO_model_class_definitions(
     return true;
   }
   bool 
-  SqliteConnector::Start()
+  QSqlit3Connector::Start()
   {
     if(external_instance_ != nullptr){
       CLOG_WARN("sqlite-connector : start : there is an attached external "
@@ -188,7 +188,7 @@ CYT3MACRO_model_class_definitions(
   }
   
   bool 
-  SqliteConnector::Stop()
+  QSqlit3Connector::Stop()
   {
     if( (state != State::LAUNCHED)
         &&(state != State::LAUNCHING))
@@ -214,7 +214,7 @@ CYT3MACRO_model_class_definitions(
   }
 
   bool 
-  SqliteConnector::Shutdown()
+  QSqlit3Connector::Shutdown()
   {
     if(state != State::STOPPED)
     {
@@ -228,7 +228,7 @@ CYT3MACRO_model_class_definitions(
 
 
   bool 
-  SqliteConnector::openDatabase()
+  QSqlit3Connector::openDatabase()
   {
     CLOG_DEBUG(5,"SQLITE CONNECTOR : open-database : locking mutex. opening "
     "database for [" << connection_name_ << "]");
@@ -280,7 +280,7 @@ CYT3MACRO_model_class_definitions(
   }
 
   bool 
-  SqliteConnector::closeDatabase()
+  QSqlit3Connector::closeDatabase()
   {
 
     CLOG_DEBUG(5,"SQLITE CONNECTOR : close-database : locking mutex");
@@ -306,7 +306,7 @@ CYT3MACRO_model_class_definitions(
   }
 
   bool 
-  SqliteConnector::makeLinkControlQuery()
+  QSqlit3Connector::makeLinkControlQuery()
   {
     std::lock_guard<std::mutex> guard(dbmutex);
 
@@ -332,7 +332,7 @@ CYT3MACRO_model_class_definitions(
 
 
   bool 
-  SqliteConnector::makeSelectQuery(const QString& queryString,QSqlQuery& q){
+  QSqlit3Connector::makeSelectQuery(const QString& queryString,QSqlQuery& q){
     std::string err;
     return makeSelectQuery(queryString, q, err);
   }
@@ -340,7 +340,7 @@ CYT3MACRO_model_class_definitions(
 
 
   bool 
-  SqliteConnector::makeSelectQuery(const QString& queryString,QSqlQuery& q, std::string& err)
+  QSqlit3Connector::makeSelectQuery(const QString& queryString,QSqlQuery& q, std::string& err)
   {
 
     std::lock_guard<std::mutex> guard(dbmutex);
@@ -389,7 +389,7 @@ CYT3MACRO_model_class_definitions(
 
 
   bool 
-  SqliteConnector::makeInsertionQuery(const QString& queryString){
+  QSqlit3Connector::makeInsertionQuery(const QString& queryString){
     std::string err;
     return makeInsertionQuery(queryString, err);
   }
@@ -398,7 +398,7 @@ CYT3MACRO_model_class_definitions(
 
 
   bool 
-  SqliteConnector::makeInsertionQuery(const QString& queryString, std::string& err)
+  QSqlit3Connector::makeInsertionQuery(const QString& queryString, std::string& err)
   {
     bool success = false;
     std::lock_guard<std::mutex> guard(dbmutex);
@@ -438,13 +438,13 @@ CYT3MACRO_model_class_definitions(
   }
 
   bool 
-  SqliteConnector::makeCreateTableQuery(const QString& queryString){
+  QSqlit3Connector::makeCreateTableQuery(const QString& queryString){
     std::string err;
     return makeCreateTableQuery(queryString,err);
   }
 
   bool 
-  SqliteConnector::makeCreateTableQuery(const QString& queryString,std::string& err)
+  QSqlit3Connector::makeCreateTableQuery(const QString& queryString,std::string& err)
   {
     bool success = false;
     std::lock_guard<std::mutex> guard(dbmutex);
@@ -473,7 +473,7 @@ CYT3MACRO_model_class_definitions(
     return success;
   }
 
-  void SqliteConnector::evaluateState()
+  void QSqlit3Connector::evaluateState()
   {   
     if(!database)
     {
@@ -490,28 +490,28 @@ CYT3MACRO_model_class_definitions(
     
   }
 
-  bool SqliteConnector::database_owned(){return owns_db_;}
+  bool QSqlit3Connector::database_owned(){return owns_db_;}
     
-  std::string   SqliteConnector::database_name() const{
+  std::string   QSqlit3Connector::database_name() const{
     return dbname;
   }
-  std::string   SqliteConnector::database_name(const std::string& n){
+  std::string   QSqlit3Connector::database_name(const std::string& n){
     return (dbname = n);
   }
-  std::string   SqliteConnector::connection_name() const{
+  std::string   QSqlit3Connector::connection_name() const{
     return connection_name_;
   }
-  std::string   SqliteConnector::connection_name(const std::string& n){
+  std::string   QSqlit3Connector::connection_name(const std::string& n){
     return connection_name_ = n;
   }
-  int64_t SqliteConnector::keepalive_interval() const{
+  int64_t QSqlit3Connector::keepalive_interval() const{
     return timer_status_interval;
   }
-  int64_t SqliteConnector::keepalive_interval(int64_t i){
+  int64_t QSqlit3Connector::keepalive_interval(int64_t i){
     return timer_status_interval = i;
   }
 
-  bool SqliteConnector::master_attach(const SqliteConnector& master){
+  bool QSqlit3Connector::master_attach(const QSqlit3Connector& master){
     if(external_instance_ != nullptr){
       CLOG_WARN("sqlite-connector : master-attach : error attaching instance. "
       "already attached to other master instance.")
@@ -526,13 +526,13 @@ CYT3MACRO_model_class_definitions(
     }
     CLOG_INFO("sqlite-connector : master-attach : attaching external master "
     "instance")
-    external_instance_ = const_cast<SqliteConnector*>(&master);
+    external_instance_ = const_cast<QSqlit3Connector*>(&master);
     external_instance_->slave_attach_(this);
     return true;
   }
   
   bool
-  SqliteConnector::master_detach(){
+  QSqlit3Connector::master_detach(){
     external_instance_->slave_detach_(this);
     if(external_instance_ == nullptr){
       CLOG_WARN("sqlite-connector : master-detach : no master instance is "
@@ -543,9 +543,9 @@ CYT3MACRO_model_class_definitions(
     return true;
   }
 
-  bool SqliteConnector::slave_attach_(SqliteConnector* c){
+  bool QSqlit3Connector::slave_attach_(QSqlit3Connector* c){
     std::lock_guard guard(dbmutex);
-    std::map<SqliteConnector*, const SqliteConnector*>::iterator it;
+    std::map<QSqlit3Connector*, const QSqlit3Connector*>::iterator it;
     it = slaves_.find(c);
     if(it != slaves_.end()){
       return true;
@@ -553,9 +553,9 @@ CYT3MACRO_model_class_definitions(
     slaves_.insert(std::make_pair(c, this));
     return true;
   }
-  bool SqliteConnector::slave_detach_(SqliteConnector* c){
+  bool QSqlit3Connector::slave_detach_(QSqlit3Connector* c){
     std::lock_guard guard(dbmutex);
-    std::map<SqliteConnector*, const SqliteConnector*>::iterator it;
+    std::map<QSqlit3Connector*, const QSqlit3Connector*>::iterator it;
     it = slaves_.find(c);
     if(it == slaves_.end()){
       return true;

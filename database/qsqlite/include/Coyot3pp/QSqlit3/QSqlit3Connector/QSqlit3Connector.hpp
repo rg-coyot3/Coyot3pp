@@ -36,7 +36,7 @@ namespace ddbb{
 namespace sqlite{
 
 CYT3MACRO_model_class_declarations(
-  SqliteConnectorConfigObject
+  QSqlit3ConnectorConfigObject
   , 
   , ( )
   , ( )
@@ -46,7 +46,7 @@ CYT3MACRO_model_class_declarations(
 )
 
   CYT3MACRO_model_class_serializable_json_declarations(
-    SqliteConnectorConfigObject
+    QSqlit3ConnectorConfigObject
     , 
     , 
     , ( )
@@ -56,7 +56,7 @@ CYT3MACRO_model_class_declarations(
       , check_state_interval , "check_state_interval" ,
   )
 
-class SqliteConnector : public QObject{
+class QSqlit3Connector : public QObject{
   Q_OBJECT
   public:
     struct Config{
@@ -67,12 +67,12 @@ class SqliteConnector : public QObject{
     };
     typedef coyot3::tools::ModuleState State;
   
-    SqliteConnector(QObject* parent = nullptr);
+    QSqlit3Connector(QObject* parent = nullptr);
 
-    virtual ~SqliteConnector();
+    virtual ~QSqlit3Connector();
 
     bool setConfiguration(const Json::Value& cfg);
-    bool setConfiguration(const SqliteConnectorConfigObject& obj);
+    bool setConfiguration(const QSqlit3ConnectorConfigObject& obj);
 
     virtual bool Init();
     virtual bool Start();
@@ -80,7 +80,7 @@ class SqliteConnector : public QObject{
     virtual bool Shutdown();
 
 
-    bool          master_attach(const SqliteConnector& master);
+    bool          master_attach(const QSqlit3Connector& master);
     bool          master_detach();
 
     bool          database_owned();
@@ -100,7 +100,7 @@ class SqliteConnector : public QObject{
     State state;
 
     bool           owns_db_;
-      SqliteConnector* external_instance_;
+      QSqlit3Connector* external_instance_;
     QSqlDatabase*  database;
       std::string    dbname;
       std::string    connection_name_;
@@ -119,15 +119,15 @@ class SqliteConnector : public QObject{
 
     //bool check_configuration_structure();
 
-        bool slave_attach_(SqliteConnector* c);
-        bool slave_detach_(SqliteConnector* c);
-          std::map<SqliteConnector*, const SqliteConnector*> slaves_;
+        bool slave_attach_(QSqlit3Connector* c);
+        bool slave_detach_(QSqlit3Connector* c);
+          std::map<QSqlit3Connector*, const QSqlit3Connector*> slaves_;
 
     QTimer*       timerStatus;
       int           timer_status_interval;
 
     //Json::Value config;
-    SqliteConnectorConfigObject config_;
+    QSqlit3ConnectorConfigObject config_;
 
     std::string lastErrorString;
 

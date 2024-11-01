@@ -1,4 +1,17 @@
 
+set(COYOT3PPCOMPONENT          Mqtt)
+set(COYOT3PPCOMPONENTVERSION   1.0)
+
+
+
+include_directories(include)
+include_directories(${COYOT3PPCOR3_INCLUDE_DIRS})
+
+file(GLOB LC3_SRCS_MQTT
+          src/${PROJECT_NAME}/${COYOT3PPCOMPONENT}/Gateway/*.cpp)
+
+
+
 if(WIN32)
   message( FATAL_ERROR "MQTT - not previewed for windows.")
 elseif(UNIX)

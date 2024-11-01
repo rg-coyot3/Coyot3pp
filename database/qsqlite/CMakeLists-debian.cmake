@@ -1,10 +1,4 @@
 
-set(COYOT3PPCOMPONENT          QSqlit3)
-set(COYOT3PPCOMPONENTVERSION   1.0)
-
-include_directories(include)
-include_directories(${COYOT3PPCOR3_INCLUDE_DIRS})
-
 find_package(Qt5 REQUIRED Sql)
 
 set(LCOYOT3PPQSQLT_EXTERNAL_DEPENDENCES
@@ -12,10 +6,6 @@ set(LCOYOT3PPQSQLT_EXTERNAL_DEPENDENCES
   Cor3
 )
 
-
-file(GLOB LC3_SRCS_QSQLT
-          src/${PROJECT_NAME}/${COYOT3PPCOMPONENT}/QSqliteConnector/*.cpp
-)
 
 add_library(${COYOT3PPCOMPONENT} ${LC3_SRCS_QSQLT})
 add_library(${PROJECT_NAME}::${COYOT3PPCOMPONENT} ALIAS ${COYOT3PPCOMPONENT})
@@ -28,12 +18,10 @@ target_link_libraries(${COYOT3PPCOMPONENT}
                     Cor3
 )
 
-
 set(CMAKE_INSTALL_PREFIX ${COYOT3_INSTALL_PREFIX})
 install(  DIRECTORY   ${CMAKE_CURRENT_SOURCE_DIR}/include/${PROJECT_NAME}/${COYOT3PPCOMPONENT}
           DESTINATION include/${PROJECT_NAME}
 )
-
 
 install(  TARGETS     ${COYOT3PPCOMPONENT}
 

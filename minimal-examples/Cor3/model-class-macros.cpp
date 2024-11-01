@@ -798,13 +798,13 @@ int main(int argv, char** argc){
   test1_fin = coyot3::tools::now();
   CLOG_INFO(" - allgood = " << res << " : fin test json : msecs=" << (test1_fin - test1_init))
 
-  CLOG_INFO(" - inicia test rjson")
-  test2_init = coyot3::tools::now();
-  res = true;
-  for(int64_t i = 0; i < total_veces; i++){
-    test2.clear();
-    res &= test2.from_rjson_string(cont);
-  }
+  // CLOG_INFO(" - inicia test rjson")
+  // test2_init = coyot3::tools::now();
+  // res = true;
+  // for(int64_t i = 0; i < total_veces; i++){
+  //   test2.clear();
+  //   res &= test2.from_rjson_string(cont);
+  // }
   test2_fin = coyot3::tools::now();
   CLOG_INFO(" - fin test rjson : msecs=" << (test2_fin - test2_init))
   CLOG_INFO(" - allgood " << res)

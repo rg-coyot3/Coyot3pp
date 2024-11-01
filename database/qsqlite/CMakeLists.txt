@@ -1,4 +1,14 @@
 
+set(COYOT3PPCOMPONENT          QSqlit3)
+set(COYOT3PPCOMPONENTVERSION   1.0)
+
+include_directories(include)
+include_directories(${COYOT3PPCOR3_INCLUDE_DIRS})
+
+
+file(GLOB LC3_SRCS_QSQLT
+          src/${PROJECT_NAME}/${COYOT3PPCOMPONENT}/QSqlit3Connector/*.cpp
+)
 
 if(WIN32)
   message( FATAL_ERROR "QSQLT - not previewed for windows.")

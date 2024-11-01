@@ -80,16 +80,16 @@ SqliteDBStopsManager::~SqliteDBStopsManager(){
 }
 bool
 SqliteDBStopsManager::Start(){
-  db_connector_  = new coyot3::ddbb::sqlite::SqliteConnector(this);
+  db_connector_  = new coyot3::ddbb::sqlite::QSqlit3Connector(this);
   serviceStopsIO = new ServiceStopDAOQSqliteIO(this);
   manager_timer_ = new QTimer(this);
 
   connect(manager_timer_,&QTimer::timeout, 
           this, &SqliteDBStopsManager::timer_check_status_callback);
 
-  db_connector_->database_name("database_path.sqlite");
+  db_connector_->database_name("database_path.sqlite"); //master db connector
   serviceStopsIO->set_table_name("table_positions");
-  serviceStopsIO->master_attach(*db_connector_);
+  serviceStopsIO->master_attach(*db_connector_); 
   manager_timer_->setInterval(1000);
 
   db_connector_->Init();

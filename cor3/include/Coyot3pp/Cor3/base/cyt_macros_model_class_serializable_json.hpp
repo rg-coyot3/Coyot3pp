@@ -40,7 +40,6 @@
       \
       virtual Json::Value   to_json() const override;\
       virtual bool          from_json(const Json::Value& source) override;\
-      virtual bool          from_json(const rapidjson::Value& source) override;\
       static std::string    get_serialization_model_template(int l__ = 0);\
       protected:\
         static const char* version_;\
@@ -51,6 +50,9 @@
   std::ostream& operator<<(::std::ostream& o, const CY_class_name & i);
 
 
+
+// removed rapidjson support
+//      virtual bool          from_json(const rapidjson::Value& source) override;
 
 
 
@@ -149,7 +151,7 @@
     }
 
 
-
+/* REMOVED RAPIDJSON SUPPORT
   #define cyt3macro_model_class_serializable_json_def_fromrapidjson_(CY_class_name, CY_jsio_parent, CY_version, CY_props_jsios,CY_props_enum_classes,...)\
     bool CY_class_name##JsIO::from_json(const rapidjson::Value& source){\
       bool res = true;\
@@ -169,7 +171,7 @@
       FOR_EACH_TRIPLES(cyt3macro_model_class_serializable_json_def_fromrjson_enumclass_item_, PASS_PARAMETERS(CY_props_enum_classes)) \
       return res;\
     }
-
+*/
 
 
     #define cyt3macro_model_class_serializable_json_def_fromrjson_item_(CY_prop_source, CY_json_tag, CY_prop_jscast_type) \
@@ -222,7 +224,7 @@
   #define cyt3macro_model_class_serializable_json_def_operator_stdstring_(CY_class_name)\
     bool operator<<(CY_class_name & o, const std::string& i){\
       bool res;CY_class_name##JsIO buffer(o); \
-      res = buffer.from_rjson_string(i);\
+      res = buffer.from_json_string(i);\
       o = buffer; \
       return res;\
     }
@@ -261,8 +263,6 @@
   \
   cyt3macro_model_class_serializable_json_def_fromjson_(CY_class_name, CY_jsio_parent, CY_version, CY_props_jsios,CY_props_enum_classes,__VA_ARGS__);\
   \
-  cyt3macro_model_class_serializable_json_def_fromrapidjson_(CY_class_name, CY_jsio_parent, CY_version, CY_props_jsios,CY_props_enum_classes,__VA_ARGS__);\
-  \
   cyt3macro_model_class_serializable_json_def_getmodel_(CY_class_name, CY_jsio_parent, CY_version, CY_props_jsios,CY_props_enum_classes,__VA_ARGS__)\
   \
   cyt3macro_model_class_serializable_json_def_operator_ostream_(CY_class_name)\
@@ -273,7 +273,9 @@
   \
   cyt3macro_model_class_serializable_json_def_operator_stdstring_(CY_class_name)\
   
-
+// REMOVED RAPIDJSON SUPPORT
+//  cyt3macro_model_class_serializable_json_def_fromrapidjson_(CY_class_name, CY_jsio_parent, CY_version, CY_props_jsios,CY_props_enum_classes,__VA_ARGS__);
+  
 
 
 ///
@@ -295,14 +297,14 @@
       \
       virtual Json::Value to_json() const override;\
       virtual bool        from_json(const Json::Value& source) override;\
-      virtual bool        from_json(const rapidjson::Value& source) override;\
       static std::string get_serialization_model_template(int l__ = 0);\
   };\
   Json::Value   operator<<(::Json::Value& o, const CY_class_name##MappedSet& i);\
   bool          operator<<(CY_class_name & o, const Json::Value& i);\
   std::ostream& operator<<(::std::ostream& o, const CY_class_name##MappedSet& i);
 
-
+// REMOVED RAPIDJSON SUPPORT
+//      virtual bool        from_json(const rapidjson::Value& source) override;
 
   #define cyt3macro_model_class_set_mapped_serializable_json_def_constrdestr_(CY_class_name,CY_member_index_property)\
     CY_class_name##MappedSetJsIO::CY_class_name##MappedSetJsIO()\
@@ -339,7 +341,8 @@
       return res;\
     }
   
-  
+/*REMOVED RAPIDJSON SUPPORT
+
   #define cyt3macro_model_class_set_mapped_serializable_json_def_from_rjson_(CY_class_name,CY_member_index_property) \
     bool CY_class_name##MappedSetJsIO::from_json(const rapidjson::Value& source){\
       bool res = true;\
@@ -354,6 +357,8 @@
       }\
       return res;\
     }
+*/
+
 
   #define cyt3macro_model_class_set_mapped_serializable_def_operator_ostream_(CY_class_name)\
     std::ostream& operator<<(::std::ostream& o, const CY_class_name##MappedSet& i){\
@@ -389,8 +394,6 @@
   \
   cyt3macro_model_class_set_mapped_serializable_json_def_from_json_(CY_class_name,CY_member_index_property) \
   \
-  cyt3macro_model_class_set_mapped_serializable_json_def_from_rjson_(CY_class_name,CY_member_index_property) \
-  \
   cyt3macro_model_class_set_mapped_serializable_def_operator_json_(CY_class_name) \
   \
   cyt3macro_model_class_set_mapped_serializable_def_operator_classname_(CY_class_name) \
@@ -399,7 +402,10 @@
   \
   cyt3macro_model_class_set_mapped_serializable_def_sermodeltemp(CY_class_name,CY_member_index_property)
 
-
+  
+//REMOVED RAPIDJSON SUPPORT
+//  cyt3macro_model_class_set_mapped_serializable_json_def_from_rjson_(CY_class_name,CY_member_index_property) 
+  
 
 
 
@@ -421,13 +427,15 @@
       \
       Json::Value to_json() const;\
       bool        from_json(const Json::Value& source);\
-      bool        from_json(const rapidjson::Value& source);\
       \
       static std::string get_serialization_model_template(int l__ = 0);\
   };\
   Json::Value   operator<<(::Json::Value& o, const CY_class_name##Stack& i);\
   bool          operator<<(CY_class_name##Stack& o, const Json::Value& i);\
   std::ostream& operator<<(::std::ostream& o, const CY_class_name##Stack& i);
+
+// REMOVED RAPIDJSON SUPPORT
+//      bool        from_json(const rapidjson::Value& source);
 
 
   #define cyt3macro_model_class_set_stack_def_serializable_json_tojson_(CY_class_name) \
@@ -453,6 +461,9 @@
       return res; \
     }
 
+
+/*REMOVED RAPIDJSON SUPPORT
+
   #define cyt3macro_model_class_set_stack_def_serializable_json_fromrjson_(CY_class_name) \
     bool CY_class_name##StackJsIO::from_json(const rapidjson::Value& source){ \
       bool res = true; \
@@ -465,6 +476,8 @@
       } \
       return res; \
     }
+*/
+
 
   #define cyt3macro_model_class_set_stack_def_serializable_json_operators_(CY_class_name) \
     Json::Value   operator<<(::Json::Value& o, const CY_class_name##Stack& i){\
@@ -498,11 +511,11 @@
   \
   cyt3macro_model_class_set_stack_def_serializable_json_fromjson_(CY_class_name) \
   \
-  cyt3macro_model_class_set_stack_def_serializable_json_fromrjson_(CY_class_name) \
-  \
   cyt3macro_model_class_set_stack_def_serializable_json_operators_(CY_class_name) \
   \
   cyt3macro_model_class_set_stack_def_serializable_json_sermodetemplate_(CY_class_name) \
 
 
 
+// REMOVED RAPIDJSON SUPPORT
+//  cyt3macro_model_class_set_stack_def_serializable_json_fromrjson_(CY_class_name)
