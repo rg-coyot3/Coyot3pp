@@ -23,3 +23,8 @@ done
 echo " "
 echo " - done"
 echo " "
+
+for debinstaller in $(ls ${v_this_dir}/bashes/gnu/debian)
+do
+  bashes/gnu/debian/$debinstaller
+done

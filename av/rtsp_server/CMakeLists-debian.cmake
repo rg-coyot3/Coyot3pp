@@ -2,7 +2,6 @@
 
 find_package(OpenCV 4 REQUIRED)
 find_package(GStreamer REQUIRED)
-find_package(GLib REQUIRED)
 
 include_directories(/usr/include/glib-2.0)
 include_directories(/usr/lib/x86_64-linux-gnu/glib-2.0/include)
