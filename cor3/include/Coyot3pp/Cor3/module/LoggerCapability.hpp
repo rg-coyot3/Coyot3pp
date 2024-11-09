@@ -47,7 +47,9 @@ class LoggerCapability{
 
   public:
     virtual ~LoggerCapability();
-
+    LoggerLine::Level        modlog_verbosity() const;
+    LoggerLine::Level        modlog_verbosity(LoggerLine::Level l);
+    LoggerLine::Level        modlog_verbosity(int l);
 
 
 
@@ -80,8 +82,7 @@ class LoggerCapability{
     std::string class_name() const;
     std::string class_name(const std::string& cn);
 
-    LoggerLine::Level        modlog_verbosity() const;
-    LoggerLine::Level        modlog_verbosity(LoggerLine::Level l);
+
 
 
 

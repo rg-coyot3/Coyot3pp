@@ -215,6 +215,7 @@ ImageContent::ImageContent(const std::string& instanceName)
 ,params_()
 ,image_product()
 ,image_source()
+,preview_window_created_(false)
 {
   class_name("img-content");
   ImageContent::InitializeOpenCvVisualPreviews();
@@ -265,7 +266,6 @@ bool ImageContent::set_config(const SourceImageConfig& config){
 bool ImageContent::prepare_output(){
   bool opres = true;
   //resize
-
   //shifting;
   if(params_.effects().src_shifting_x() || params_.effects().src_shifting_y()){
     if(!shift_source(params_.effects().src_shifting_x(), params_.effects().src_shifting_y())){
@@ -273,12 +273,10 @@ bool ImageContent::prepare_output(){
       return false;
     }
   }
-
   if(!update_img_to_product()){
     log_warn("imc : update : error importing to product");
     return false;
   }
-
   if(!(opres &= imgprod_rotate())){
     log_warn("imc : update : img rotation error");
   }
@@ -286,8 +284,11 @@ bool ImageContent::prepare_output(){
     log_warn("imc : update : error drawing title");
   }
 
-  
   if(show_preview()){
+    if(preview_window_created_ == false){
+      cv::imshow(name()+"_prod",image_product);
+      preview_window_created_ = true;
+    }
     cv::resizeWindow(name()+"_prod", params_.width(),params_.height());
     cv::imshow(name()+"_prod",image_product);
     cv::waitKey(1);

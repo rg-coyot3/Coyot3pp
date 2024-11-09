@@ -41,6 +41,7 @@ namespace image{
 
 
   bool ImageContentImgSequence::task_init(){
+    log_info("init : begin");
     wth_ = new(std::nothrow) ct::WorkerThread(
       std::bind(&ImageContentImgSequence::image_sequence_task,this),"imc");
     if(!wth_){
@@ -49,29 +50,37 @@ namespace image{
     }
     params_imgsec().current_index(0);
     wth_->setInterval(params_imgsec_.interval());
+    log_info("init : end");
     return true;
   }
   bool ImageContentImgSequence::task_start(){
+    log_info("start : begin");
     wth_->start();
+    log_info("start : end");
     return true;
     
   }
   bool ImageContentImgSequence::task_pause(){
+    log_info("pause : begin");
     wth_->stop();
+    log_info("pause : end");
     return true;
   }
   bool ImageContentImgSequence::task_stop(){
+    log_info("stop : begin");
     wth_->stop();
+    log_info("stop : end");
     return true;
   }
   bool ImageContentImgSequence::task_end(){
-    
+    log_info("end : begin");
     if(wth_ != nullptr){
       log_info("end : clearing worker thread");
       wth_->stop();
       delete wth_;
       wth_ = nullptr;
     }
+    log_info("ended");
     return true;
   }
 
@@ -152,7 +161,7 @@ namespace image{
         CLOG_DEBUG(3,"imc-image-sequence : calculate next index : current index"
         "is same as precedent (" << init_index << ")")
       }
-      buffer = buffer = params_.base_path() + params_imgsec_.sequence()[
+      buffer = params_.base_path() + params_imgsec_.sequence()[
         params_imgsec_.current_index()]
         .path();
       if(ct::file_exists(buffer) == false){

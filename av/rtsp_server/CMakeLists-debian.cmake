@@ -2,10 +2,11 @@
 
 find_package(OpenCV 4 REQUIRED)
 find_package(GStreamer REQUIRED)
-
+find_package(GLib REQUIRED)
 include_directories(/usr/include/glib-2.0)
 include_directories(/usr/lib/x86_64-linux-gnu/glib-2.0/include)
 include_directories(/usr/include/gstreamer-1.0)
+
 
 # gstreamer & rtsp-server : begin
 pkg_check_modules(GST gstreamer-1.0)
@@ -16,6 +17,7 @@ set(LCOYOT3PPRTSP_EXTERNAL_DEPENDENCES
   gstreamer-1.0
   gstbase-1.0
   gstrtsp-1.0
+  gstrtspserver-1.0
   gstapp-1.0
   gstnet-1.0
   gobject-2.0
@@ -24,9 +26,27 @@ set(LCOYOT3PPRTSP_EXTERNAL_DEPENDENCES
   gthread-2.0
   glib-2.0
   gio-2.0
+
 )
 
+include_directories(
+    include
+    ${GST_INCLUDE_DIRS}
+    ${GSTREAMER_INCLUDE_DIRS}
+    ${GSTRTSP_INCLUDE_DIRS}
+  )
+  link_directories(
+    ${GLIB_LIBRARY_DIRS}
+    ${GSTREAMER_LIBRARY_DIRS}
+    ${GSTRTSP_LIBRARY_DIRS}
+  )
+  add_definitions(
+    ${GST_DEFINITIONS}
+    ${GSTRTSP_DEFINITIONS}
+    ${GSTREAMER_DEFINITIONS}   
+  )
 
+  add_compile_definitions(IMAG3_EXAMPLES_DIRECTORY="${CMAKE_CURRENT_LIST_DIR}/../image_content/doc/images")
 
 
 add_library(${COYOT3PPCOMPONENT} ${LC3_SRCS_RTSP})
@@ -81,13 +101,15 @@ install(FILES
         DESTINATION lib/cmake/${PROJECT_NAME}
 )
 
-# if(LCY_BUILD_WITH_MINIMAL_EXAMPLES)
-#   add_executable(mqtt_simple_client_example
-#     ${COYOT3PP_MINIMAL_EXAMPLES_SRC_DIR}/Mqtt/mqtt_client_example.cpp
-#   )
-#   target_link_libraries(mqtt_simple_client_example
-#     ${COYOT3PPCOMPONENT}
-#     Cor3
-#   )
 
-# endif()
+
+if(LCY_BUILD_WITH_MINIMAL_EXAMPLES)
+  add_executable(h264rtsp_min_example
+    ${COYOT3PP_MINIMAL_EXAMPLES_SRC_DIR}/H264Rtsp/h264-rtsp-min-example.cpp)
+  
+  target_link_libraries(h264rtsp_min_example
+    ${COYOT3PPCOMPONENT}
+    Cor3
+  )
+endif()
+

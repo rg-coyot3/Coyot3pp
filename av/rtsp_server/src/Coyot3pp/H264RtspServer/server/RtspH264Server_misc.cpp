@@ -9,8 +9,8 @@ namespace rtsp{
 
   
   const std::string RtspH264Server::pipeline_preset_ull 
-                    = "appsrc name=imagesrc "
-                      "do-timestamp=true "
+                    = "( appsrc name=imagesrc "
+                      "do-timestamp=false "
                       "min-latency=0 "
                       "max-latency=0 "
                       "max-bytes=1000 "
@@ -33,8 +33,8 @@ namespace rtsp{
                       "! "
                       "rtph264pay "
                       "pt=96 "
-                      "sync=false "
-                      "name=pay0 ";
+                      // "sync=true "
+                      "name=pay0 )";
 
   const std::string RtspH264Server::pipeline_preset_tst
                     = "videotestsrc"

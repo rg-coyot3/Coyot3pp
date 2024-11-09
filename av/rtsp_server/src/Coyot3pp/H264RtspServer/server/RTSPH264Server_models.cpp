@@ -42,7 +42,9 @@ namespace rtsp{
   ,gstloop_thread(nullptr)
   ,rtsp_server(nullptr)
   ,rtsp_server_source_id(0)
-  ,server_port(0){}
+  ,server_port(0){
+    CLOG_INFO("h264-rtsp-server : server-gst-struct : created")
+  }
   
   RtspH264Server::ServerGstStruct::~ServerGstStruct(){}
 

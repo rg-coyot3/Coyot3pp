@@ -20,7 +20,9 @@ namespace rtsp{
   ,params_()
   ,streams()
   {
-    log_info("constructor");
+    class_name("h264-rtsp-server");
+    log_info("constructor ");
+    CLOG_INFO("BORRAR ÉSTO... SOLO ES PARA SABER QUE LLEGO AQUÍ")
     conf_task_init_(std::bind(&RtspH264Server::task_init_,this));
     conf_task_start_(std::bind(&RtspH264Server::task_start_,this));
     conf_task_pause_(std::bind(&RtspH264Server::task_pause_,this));
@@ -63,6 +65,7 @@ namespace rtsp{
   bool 
   RtspH264Server::task_init_(){
     //crear los servidores.
+    log_info("init : creating publishers");
     return publishers_create_();
   }
 
@@ -77,6 +80,7 @@ namespace rtsp{
     }else{
       log_info("start : initializing gst");
       gst_init(nullptr,nullptr);
+      GST_IS_INITIALIZED = true;
     }
 
     if((fops &= create_rtsp_server_()) == false){
@@ -105,6 +109,7 @@ namespace rtsp{
       g_main_loop_run(handlers.gstreamer_main_loop);
       g_main_loop_unref(handlers.gstreamer_main_loop);
     });
+    
     return true;
   }
   

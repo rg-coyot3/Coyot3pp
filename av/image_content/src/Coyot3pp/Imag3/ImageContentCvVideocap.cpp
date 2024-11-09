@@ -24,6 +24,7 @@ namespace image{
     params_.name(name);
 
     conf_task_start_(std::bind(&ImageContentCvVideocap::task_start,this));
+    conf_task_stop_(std::bind(&ImageContentCvVideocap::task_stop,this));
   }
 
   ImageContentCvVideocap::~ImageContentCvVideocap(){}

@@ -50,7 +50,7 @@ namespace image{
   }
   
   bool ImageContentDisplayImage::get_image_from_display(){
-    log_debug(7,"get-image-from-display : obtaining window attributes");
+    log_debug(7,o() << "get-image-from-display : obtaining window attributes");
     XGetWindowAttributes(display_,window_root_, &window_attributes_);
     
     log_debug(5, o() << "get-image-from-display : making capture [" 

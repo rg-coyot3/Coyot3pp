@@ -71,18 +71,21 @@ namespace image{
     test_image_params.offset(test_image_params.offset() + (now - test_image_params.last_it_ts()));
     test_image_params.last_it_ts(now);
     (test_image_params.offset()>5000?test_image_params.offset(test_image_params.offset() - 5000):test_image_params.offset());
-    test_image_params.red()   = static_cast<int>(255.0 * ((1.0 + sin(M_2_PI * ( test_image_params.offset() / 5000.0)))/ 2.0));
-    test_image_params.green() = static_cast<int>(255.0 * ((1.0 + sin(M_2_PI * (0.5 * test_image_params.offset() / 5000.0)))/ 2.0));
-    test_image_params.blue()  = static_cast<int>(255.0 * ((1.0 + sin(M_PI + M_2_PI * ( 4 * test_image_params.offset() / 5000.0)))/ 2.0));
-    CLOG_DEBUG(5,"vsi-test : task : "
-        " offset(" << test_image_params.offset() << ") "
-        " sin(" << ((1.0 + sin(M_2_PI * ( test_image_params.offset() / 5000.0)))/ 2.0) << ")"
+    test_image_params.red()   = static_cast<int>(255.0 * (sin(M_2_PI * ( test_image_params.offset() / 5000.0)))/ 2.0);
+    test_image_params.green() = static_cast<int>(255.0 * (sin(M_PI * (test_image_params.offset() / 5000.0)))/ 2.0);
+    test_image_params.blue()  = static_cast<int>(255.0 * (sin(M_2_PI * ( 4 * test_image_params.offset() / 5000.0)))/ 2.0);
+    log_debug(5,o() << "vsi-test : task : offset(" << test_image_params.offset() 
+      << ") sin(" << ((1.0 + sin(M_2_PI * ( test_image_params.offset() / 5000.0)))/ 2.0) << ")"
         "(r:" << test_image_params.red() 
       << ",g:" << test_image_params.green() 
       << ",b:" << test_image_params.blue() 
-      <<  ")")
+      <<  ")");
     image_source.setTo(cv::Scalar(test_image_params.red(),test_image_params.green(),test_image_params.blue()));
     if(params_.show_preview()){
+      if(preview_window_created_ == false){
+        cv::imshow(params_.name() + "testsource",image_source);
+        preview_window_created_ = true;  
+      }
       cv::resizeWindow(params_.name() + "testsource", test_image_params.width(),test_image_params.height());
       cv::imshow(params_.name() + "testsource",image_source);
       cv::waitKey(1);

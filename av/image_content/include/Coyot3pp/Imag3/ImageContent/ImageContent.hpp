@@ -277,7 +277,8 @@ class ImageContent : public coyot3::mod::ModuleBase{
     cv::Mat               image_source;
     std::mutex            mtx_output_;
     std::mutex            mtx_source_;
-
+    
+    bool                  preview_window_created_;
 
     bool update_img_to_product();
     bool imgprod_resize(); //mutex lock
