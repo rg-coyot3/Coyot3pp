@@ -1,6 +1,13 @@
 # Coyot3pp lib
 
-## INTRODUCTION
+
+## SUMMARY
+
+* [INTRODUCTION AND BLAHBLAH](#introduction-blahblah)
+* [INSTALLATION](#installation)
+
+
+## INTRODUCTION BLAHBLAH
 
 This is a set of tools I have created to ease my development tasks.
 
@@ -55,6 +62,25 @@ at a console, launch the command:
 source INSTALL_DEPS_DEBIAN.sh
 ```
 
+> this library uses dependences from the standard repositories.
+
+### CHOOSE COMPONENTS
+
+At `CMakeLists.txt`: 
+
+Select the options to activate:
+
+```cmake
+option(LCY_BUILD_WITH_MINIMAL_EXAMPLES   "Build with minimal examples"       ON)
+option(LCY_BUILD_COMPONENT_REST          "Build with R3st components"        OFF)
+option(LCY_BUILD_COMPONENT_MQTT          "Build with Mqtt components"        ON)
+option(LCY_BUILD_COMPONENT_POSTGRESQL    "Build with PostgreSql components"  OFF)
+option(LCY_BUILD_COMPONENT_QSQLITE       "Build with QSqlite    components"  ON)
+option(LCY_BUILD_COMPONENT_IMAG3         "Build with Imag3      components"  OFF)
+option(LCY_BUILD_COMPONENT_H264RTSP      "Build with H264Rtsp   components"  ON)
+option(LCY_BUILD_COMPONENT_LWSS          "Build with LwsServer  components"  OFF)
+```
+
 ### BUILD
 
 ```bash
@@ -88,3 +114,6 @@ make install
   ```
   
   However, it has been included a `make uninstall` target that will ease the uninstallation for you.
+
+
+

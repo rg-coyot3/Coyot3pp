@@ -65,7 +65,11 @@ namespace mod{
                     && (state_ == ec::CytModuleState::PAUSED) )
                   || (_modconf_pauses == false);
 
-    if((cond01 == false) || (cond02 == false) || (cond03 == false)){
+    if(
+      (cond01 == false) 
+      || ((cond02 == false) && (state_ != ec::CytModuleState::PAUSED)) 
+      || ((cond03 == false) && (state_ != ec::CytModuleState::INITIALIZED))
+      ){
       log_warn( o() << "state does not permit start. state=[" << state_ << "]."
       " module states" << _mod_configuration() );
       return false;
@@ -262,6 +266,9 @@ namespace mod{
   std::string ModuleBase::name(const std::string& nn){
     name_ = nn;return instance_name(nn);
   }
+  ec::CytModuleState ModuleBase::state() const{
+    return state_;
+  }
 
 
 
@@ -313,7 +320,7 @@ ModuleBase::tasks_end_(){
 
 bool ModuleBase::conf_task_init_(ModuleTaskFunction f,bool prepend){
   _modconf_initializes = true;
-  if(prepend == true){
+  if((prepend == true) && (tasks_stack_init_.size() != 0)){
     tasks_stack_init_.insert(tasks_stack_init_.begin(),f);
   }else{
     tasks_stack_init_.push_back(f);
@@ -322,7 +329,8 @@ bool ModuleBase::conf_task_init_(ModuleTaskFunction f,bool prepend){
 }
 bool ModuleBase::conf_task_start_(ModuleTaskFunction f,bool prepend){
   _modconf_starts = true;
-  if(prepend == true){
+  
+  if((prepend == true) && (tasks_stack_start_.size() != 0)){
     tasks_stack_start_.insert(tasks_stack_init_.begin(),f);
   }else{
     tasks_stack_start_.push_back(f);
@@ -331,7 +339,7 @@ bool ModuleBase::conf_task_start_(ModuleTaskFunction f,bool prepend){
 }
 bool ModuleBase::conf_task_pause_(ModuleTaskFunction f,bool prepend){
   _modconf_pauses = true;
-  if(prepend == true){
+  if((prepend == true) && (tasks_stack_pause_.size() != 0)){
     tasks_stack_pause_.insert(tasks_stack_init_.begin(),f);
   }else{
     tasks_stack_pause_.push_back(f);
@@ -340,7 +348,7 @@ bool ModuleBase::conf_task_pause_(ModuleTaskFunction f,bool prepend){
 }
 bool ModuleBase::conf_task_stop_(ModuleTaskFunction f,bool prepend){
   _modconf_stops = true;
-  if(prepend == true){
+  if((prepend == true) && (tasks_stack_stop_.size() != 0)){
     tasks_stack_stop_.insert(tasks_stack_init_.begin(),f);
   }else{
     tasks_stack_stop_.push_back(f);
@@ -349,7 +357,7 @@ bool ModuleBase::conf_task_stop_(ModuleTaskFunction f,bool prepend){
 }
 bool ModuleBase::conf_task_end_(ModuleTaskFunction f,bool prepend){
   _modconf_ends = true;
-  if(prepend == true){
+  if((prepend == true) && (tasks_stack_end_.size() != 0)){
     tasks_stack_end_.insert(tasks_stack_init_.begin(),f);
   }else{
     tasks_stack_end_.push_back(f);
@@ -379,5 +387,9 @@ ModuleBase::_mod_configuration(){
   ret+=")";
   return ret;
 }
+
+
+
+
 }
 }

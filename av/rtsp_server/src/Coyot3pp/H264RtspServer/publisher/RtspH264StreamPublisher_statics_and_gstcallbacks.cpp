@@ -28,16 +28,14 @@ namespace rtsp{
     GstRTSPMediaFactory*  factory
     ,GstRTSPMedia*        media)
   {
-    CLOG_INFO("rtsp-h264-stream : factory-media-configure : " 
-      << name() << " : begin")
+    log_info("factory-media-configure :  begin");
     GstElement* pipeline         = gst_rtsp_media_get_element(media);
     //CLOG_INFO("TO-DELETE : factory media conf bin get by name : " << gst_bin_get_by_name(GST_BIN(pipeline),"imagesrc"))
     handlers.gst_application_alt = (GstAppSrc*)gst_bin_get_by_name(GST_BIN(pipeline),"imagesrc");
     handlers.gst_application = handlers.gst_application_alt;
     gst_util_set_object_arg(G_OBJECT(handlers.gst_application_alt),"format","time");
     gst_object_unref(pipeline);
-    CLOG_INFO("rtsp-h264-stream : factory-media-configure : " 
-      << name() << " : DONE")    
+    log_info("factory-media-configure : DONE");
   }
 
 

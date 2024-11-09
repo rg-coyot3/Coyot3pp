@@ -30,6 +30,11 @@ namespace image{
   ,organization_(ec::ImcTreeOrganization::MOSAIC){
     class_name("imc-composition");
     log_info("constructor");
+    conf_task_init_(std::bind(&ImageContentComposition::task_init,this),true);
+    conf_task_start_(std::bind(&ImageContentComposition::task_start,this),true);
+    conf_task_pause_(std::bind(&ImageContentComposition::task_pause,this),true);
+    conf_task_stop_(std::bind(&ImageContentComposition::task_stop,this),true);
+    conf_task_end_(std::bind(&ImageContentComposition::task_end,this),true);
   }
 
   ImageContentComposition::~ImageContentComposition(){
@@ -732,10 +737,9 @@ bool ImageContentComposition::task_init(){
   allgood &= (doneok == sources.size());
 
   allgood &= ImageContent::task_init();
-  CLOG_EVALUATION(allgood,
-  "image-content-composition : init : " << name(),
-  "done ok",
-  "alerts at initialization")
+  log_eval(allgood,
+  "init : done ok",
+  "init : alerts at initialization");
   
   return allgood;
 }

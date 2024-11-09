@@ -46,7 +46,7 @@ namespace mod{
   ,stdout_log_active_(true)
   ,stdout_colored_(true)
   {
-
+    prefix_conf_();
   }
 
   LoggerCapability::~LoggerCapability(){}
@@ -72,7 +72,7 @@ namespace mod{
 
   LoggerLine::Level LoggerCapability::modlog_verbosity() const{return level_;}
   LoggerLine::Level LoggerCapability::modlog_verbosity(LoggerLine::Level l){return level_ = l;}
-
+  LoggerLine::Level LoggerCapability::modlog_verbosity(int l){return level_ = static_cast<LoggerLine::Level>(l);}
 
   void LoggerCapability::operate_line_(const LoggerLine& l){
     if(l.level() > level_)return;
@@ -204,8 +204,11 @@ namespace mod{
       prefix_ = std::string(" : ") + class_name_ + " : ";
     }else if(class_name_.size() == 0){
       prefix_ = std::string(" : ") + instance_name_ + " : ";
+    }else{
+      prefix_ = " : WTF! :";
     }
-    prefix_ = " : WTF! :";
   }
+
+
 }
 }

@@ -17,7 +17,7 @@ namespace rtsp{
   , clients()
   , source_image(nullptr)
   , stream_image(){
-    class_name("rtsp-h264-serv");
+    class_name("h264-stream-pub");
     log_info("constructor");
     conf_task_init_(std::bind(&RtspH264StreamPublisher::task_init,this));
     conf_task_start_(std::bind(&RtspH264StreamPublisher::task_start,this));
@@ -175,8 +175,9 @@ namespace rtsp{
       log_info("source-init- : ERROR! SOURCE IMAGE NOT SET!");
       return true;
     }
+    if( (source_image->state() != cm::ec::CytModuleState::CREATED))return true;
     return source_image->Init();
-    return true;
+    
   }
 
 
@@ -187,6 +188,7 @@ namespace rtsp{
     if(!source_image){
       log_info("source-start- : ERROR! SOURCE IMAGE NOT SET!");
     }
+    
     if(source_image->initialized()){
       return source_image->Start();
     }

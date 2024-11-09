@@ -61,7 +61,7 @@ namespace image{
     , 
     , ( sequence , "sequence" , ImageContentImgSequenceParamsImageStack)
     , ( )
-    , base_path       , "base_path"    , 
+    , base_path        , "base_path"   , 
     , interval         , "interval"    ,
   )
 

@@ -6,8 +6,10 @@ set(COYOT3PPCOMPONENTVERSION   1.0)
 include_directories(include)
 include_directories(${COYOT3PPCOR3_INCLUDE_DIRS})
 
+
 file(GLOB   LC3_SRCS_IMG3
             src/${PROJECT_NAME}/${COYOT3PPCOMPONENT}/*.cpp)
+
 
 if(WIN32)
   message( FATAL_ERROR "COR3 - not previewed for windows.")

@@ -9,26 +9,20 @@ option(LCY_BUILD_COMPONENT_MQTT          "Build with Mqtt components"        ON)
 option(LCY_BUILD_COMPONENT_POSTGRESQL    "Build with PostgreSql components"  ON)
 option(LCY_BUILD_COMPONENT_QSQLITE       "Build with QSqlite    components"  ON)
 option(LCY_BUILD_COMPONENT_IMAG3         "Build with Imag3      components"  ON)
-OPTION(LCY_BUILD_COMPONENT_H264RTSP      "Build with H264Rtsp   components"  ON)
-OPTION(LCY_BUILD_COMPONENT_LWSS          "Build with LwsServer  components"  ON)
-
-set(CMAKE_CXX_STANDARD 23)
-SET (CMAKE_VERBOSE_MAKEFILE 1)
-set(CMAKE_CXX_FLAGS "-fPIC ${CMAKE_CXX_FLAGS}")
-set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror=return-type")
-
+option(LCY_BUILD_COMPONENT_H264RTSP      "Build with H264Rtsp   components"  ON)
+option(LCY_BUILD_COMPONENT_LWSS          "Build with LwsServer  components"  ON)
 
 if(NOT DEFINED COYOT3_INSTALL_PREFIX)
   set(COYOT3_INSTALL_PREFIX ${CMAKE_CURRENT_LIST_DIR}/install/coyot3pp)
 endif()
 
 
-set(CMAKE_INSTALL_PREFIX ${COYOT3_INSTALL_PREFIX})
-message("install prefix set to : ${CMAKE_INSTALL_PREFIX}")
-option(LCY_BUILD_WITH_MINIMAL_EXAMPLES      "Build with minimal examples"   ON)
-option(LCY_BUILD_COMPONENT_REST             "Build with R3st components"    ON)
-option(LCY_BUILD_COMPONENT_MQTT             "Build with Mqtt components"    ON)
 
+set(CMAKE_CXX_STANDARD 23)
+SET (CMAKE_VERBOSE_MAKEFILE 1)
+set(CMAKE_CXX_FLAGS "-fPIC ${CMAKE_CXX_FLAGS}")
+set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror=return-type")
+set(CMAKE_INSTALL_PREFIX ${COYOT3_INSTALL_PREFIX})
 
 
 
