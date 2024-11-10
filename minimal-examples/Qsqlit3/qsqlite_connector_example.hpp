@@ -1,4 +1,4 @@
-#include <Coyot3pp/QSqlite/QQSqlit3Connector.hpp>
+#include <Coyot3pp/QSqlit3/QSqlit3Connector/QSqlit3Connector.hpp>
 
 
 
@@ -79,6 +79,8 @@
       virtual ~SqliteDBStopsManager();
 
       const ServiceStopDAOStack&  stop_data() const;
+
+      bool pushStop(const ServiceStopDAO& stop);
 
       bool Start();
       bool Stop();

@@ -65,56 +65,7 @@
     , altitude            , "NUMERIC"                             , "altitude"
   )
 
-SqliteDBStopsManager::SqliteDBStopsManager(QObject* parent = nullptr)
-:db_connector_(nullptr)
-,manager_timer_(nullptr)
-,serviceStopsIO(nullptr)
-, serviceStopsCurrent()
-, serviceStopsChanged(false)
-{
-  CLOG_INFO(" manager created ")
-}
-SqliteDBStopsManager::~SqliteDBStopsManager(){
-  CLOG_WARN(" destroying manager")
-  if(db_connector_)delete db_connector_;
-}
-bool
-SqliteDBStopsManager::Start(){
-  db_connector_  = new coyot3::ddbb::sqlite::QSqlit3Connector(this);
-  serviceStopsIO = new ServiceStopDAOQSqliteIO(this);
-  manager_timer_ = new QTimer(this);
-
-  connect(manager_timer_,&QTimer::timeout, 
-          this, &SqliteDBStopsManager::timer_check_status_callback);
-
-  db_connector_->database_name("database_path.sqlite"); //master db connector
-  serviceStopsIO->set_table_name("table_positions");
-  serviceStopsIO->master_attach(*db_connector_); 
-  manager_timer_->setInterval(1000);
-
-  db_connector_->Init();
-  db_connector_->Start();
-
-  std::string errString;
-  
-  if(initialize_read() == false){
-    CLOG_ERROR(" error starting manager.")
-    return false;
-  }
 
 
 
-}
-bool
-SqliteDBStopsManager::Stop(){
 
-}
-
-bool 
-SqliteDBStopsManager::initialize_read(){
-  serviceStopsIO->
-}
-
-int main(int argc, char** argv){
-  
-}

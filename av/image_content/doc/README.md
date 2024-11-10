@@ -60,7 +60,7 @@ To be able to include sequence of images.
 
 ### `ImageContentDisplayImage` 
 
-To create a source from the desktop source.
+To create a source from the desktop image.
 
 ### `ImageContentComposition`
 
