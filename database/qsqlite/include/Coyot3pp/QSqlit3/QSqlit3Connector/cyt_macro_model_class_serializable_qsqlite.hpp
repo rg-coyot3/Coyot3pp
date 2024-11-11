@@ -203,7 +203,7 @@ class CY_class_name##QSqliteIO : public coyot3::ddbb::sqlite::QSqlit3Connector{\
     tablename_ = name;\
     calc_iq_string_prefix_();\
     calc_sq_string_prefix_();\
-    return ((tablename_ = name).size() != 0);\
+    return tablename_;\
   }\
   std::string CY_class_name##QSqliteIO::table_name() const{\
     return tablename_;\
