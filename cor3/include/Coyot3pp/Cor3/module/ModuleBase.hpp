@@ -6,6 +6,7 @@
 namespace coyot3{
 namespace mod{
 
+
   CYT3MACRO_enum_class_declarations(
     CytModuleState
     ,
@@ -24,10 +25,11 @@ namespace mod{
       , MODULE_ERROR
   )
   
+
   class ModuleBase
   : public LoggerCapability{
     public:
-
+      typedef std::function<bool(ModuleBase* )> ModuleEventInvoker;
       typedef std::function<bool()> ModuleTaskFunction;
       typedef std::vector<ModuleTaskFunction> ModuleTaskFunctionStack;
 
@@ -53,16 +55,30 @@ namespace mod{
 
       std::string        name() const;
       std::string        name(const std::string& nn);
+
+
+      std::string        module_configuration() const;
+
+      /**
+       * @brief set a callback to be invoked when the module enters in error 
+       *  state
+       * 
+       * @param cb 
+       */
+      void               on_module_error_callback_set(ModuleEventInvoker cb);
       
     protected:
 
       ec::CytModuleState state(ec::CytModuleState state);
 
-      bool conf_task_init_(ModuleTaskFunction f,bool prepend = false);
-      bool conf_task_start_(ModuleTaskFunction f,bool prepend = false);
-      bool conf_task_pause_(ModuleTaskFunction f,bool prepend = false);
-      bool conf_task_stop_(ModuleTaskFunction f,bool prepend = false);
-      bool conf_task_end_(ModuleTaskFunction f,bool prepend = false);
+      
+      bool add_task_init(ModuleTaskFunction f,bool prepend = false);
+      bool add_task_start(ModuleTaskFunction f,bool prepend = false);
+      bool add_task_pause(ModuleTaskFunction f,bool prepend = false);
+      bool add_task_stop(ModuleTaskFunction f,bool prepend = false);
+      bool add_task_end(ModuleTaskFunction f,bool prepend = false);
+
+      bool signal_error();
 
     private:
       ec::CytModuleState state_;
@@ -81,7 +97,7 @@ namespace mod{
       bool _modconf_pauses;
       bool _modconf_stops;
       bool _modconf_ends;
-        std::string _mod_configuration();
+        std::string _mod_configuration() const;
 
       bool _priv_init();
       bool _priv_start();
@@ -102,6 +118,9 @@ namespace mod{
       ModuleTaskFunctionStack   tasks_stack_pause_;
       ModuleTaskFunctionStack   tasks_stack_stop_;
       ModuleTaskFunctionStack   tasks_stack_end_;
+
+
+      ModuleEventInvoker        callback_on_module_error_;
 
 
       

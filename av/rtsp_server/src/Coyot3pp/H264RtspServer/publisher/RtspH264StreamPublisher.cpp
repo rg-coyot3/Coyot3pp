@@ -19,8 +19,8 @@ namespace rtsp{
   , stream_image(){
     class_name("h264-stream-pub");
     log_info("constructor");
-    conf_task_init_(std::bind(&RtspH264StreamPublisher::task_init,this));
-    conf_task_start_(std::bind(&RtspH264StreamPublisher::task_start,this));
+    add_task_init(std::bind(&RtspH264StreamPublisher::task_init,this));
+    add_task_start(std::bind(&RtspH264StreamPublisher::task_start,this));
   }
 
   RtspH264StreamPublisher::~RtspH264StreamPublisher(){

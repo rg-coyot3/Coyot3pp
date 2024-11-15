@@ -124,7 +124,7 @@ if(LCY_BUILD_WITH_MINIMAL_EXAMPLES)
                   ${LCOYOT3PPCORE_EXTERNAL_DEPENDENCES}
   )
   add_executable(example_cvalue
-    ${COYOT3PP_MINIMAL_EXAMPLES_SRC_DIR}/${COYOT3PPCOMPONENT}/value.cpp
+    ${COYOT3PP_MINIMAL_EXAMPLES_SRC_DIR}/${COYOT3PPCOMPONENT}/value-example.cpp
   )
   target_link_libraries(example_cvalue
     ${COYOT3PPCOMPONENT}
@@ -135,6 +135,14 @@ if(LCY_BUILD_WITH_MINIMAL_EXAMPLES)
     ${COYOT3PP_MINIMAL_EXAMPLES_SRC_DIR}/${COYOT3PPCOMPONENT}/model-class-macros.cpp
   )
   target_link_libraries(example_modelclasses
+    ${COYOT3PPCOMPONENT}
+    ${LCOYOT3PPCORE_EXTERNAL_DEPENDENCES}
+  )
+
+  add_executable(example_module
+    ${COYOT3PP_MINIMAL_EXAMPLES_SRC_DIR}/${COYOT3PPCOMPONENT}/module-class-example.cpp
+  )
+  target_link_libraries(example_module
     ${COYOT3PPCOMPONENT}
     ${LCOYOT3PPCORE_EXTERNAL_DEPENDENCES}
   )

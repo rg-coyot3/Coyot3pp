@@ -201,12 +201,16 @@ const rapidjson::Value& rjson_get_member(const rapidjson::Value& source, const s
 /**
  * @brief to capital letters
 */
-std::string toUpper(const std::string& source);
+//std::string toUpper(const std::string& source);
+std::string to_upper(const std::string& source);
+constexpr auto toUpper = to_upper;
 /**
  * @brief to lower letters
 */
-std::string toLower(const std::string& source);
+//std::string toLower(const std::string& source);
 
+std::string to_lower(const std::string& source);
+constexpr auto toLower = to_lower;
 
 /**
  * @brief mathematical gadgets
@@ -231,30 +235,44 @@ double      hypotenuse(double x1,double y1,double x2,double y2);
  * @param searched argument : i.e.: "--help"
  * @return true if the argument exists in the command line
 */
-bool        hasLaunchCommandArgument(const std::string& argument,int argc, char** argv);
+bool  has_launch_command_argument(const std::string& argument,int argc, char** argv);
+constexpr auto hasLaunchCommandArgument = has_launch_command_argument;
 /**
  * @brief serves an argument used when the executable is launched.
  * @param searched argument : i.e.: "--num-instances 4"
  * @return the value relative to the searched argumnet.
 */
-std::string getLaunchCommandArgument(const std::string& argument,int argc,char** argv);
+std::string get_launch_command_argument(const std::string& argument,int argc,char** argv);
+constexpr auto getLaunchCommandArgument = get_launch_command_argument;
 
-std::string getRealPath(const std::string relativePath);
-size_t      stringSplit(const std::string& str,const char* delim, std::vector<std::string>& out);
-std::string stringReplace(std::string str,const std::string& from,const std::string& to);
+std::string get_real_path(const std::string relativePath);
+constexpr auto getRealPath = get_real_path;
+
+
+size_t      string_split(const std::string& str,const char* delim, std::vector<std::string>& out);
+constexpr auto stringSplit = string_split;
+
+std::string string_replace(std::string str,const std::string& from,const std::string& to);
+constexpr auto stringReplace = string_replace;
 
 std::string stringify(const Json::Value& js);
 std::string stringify(const uint8_t* pptr,size_t psize);
 
 
+int         get_dir_path_depth(const std::string& path);
+constexpr auto getDirPathDepth = get_dir_path_depth;
 
 
-int         getDirPathDepth(const std::string& path);
-std::string getDirPathParent(const std::string& path,int level = 1);
+std::string get_dir_path_parent(const std::string& path,int level = 1);
+constexpr auto getDirPathParent = get_dir_path_parent;
+
+
+
 std::string find_file_in_dir(const std::string& fileName,const std::string& initial_path);
 std::string exec(const char* cmd);
-std::string getCurrentExecutablePath();
 
+std::string get_current_executable_path();
+constexpr auto getCurrentExecutablePath = get_current_executable_path;
 
 
   /**

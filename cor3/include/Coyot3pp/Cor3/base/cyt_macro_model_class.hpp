@@ -61,7 +61,7 @@
       )
 
   // ps-priv : begin
-  #define cytemacro_privdec_model_class_common_priv_dev_(CY_class_name, CY_enumclass_deps, ...) \
+  #define cytemacro_privdec_model_class_common_priv_dev_(CY_class_name, CY_parent_class, CY_enumclass_deps, ...) \
         \
         IFN(CY_enumclass_deps)(FOR_EACH_TRIPLES(cyt3macro_model_class_enumclass_declare_types_,PASS_PARAMETERS(CY_enumclass_deps)))\
         \
@@ -72,16 +72,18 @@
         FOR_EACH_TRIPLES(cytemacro_model_class_getterssetters_dec_,__VA_ARGS__)\
         \
         CY_class_name & operator=(const CY_class_name & o); \
-        bool           operator==(const CY_class_name & o) const; \
-        bool           operator!=(const CY_class_name & o) const; \
+        bool            operator==(const CY_class_name & o) const; \
+        bool            operator!=(const CY_class_name & o) const; \
         \
         CY_class_name(); \
         CY_class_name(const CY_class_name & o); \
+        IFN(CY_parent_class)(CY_class_name(const CY_parent_class & o);)\
         CY_class_name(\
           cyt3macro_privdev_model_class_dec_tr_params(__VA_ARGS__)\
           IFN(__VA_ARGS__)(IFN(PASS_PARAMETERS(CY_enumclass_deps))(COMMA()))\
           cyt3macro_privdev_model_class_dec_tr_params(PASS_PARAMETERS(CY_enumclass_deps))\
         );\
+        \
         virtual ~CY_class_name();\
         \
         cyt3macro_privdev_model_class_get_model_template_dec_(CY_class_name, CY_enumclass_deps, __VA_ARGS__) \
@@ -126,7 +128,7 @@
     \
     FOR_EACH(cyt3macro_privdec_model_class_additional_method_add_, PASS_PARAMETERS(CY_additional_methods)) \
     \
-    cytemacro_privdec_model_class_common_priv_dev_(CY_class_name, CY_enumclass_deps, __VA_ARGS__) \
+    cytemacro_privdec_model_class_common_priv_dev_(CY_class_name, CY_parent_class, CY_enumclass_deps, __VA_ARGS__) \
     \
   };
 
@@ -204,8 +206,9 @@
 #define CYT3MACRO_model_class_definitions(CY_class_name, CY_parent_class, CY_additional_methods, CY_enumclass_deps, ...) \
   CY_class_name::CY_class_name()\
     IFN(CY_parent_class)(:CY_parent_class()){} \
-  CY_class_name::CY_class_name(const CY_class_name & o){*this = o;}\
   CY_class_name::~CY_class_name(){}\
+  IFN(CY_parent_class)(CY_class_name::CY_class_name(const CY_parent_class & o):CY_parent_class(o){}) \
+  CY_class_name::CY_class_name(const CY_class_name & o){*this = o;}\
   CY_class_name::CY_class_name(\
           cyt3macro_privdev_model_class_dec_tr_params(__VA_ARGS__)\
           IFN(__VA_ARGS__)(IFN(PASS_PARAMETERS(CY_enumclass_deps))(COMMA()))\
@@ -445,8 +448,10 @@
       void         resize(size_t s);\
       std::size_t  max_size()        const;\
       std::size_t  max_size(std::size_t v);\
-      bool    push(const CY_class_name & o);\
-      bool    push(const CY_class_name##Stack& o);\
+      bool    push_front(const CY_class_name & o);\
+      bool    push_front(const CY_class_name##Stack& o);\
+      bool    push_back(const CY_class_name & o);\
+      bool    push_back(const CY_class_name##Stack& o);\
       void    clear();\
       CY_class_name##Stack& operator=(const CY_class_name##Stack& o);\
       bool                  operator==(const CY_class_name##Stack& o) const;\
@@ -518,17 +523,37 @@
           return ok; \
         } 
 
+
+
+
     #define cyt3macro_model_class_def_set_stack_push_(CY_class_name) \
-      bool    CY_class_name##Stack::push(const CY_class_name & o){ \
+      bool    CY_class_name##Stack::push_front(const CY_class_name & o){ \
+        stack_.insert(stack_.begin(), o);\
+        if(stack_.size()>= default_max_size_){ \
+          stack_.erase(stack_.begin()); \
+        }\
+        return true;\
+      }\
+      bool    CY_class_name##Stack::push_front(const CY_class_name##Stack& o){ \
+        size_t result = o.for_each([&](const CY_class_name & item){ \
+          stack_.insert(stack_.begin(), item); \
+          if(stack_.size()>= default_max_size_){ \
+            stack_.erase(stack_.begin()); \
+          }\
+          return true;\
+        });\
+        return result == o.size();\
+      }\
+      bool    CY_class_name##Stack::push_back(const CY_class_name & o){ \
         stack_.push_back(o); \
         if(stack_.size()>= default_max_size_){ \
           stack_.erase(stack_.begin()); \
         }\
         return true;\
       }\
-      bool    CY_class_name##Stack::push(const CY_class_name##Stack& o){ \
-        o.forEach([&](const CY_class_name & item){\
-          push(item);\
+      bool    CY_class_name##Stack::push_back(const CY_class_name##Stack& o){ \
+        o.for_each([&](const CY_class_name & item){\
+          push_back(item);\
           return true;\
         });\
         return true;\

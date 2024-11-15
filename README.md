@@ -3,8 +3,15 @@
 
 ## SUMMARY
 
-* [INTRODUCTION AND BLAHBLAH](#introduction-blahblah)
-* [INSTALLATION](#installation)
+- [Coyot3pp lib](#coyot3pp-lib)
+  - [SUMMARY](#summary)
+  - [INTRODUCTION BLAHBLAH](#introduction-blahblah)
+  - [COMPONENTS AND DOCUMENTS](#components-and-documents)
+  - [INSTALLATION](#installation)
+    - [DEPENDENCES](#dependences)
+    - [CHOOSE COMPONENTS](#choose-components)
+    - [BUILD](#build)
+    - [INSTALL](#install)
 
 
 ## INTRODUCTION BLAHBLAH
@@ -36,6 +43,8 @@ All this library is about that: the way I have constructed a set of components t
 As well, for many times I use it to recall myself some *stuffs* that I learned *time ago*... and it also serves me as a tutorial for myself. For example: the way to create a `cmake` project using `components`...
 
 Finally, I just called it *Coyot3pp* because *ACME* is just very used, *coyot3* is my nick and this library is FAR FAR FAR FAR FAR AWAY to be any kind of standard,...
+
+I also leave this here as kind of *CV*, so I can expose some of the things I can do.
 
 For all those that may have found this repo, may you find something useful.
 

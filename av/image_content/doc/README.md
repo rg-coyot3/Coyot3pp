@@ -66,4 +66,7 @@ To create a source from the desktop image.
 
 To be able to add multiple sources and create a single one. The instance will automatically create a mosaic with it. It is possible to select a specific source to see it bigger.
 
+### CREATE NEW CLASSES
+
+All the 
 

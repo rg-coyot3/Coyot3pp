@@ -10,16 +10,20 @@ namespace coyot3{
 namespace mod{
 
 
+  
+class LoggerCapability;
 
-struct LoggerLine{
-  enum Level{
-    CLC_ERROR = 0,
-    CLC_WARN  = 1,
-    CLC_INFO  = 2,
-    CLC_DEBUG = 3,
-    
+
+enum LogLevel{
+    CLC_ERROR = 1,
+    CLC_WARN  = 2,
+    CLC_INFO  = 3,
+    CLC_DEBUG = 4,
   };
-  LoggerLine(Level l = Level::CLC_INFO);
+  
+struct LoggerLine{
+
+  LoggerLine(LogLevel l = LogLevel::CLC_INFO);
   virtual ~LoggerLine();
 
   template<typename T>
@@ -30,10 +34,11 @@ struct LoggerLine{
 
 
   std::string    str() const;
-  Level                  level() const;
+  LogLevel                  log_level() const;
   private:
-    ::std::ostringstream ostr_;
-    Level                 level_;
+    mutable ::std::ostringstream ostr_;
+    LogLevel                 log_level_;
+
 };
 
 
@@ -47,9 +52,9 @@ class LoggerCapability{
 
   public:
     virtual ~LoggerCapability();
-    LoggerLine::Level        modlog_verbosity() const;
-    LoggerLine::Level        modlog_verbosity(LoggerLine::Level l);
-    LoggerLine::Level        modlog_verbosity(int l);
+    LogLevel        modlog_verbosity() const;
+    LogLevel        modlog_verbosity(LogLevel l);
+    LogLevel        modlog_verbosity(int l);
 
 
 
@@ -57,17 +62,18 @@ class LoggerCapability{
     // LoggerLine& log_info();
     // LoggerLine& log_warn();
     // LoggerLine& log_err();
-    // LoggerLine& log_debug(int vlevel = 1);
+    // LoggerLine& log_debug(int vLogLevel = 1);
     
     std::ostringstream o();
+
     void log_info(const std::ostringstream& o);
     void log_info(const std::string& o);
     void log_warn(const std::ostringstream& o);
     void log_warn(const std::string& o);
     void log_err(const std::ostringstream& o);
     void log_err(const std::string& o);
-    void log_debug(int vlevel,const std::ostringstream& o);
-    void log_debug(int vlevel,const std::string& o);
+    void log_debug(int vLogLevel,const std::ostringstream& o);
+    void log_debug(int vLogLevel,const std::string& o);
     template<typename T, typename U>
     void log_eval(bool assertion, const T& cont_assert_ok, const U& cont_assert_ko){
       if(assertion == true){
@@ -92,7 +98,7 @@ class LoggerCapability{
     std::string       prefix_;
       void prefix_conf_();
     int               verbosity_;
-    LoggerLine::Level level_;
+    LogLevel          log_level_;
 
     std::string   file_log_target_;
     bool          file_log_active_;
@@ -100,11 +106,11 @@ class LoggerCapability{
     bool          stdout_log_active_;
     bool          stdout_colored_;
 
-    void    operate_line_(const LoggerLine& l);
+    void    operate_line_(const LoggerLine& l) const;
 
 
-    void    operate_stdout_nocolors_(const LoggerLine& l);
-    void    operate_stdout_colors_(const LoggerLine& l);
+    void    operate_stdout_nocolors_(const LoggerLine& l)const ;
+    void    operate_stdout_colors_(const LoggerLine& l) const;
 
 };
 

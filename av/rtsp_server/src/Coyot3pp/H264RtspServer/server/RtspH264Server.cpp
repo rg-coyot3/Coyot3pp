@@ -23,11 +23,11 @@ namespace rtsp{
     class_name("h264-rtsp-server");
     log_info("constructor ");
     CLOG_INFO("BORRAR ÉSTO... SOLO ES PARA SABER QUE LLEGO AQUÍ")
-    conf_task_init_(std::bind(&RtspH264Server::task_init_,this));
-    conf_task_start_(std::bind(&RtspH264Server::task_start_,this));
-    conf_task_pause_(std::bind(&RtspH264Server::task_pause_,this));
-    conf_task_stop_(std::bind(&RtspH264Server::task_stop_,this));
-    conf_task_end_(std::bind(&RtspH264Server::task_end_,this));
+    add_task_init(std::bind(&RtspH264Server::task_init_,this));
+    add_task_start(std::bind(&RtspH264Server::task_start_,this));
+    add_task_pause(std::bind(&RtspH264Server::task_pause_,this));
+    add_task_stop(std::bind(&RtspH264Server::task_stop_,this));
+    add_task_end(std::bind(&RtspH264Server::task_end_,this));
 
   }
 

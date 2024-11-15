@@ -1,25 +1,10 @@
-# COYOT3PP::COR3
+# `COR3`
 
+The cor3 contains the common functions and wrappers that are being used by the other components.
 
-## INTRODUCTION
+Among them, it can be subclassified as:
 
-This component includes all the basic tools that require nothing more than standard c++ libraries, as well as any standard libraries included in standard repositories.
+* [Functions and classes](./cyt3funcsandclasses.md)
+* [CYT3MACROs](./cyt3macros.md)
+* [Module Base](./cyt3module.md)
 
-
-
-## Functions and Wrappers
-
-## Logging tools
-
-## C++ Preprocessor macros/tools
-
-  * ENUM CLASS
-  * MODEL CLASS
-
-## Serialization tools
-
-  * JSON SERIALIZABLE PACKET
-
-## Module tool
-
-  * MODULE BASE

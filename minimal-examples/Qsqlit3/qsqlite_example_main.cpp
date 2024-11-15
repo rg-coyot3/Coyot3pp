@@ -74,7 +74,7 @@ SqliteDBStopsManager::initialize_read(){
 
 bool SqliteDBStopsManager::pushStop(const ServiceStopDAO& stop){
   CLOG_INFO("pushing stop data")
-  return serviceStopsIO->stack.push(stop);
+  return serviceStopsIO->stack.push_back(stop);
 }
 
 

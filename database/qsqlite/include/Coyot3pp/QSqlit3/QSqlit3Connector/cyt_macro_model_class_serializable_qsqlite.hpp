@@ -308,7 +308,7 @@ class CY_class_name##QSqliteIO : public coyot3::ddbb::sqlite::QSqlit3Connector{\
     while(q.next()){\
       CY_class_name buffer;\
       FOR_EACH_TRIPLES(cyt3macro_model_class_serializable_qsqlite_def_query_items_recv_,__VA_ARGS__)\
-      query_stack.push(buffer);\
+      query_stack.push_back(buffer);\
     }\
     return result;\
   }    

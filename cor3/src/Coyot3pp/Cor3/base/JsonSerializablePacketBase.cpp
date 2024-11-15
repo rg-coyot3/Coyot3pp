@@ -25,7 +25,7 @@ std::string JsonSerializablePacketBase::deserialization_src() const{
   return deserialization_source_;
 }
 
-bool JsonSerializablePacketBase::from_stream(const uint8_t* payload,size_t payload_size)
+bool JsonSerializablePacketBase::from_json_stream(const uint8_t* payload,size_t payload_size)
 {
     std::string s;
     for(size_t n = 0;n<payload_size;++n)
@@ -66,17 +66,17 @@ bool JsonSerializablePacketBase::from_json(const Json::Value& source)
 // bool JsonSerializablePacketBase::from_json(const rapidjson::Value& source){
 //   return (parsed_valid_ = false);
 // }
-ByteStream JsonSerializablePacketBase::to_stream() const
+ByteStream JsonSerializablePacketBase::to_json_stream() const
 {
     ByteStream bs;
-    std::string buffer = to_string();
+    std::string buffer = to_json_string();
     for(char c : buffer)
     {
       bs.push_back((uint8_t)c);
     }
     return bs;
 }
-std::string JsonSerializablePacketBase::to_string() const
+std::string JsonSerializablePacketBase::to_json_string() const
 {
     std::stringstream ss;
     ss << to_json();

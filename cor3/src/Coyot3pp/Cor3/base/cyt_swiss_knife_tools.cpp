@@ -356,13 +356,13 @@ bool parse_yaml(const std::string& source,YAML::Node& destination)
 
 
 
-std::string toUpper(const std::string& source)
+std::string to_upper(const std::string& source)
 {
     std::string buffer = source;
     std::transform(buffer.begin(),buffer.end(),buffer.begin(),::toupper);
     return buffer;
 }
-std::string toLower(const std::string& source)
+std::string to_lower(const std::string& source)
 {
     std::string buffer = source;
     std::transform(buffer.begin(),buffer.end(),buffer.begin(),::tolower);
@@ -397,7 +397,7 @@ double hypotenuse(double x1,double y1,double x2,double y2)
     return sqrt(pow(x2-x1,2.0) + pow(y2-y1,2.0));
 }
 
-bool hasLaunchCommandArgument(const std::string& argument,int argc, char** argv)
+bool has_launch_command_argument(const std::string& argument,int argc, char** argv)
 {
   for(int i = 0;i<argc;++i)
   {
@@ -409,7 +409,7 @@ bool hasLaunchCommandArgument(const std::string& argument,int argc, char** argv)
   return false;
 }
 
-std::string getLaunchCommandArgument(const std::string& argument,int argc,char** argv)
+std::string get_launch_command_argument(const std::string& argument,int argc,char** argv)
 {
   std::string res;
   for(int i=0;i<argc;++i)
@@ -425,7 +425,7 @@ std::string getLaunchCommandArgument(const std::string& argument,int argc,char**
   return res;
 }
 
-std::string getRealPath(const std::string relativePath)
+std::string get_real_path(const std::string relativePath)
 {
   std::string res;
   char* a = new char[256];
@@ -438,11 +438,12 @@ std::string getRealPath(const std::string relativePath)
 }
 
 
+
 bool json_contains_member(const Json::Value& source,const std::string& property)
 {
   std::vector<std::string> fields;
   Json::Value inner = source;
-  stringSplit(property,".",fields);
+  string_split(property,".",fields);
 
 
   for(auto field : fields)
@@ -477,7 +478,7 @@ Json::Value json_get_member(const Json::Value& source,const std::string& propert
   
   Json::Value inner = source;
   
-  stringSplit(property,".",fields);
+  string_split(property,".",fields);
   for(auto field : fields)
   {
     if(inner.isMember(field))
@@ -684,7 +685,7 @@ std::string stringify(const uint8_t* pptr,size_t psize)
 }
 
 
-std::string getCurrentExecutablePath()
+std::string get_current_executable_path()
 {
   char result[511];
   ssize_t count = readlink("/proc/self/exe",result,511);
@@ -702,7 +703,7 @@ std::string getCurrentExecutablePath()
 }
 
 
-int         getDirPathDepth(const std::string& path)
+int         get_dir_path_depth(const std::string& path)
 {
   size_t it1,it2;
   int count = 0;
@@ -718,7 +719,7 @@ int         getDirPathDepth(const std::string& path)
   return count;
 }
 
-std::string getDirPathParent(const std::string& path,int level)
+std::string get_dir_path_parent(const std::string& path,int level)
 {
   size_t it1,it2;
   it1=it2=0;
@@ -817,7 +818,7 @@ ModuleState ModuleStateFromString(const std::string& s)
   return ModuleState::UNKNOWN_WRONG_STATE;
 }
 
-size_t stringSplit(const std::string& str,const char* delim, std::vector<std::string>& out)
+size_t string_split(const std::string& str,const char* delim, std::vector<std::string>& out)
 {
   //from [https://www.codegrepper.com/code-examples/cpp/std+string+split+c%2B%2B+17]
   std::string scopy = str;
@@ -834,7 +835,9 @@ size_t stringSplit(const std::string& str,const char* delim, std::vector<std::st
   //CLOG_INFO("to-delete : string-split : serving [" << out.size() << "] splitted strings");
   return out.size();
 }
-std::string stringReplace(std::string str,const std::string& from,const std::string& to)
+
+
+std::string string_replace(std::string str,const std::string& from,const std::string& to)
 {
   size_t start_pos = 0;
   while((start_pos = str.find(from, start_pos)) != std::string::npos) {

@@ -14,8 +14,8 @@ namespace image{
   ,window_attributes_{0}{
     class_name("imc-display");
     log_info("constructor" );
-    conf_task_start_(std::bind(&ImageContentDisplayImage::task_start,this));
-    conf_task_stop_(std::bind(&ImageContentDisplayImage::task_stop,this));
+    add_task_start(std::bind(&ImageContentDisplayImage::task_start,this));
+    add_task_stop(std::bind(&ImageContentDisplayImage::task_stop,this));
   }
   ImageContentDisplayImage::~ImageContentDisplayImage(){
     log_warn("destructor");
