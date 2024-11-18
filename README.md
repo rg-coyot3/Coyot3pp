@@ -56,6 +56,9 @@ Each component has included its own documentation file:
 * [R3st](./communication/rest_connector/README.md)
 * [Mqtt](./communication/mqtt/README.md)
 * [Postgr3Sql](./database/postgresql/README.md)
+* [QSqlit3](./database//qsqlite/doc/README.md)
+* [Imag3](./av/image_content/doc/README.md)
+* [H264RtspServer](./av/rtsp_server/doc/README.md)
 
 ## INSTALLATION
 
