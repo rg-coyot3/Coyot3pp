@@ -542,15 +542,13 @@ void MqttClientConfigObject::print_current_config_state()
 
 
 
-
-
-
 CYT3MACRO_enum_class_declarations(
   EnumExample1
   ,
     , MY_STATE_0 = 0
     , MY_STATE_1 = 1
-    , MY_STATE_2 = 2)
+    , MY_STATE_2 = 2
+)
 
 
 CYT3MACRO_enum_class_definitions(
@@ -558,7 +556,8 @@ CYT3MACRO_enum_class_definitions(
   ,
     , MY_STATE_0 
     , MY_STATE_1 
-    , MY_STATE_2 )
+    , MY_STATE_2 
+)
 
 CYT3MACRO_model_class_declarations(
   MyClassPriv_
@@ -596,7 +595,7 @@ class MyClass : public MyClassPriv_{
 
 
 CYT3MACRO_model_class_declarations(
-  RapidjsonDevSubclase
+  JsonDevSubclase
   , 
   , ( )
   , ( )
@@ -604,7 +603,7 @@ CYT3MACRO_model_class_declarations(
 )
 
 CYT3MACRO_model_class_serializable_json_declarations(
-  RapidjsonDevSubclase
+  JsonDevSubclase
   ,
   ,
   , ( )
@@ -613,7 +612,7 @@ CYT3MACRO_model_class_serializable_json_declarations(
 )
 
 CYT3MACRO_model_class_declarations(
-  RapidjsonDev
+  JsonDev
   ,
   , ( )
   , ( )
@@ -621,12 +620,12 @@ CYT3MACRO_model_class_declarations(
     , dos         , std::string             , ""
     , tres        , double                  , 0.0
     , cuatro      , bool                    , true
-    , cinco       , RapidjsonDevSubclase    , 
+    , cinco       , JsonDevSubclase    , 
 )
 
 
 CYT3MACRO_model_class_serializable_json_declarations(
-  RapidjsonDev
+  JsonDev
   , 
   ,
   , ( 
@@ -643,7 +642,7 @@ CYT3MACRO_model_class_serializable_json_declarations(
 
 
 CYT3MACRO_model_class_definitions(
-  RapidjsonDevSubclase
+  JsonDevSubclase
   , 
   , ( )
   , ( )
@@ -651,7 +650,7 @@ CYT3MACRO_model_class_definitions(
 )
 
 CYT3MACRO_model_class_serializable_json_definitions(
-  RapidjsonDevSubclase
+  JsonDevSubclase
   ,
   ,
   , ( )
@@ -660,7 +659,7 @@ CYT3MACRO_model_class_serializable_json_definitions(
 )
 
 CYT3MACRO_model_class_definitions(
-  RapidjsonDev
+  JsonDev
   ,
   , ( )
   , ( )
@@ -668,15 +667,15 @@ CYT3MACRO_model_class_definitions(
     , dos         , std::string             , ""
     , tres        , double                  , 0.0
     , cuatro      , bool                    , true
-    , cinco       , RapidjsonDevSubclase    , 
+    , cinco       , JsonDevSubclase    , 
 )
 
 CYT3MACRO_model_class_serializable_json_definitions(
-  RapidjsonDev
+  JsonDev
   , 
   ,
   , ( 
-    cinco       , "cinco"       , RapidjsonDevSubclase
+    cinco       , "cinco"       , JsonDevSubclase
   )
   , ( )
     , uno         , "uno"         ,
@@ -703,26 +702,26 @@ int main(int argv, char** argc){
 
 
   
-  RapidjsonDev rjsontest;
+  JsonDev jsonserializable;
   // Json::Value js;
   // js << content;
   // Json::Reader reader;
   // reader.parse(content,js);
   // CLOG_INFO(" js = " << js);
-  (rjsontest << content);
-  // if((rjsontest << content) ==  false)
+  (jsonserializable << content);
+  // if((jsonserializable << content) ==  false)
   // {
   //   CLOG_ERROR(" - error parseando clase de test desde string")
   //   exit(1);
   // }
 
-  CLOG_INFO(" - clase test parseada correctamente : " << rjsontest.uno())
-  CLOG_INFO(" - clase test parseada correctamente : " << rjsontest.dos())
-  CLOG_INFO(" - clase test parseada correctamente : " << rjsontest.tres())
-  CLOG_INFO(" - clase test parseada correctamente : " << rjsontest.cuatro())
+  CLOG_INFO(" - clase test parseada correctamente : " << jsonserializable.uno())
+  CLOG_INFO(" - clase test parseada correctamente : " << jsonserializable.dos())
+  CLOG_INFO(" - clase test parseada correctamente : " << jsonserializable.tres())
+  CLOG_INFO(" - clase test parseada correctamente : " << jsonserializable.cuatro())
 
 
-  RapidjsonDevJsIO rjt2;
+  JsonDevJsIO rjt2;
 
   CLOG_INFO("punto 00");
 
@@ -809,5 +808,5 @@ int main(int argv, char** argc){
   CLOG_INFO(" - fin test rjson : msecs=" << (test2_fin - test2_init))
   CLOG_INFO(" - allgood " << res)
 
-  
+  return 0;
 }

@@ -58,14 +58,20 @@
 
 
 // foreach use pair arguments : begin
-    #define FOR_EACH_PAIR_AGAIN() FOR_EACH_PAIR_HELPER
 
-  #define FOR_EACH_PAIR_HELPER(macro, a1, a2, ...)                 \
-    macro(a1,a2)                                                     \
-    __VA_OPT__(FOR_EACH_PAIR_AGAIN PARENS (macro, __VA_ARGS__))
+
 
 #define FOR_EACH_PAIR(macro, ...) \
   __VA_OPT__(EXPAND(FOR_EACH_PAIR_HELPER(macro, __VA_ARGS__)))
+
+  #define FOR_EACH_PAIR_AGAIN() FOR_EACH_PAIR_HELPER
+  
+  #define FOR_EACH_PAIR_HELPER(macro, a1, a2, ...)\
+    macro(a1, a2) \
+    __VA_OPT__(FOR_EACH_PAIR_AGAIN PARENS (macro, __VA_ARGS__))
+
+
+
 
 #define FOR_EACH_PAIR_DEFER(macro, parens_arg) \
   FOR_EACH_PAIR(macro, DEFER parens_arg)

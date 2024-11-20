@@ -151,7 +151,9 @@ namespace mod{
       state_ = ec::CytModuleState::INITIALIZED;
     }else{
       log_warn(o() << "init : error initializing");
-      state_ = ec::CytModuleState::MODULE_ERROR;
+      log_warn(o() << "stop : error stopping");
+      if(signal_error() == false) return false;
+      else state_ = ec::CytModuleState::INITIALIZED;
     }
     return (state_ == ec::CytModuleState::INITIALIZED);
   }
@@ -168,7 +170,9 @@ namespace mod{
       state_ = ec::CytModuleState::STARTED;
     }else{
       log_warn(o() << "start : error starting");
-      state_ = ec::CytModuleState::MODULE_ERROR;
+      log_warn(o() << "stop : error stopping");
+      if(signal_error() == false) return false;
+      else state_ = ec::CytModuleState::STARTED;
     }
     return (state_ == ec::CytModuleState::STARTED);
   }
@@ -185,7 +189,8 @@ namespace mod{
       state_ = ec::CytModuleState::PAUSED;
     }else{
       log_warn(o() << "pause : error pausing");
-      state_ = ec::CytModuleState::MODULE_ERROR;
+      if(signal_error() == false) return false;
+      else state_ = ec::CytModuleState::PAUSED;
     }
     return (state_ == ec::CytModuleState::PAUSED);
   }
@@ -202,7 +207,8 @@ namespace mod{
       state_ = ec::CytModuleState::STOPPED;
     }else{
       log_warn(o() << "stop : error stopping");
-      state_ = ec::CytModuleState::MODULE_ERROR;
+      if(signal_error() == false) return false;
+      else state_ = ec::CytModuleState::STOPPED;
     }
     return (state_ == ec::CytModuleState::STOPPED);
   }
@@ -226,7 +232,8 @@ namespace mod{
       state_ = ec::CytModuleState::END_OF_LIFE;
     }else{
       log_warn(o() << "end : error ending");
-      state_ = ec::CytModuleState::MODULE_ERROR;
+      if(signal_error() == false) return false;
+      else state_ = ec::CytModuleState::END_OF_LIFE;
     }
     return (state_ == ec::CytModuleState::END_OF_LIFE);
   }
@@ -318,7 +325,7 @@ ModuleBase::tasks_end_(){
   return ret;
 }
 
-bool ModuleBase::conf_task_init_(ModuleTaskFunction f,bool prepend){
+bool ModuleBase::add_task_init(ModuleTaskFunction f,bool prepend){
   _modconf_initializes = true;
   if((prepend == true) && (tasks_stack_init_.size() != 0)){
     tasks_stack_init_.insert(tasks_stack_init_.begin(),f);
@@ -327,7 +334,7 @@ bool ModuleBase::conf_task_init_(ModuleTaskFunction f,bool prepend){
   }
   return true;
 }
-bool ModuleBase::conf_task_start_(ModuleTaskFunction f,bool prepend){
+bool ModuleBase::add_task_start(ModuleTaskFunction f,bool prepend){
   _modconf_starts = true;
   
   if((prepend == true) && (tasks_stack_start_.size() != 0)){
@@ -337,7 +344,7 @@ bool ModuleBase::conf_task_start_(ModuleTaskFunction f,bool prepend){
   }
   return true;
 }
-bool ModuleBase::conf_task_pause_(ModuleTaskFunction f,bool prepend){
+bool ModuleBase::add_task_pause(ModuleTaskFunction f,bool prepend){
   _modconf_pauses = true;
   if((prepend == true) && (tasks_stack_pause_.size() != 0)){
     tasks_stack_pause_.insert(tasks_stack_init_.begin(),f);
@@ -346,7 +353,7 @@ bool ModuleBase::conf_task_pause_(ModuleTaskFunction f,bool prepend){
   }
   return true;
 }
-bool ModuleBase::conf_task_stop_(ModuleTaskFunction f,bool prepend){
+bool ModuleBase::add_task_stop(ModuleTaskFunction f,bool prepend){
   _modconf_stops = true;
   if((prepend == true) && (tasks_stack_stop_.size() != 0)){
     tasks_stack_stop_.insert(tasks_stack_init_.begin(),f);
@@ -355,7 +362,7 @@ bool ModuleBase::conf_task_stop_(ModuleTaskFunction f,bool prepend){
   }
   return true;
 }
-bool ModuleBase::conf_task_end_(ModuleTaskFunction f,bool prepend){
+bool ModuleBase::add_task_end(ModuleTaskFunction f,bool prepend){
   _modconf_ends = true;
   if((prepend == true) && (tasks_stack_end_.size() != 0)){
     tasks_stack_end_.insert(tasks_stack_init_.begin(),f);
@@ -366,29 +373,59 @@ bool ModuleBase::conf_task_end_(ModuleTaskFunction f,bool prepend){
 }
 
 std::string 
-ModuleBase::_mod_configuration(){
+ModuleBase::_mod_configuration() const{
   std::string ret;
   ret+="(";
   if(_modconf_initializes){
     ret+="I";
+  }else{
+    ret+="i";
   }
   if(_modconf_starts){
     ret+="S";
-  }
+  }else
+    ret+="s";
   if(_modconf_pauses){
     ret+="P";
-  }
+  }else ret+="p";
   if(_modconf_stops){
     ret+="X";
-  }
+  }else ret+="x";
   if(_modconf_ends){
     ret+="E";
-  }
+  }else ret+="e";
   ret+=")";
   return ret;
 }
 
 
+bool ModuleBase::signal_error(){
+  log_warn("signaled module error");
+  ec::CytModuleState currentState = state();
+  state(ec::CytModuleState::MODULE_ERROR);
+  if(callback_on_module_error_){
+    if(callback_on_module_error_(this) == true){
+      log_warn("solved module error");
+      state(currentState);
+      return true;
+    }else{
+      log_warn("module error not solved");
+    }
+  }
+  return false;
+}
+
+void ModuleBase::on_module_error_callback_set(ModuleEventInvoker cb){
+  callback_on_module_error_ = cb;
+}
+
+ec::CytModuleState ModuleBase::state(ec::CytModuleState state){
+  return state_ = state;
+}
+
+std::string ModuleBase::module_configuration() const{
+  return _mod_configuration();
+}
 
 
 }

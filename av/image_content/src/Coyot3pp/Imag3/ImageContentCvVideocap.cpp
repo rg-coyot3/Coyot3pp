@@ -23,8 +23,8 @@ namespace image{
     log_info(o() << "constructor : conf src=" << source());
     params_.name(name);
 
-    conf_task_start_(std::bind(&ImageContentCvVideocap::task_start,this));
-    conf_task_stop_(std::bind(&ImageContentCvVideocap::task_stop,this));
+    add_task_start(std::bind(&ImageContentCvVideocap::task_start,this));
+    add_task_stop(std::bind(&ImageContentCvVideocap::task_stop,this));
   }
 
   ImageContentCvVideocap::~ImageContentCvVideocap(){}

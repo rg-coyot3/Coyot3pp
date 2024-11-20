@@ -432,6 +432,7 @@ int WebsocketsServerGateway::broadcastMessage(const std::string& message)
   std::lock_guard<std::mutex> guard(_connected_clients_mtx);
   for(i = _connected_clients.begin(); i!= _connected_clients.end();++i)
   {
+    
     if((i->second)->send(message))
     {
       r++;

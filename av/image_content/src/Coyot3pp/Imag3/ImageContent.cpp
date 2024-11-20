@@ -222,7 +222,7 @@ ImageContent::ImageContent(const std::string& instanceName)
   log_info("image-content : constructor : new instance created with no params");
 
   //module config 
-  conf_task_init_(std::bind(&ImageContent::task_init,this));
+  add_task_init(std::bind(&ImageContent::task_init,this));
 }
 
 ImageContent::~ImageContent(){}

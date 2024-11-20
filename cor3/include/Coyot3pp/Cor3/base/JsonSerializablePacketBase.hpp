@@ -22,7 +22,7 @@ class JsonSerializablePacketBase {
                               JsonSerializablePacketBase();
   virtual                     ~JsonSerializablePacketBase();
 
-  virtual bool                                         from_stream(const uint8_t* payload,size_t payload_size);
+  virtual bool                                         from_json_stream(const uint8_t* payload,size_t payload_size);
   
   
   bool    from_json_string(const std::string& source);
@@ -30,8 +30,8 @@ class JsonSerializablePacketBase {
   
   virtual bool                                         from_json(const Json::Value& source);
   //virtual bool                                         from_json(const rapidjson::Value& doc);
-  virtual std::string                                  to_string() const;
-  virtual ByteStream                                   to_stream() const;
+  virtual std::string                                  to_json_string() const;
+  virtual ByteStream                                   to_json_stream() const;
   virtual Json::Value                                  to_json() const;
   //virtual rapidjson::Writer<rapidjson::StringBuffer>   to_rjson() const;
 

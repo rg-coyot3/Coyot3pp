@@ -44,25 +44,26 @@ int main(int argv, char **argc)
   seq.id(1);
   item.name("uno");
   item.path(IMAG3_EXAMPLES_DIRECTORY "/coyot3-01.png");
-  seq.params_imgsec().sequence().push(item);
+  seq.params_imgsec().sequence().push_back(item);
   item.name("dos");
   item.path(IMAG3_EXAMPLES_DIRECTORY "/coyot3-02.jpeg");
-  seq.params_imgsec().sequence().push(item);
+  seq.params_imgsec().sequence().push_back(item);
   item.name("tres");
   item.path(IMAG3_EXAMPLES_DIRECTORY "/coyot3-03.jpg");
-  seq.params_imgsec().sequence().push(item);
+  seq.params_imgsec().sequence().push_back(item);
   item.name("cuatro");
   item.path(IMAG3_EXAMPLES_DIRECTORY "/coyot3-04.jpg");
-  seq.params_imgsec().sequence().push(item);
+  seq.params_imgsec().sequence().push_back(item);
   item.name("cinco");
   item.path(IMAG3_EXAMPLES_DIRECTORY "/coyot3-05.jpg");
-  seq.params_imgsec().sequence().push(item);
+  seq.params_imgsec().sequence().push_back(item);
   item.name("seis");
   item.path(IMAG3_EXAMPLES_DIRECTORY "/coyot3-06.jpg");
-  seq.params_imgsec().sequence().push(item);
+  seq.params_imgsec().sequence().push_back(item);
   item.name("siete");
   item.path(IMAG3_EXAMPLES_DIRECTORY "/coyot3-07.png");
-  seq.params_imgsec().sequence().push(item);
+  seq.params_imgsec().sequence().push_back(item);
+
   seq.params_imgsec().interval(3000);
   seq.params_imgsec().mode(cai::ec::ImageContentImgSequenceMode::SEQUENCE_NORMAL);
 

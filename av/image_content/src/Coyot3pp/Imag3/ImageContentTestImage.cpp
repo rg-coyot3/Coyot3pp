@@ -23,9 +23,9 @@ namespace image{
   :test_image_params()
   ,wth(nullptr){
     class_name("imc-testimg");
-    conf_task_init_(std::bind(&ImageContentTestImage::task_init,this),true);
-    conf_task_start_(std::bind(&ImageContentTestImage::task_start,this));
-    conf_task_stop_(std::bind(&ImageContentTestImage::task_stop,this));
+    add_task_init(std::bind(&ImageContentTestImage::task_init,this),true);
+    add_task_start(std::bind(&ImageContentTestImage::task_start,this));
+    add_task_stop(std::bind(&ImageContentTestImage::task_stop,this));
   }
 
   ImageContentTestImage::~ImageContentTestImage(){

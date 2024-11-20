@@ -23,18 +23,18 @@ namespace mod{
 
 
 
-  LoggerLine::LoggerLine(Level l)
-  :level_(l)
+  LoggerLine::LoggerLine(LogLevel l)
+  :log_level_(l)
   {
 
   }
 
   LoggerLine::~LoggerLine(){
-    
+
   }
 
   std::string     LoggerLine::str() const{return ostr_.str();}
-  LoggerLine::Level      LoggerLine::level() const{return level_;}
+  LogLevel      LoggerLine::log_level() const{return log_level_;}
   
 
 
@@ -54,28 +54,28 @@ namespace mod{
 
 
   // LoggerLine& LoggerCapability::log_info(){
-  //   LoggerLine ll(LoggerLine::Level::CLC_INFO);
+  //   LoggerLine ll(LogLevel::CLC_INFO);
   //   return ll;
   // }
   // LoggerLine& LoggerCapability::log_warn(){
-  //   LoggerLine ll(LoggerLine::Level::CLC_WARN);
+  //   LoggerLine ll(LogLevel::CLC_WARN);
   //   return ll;
   // }
   // LoggerLine& LoggerCapability::log_err(){
-  //   LoggerLine ll(LoggerLine::Level::CLC_ERROR);
+  //   LoggerLine ll(LogLevel::CLC_ERROR);
   //   return ll;
   // }
   // LoggerLine& LoggerCapability::log_debug(int vlevel){
-  //   LoggerLine ll(static_cast<LoggerLine::Level>(static_cast<int>(LoggerLine::Level::CLC_DEBUG)+ vlevel));
+  //   LoggerLine ll(static_cast<LogLevel>(static_cast<int>(LogLevel::CLC_DEBUG)+ vlevel));
   //   return ll;
   // }
 
-  LoggerLine::Level LoggerCapability::modlog_verbosity() const{return level_;}
-  LoggerLine::Level LoggerCapability::modlog_verbosity(LoggerLine::Level l){return level_ = l;}
-  LoggerLine::Level LoggerCapability::modlog_verbosity(int l){return level_ = static_cast<LoggerLine::Level>(l);}
+  LogLevel LoggerCapability::modlog_verbosity() const{return log_level_;}
+  LogLevel LoggerCapability::modlog_verbosity(LogLevel l){return log_level_ = l;}
+  LogLevel LoggerCapability::modlog_verbosity(int l){return log_level_ = static_cast<LogLevel>(l);}
 
-  void LoggerCapability::operate_line_(const LoggerLine& l){
-    if(l.level() > level_)return;
+  void LoggerCapability::operate_line_(const LoggerLine& l) const{
+    if(l.log_level() > log_level_)return;
     if(stdout_log_active_==true)
     if(stdout_colored_)operate_stdout_colors_(l);
     else               operate_stdout_nocolors_(l);
@@ -90,7 +90,7 @@ namespace mod{
   void        
   LoggerCapability::log_info(const std::string& o){
     //std::cout << " info" << std::endl;
-    LoggerLine ll(LoggerLine::Level::CLC_INFO);
+    LoggerLine ll(LogLevel::CLC_INFO);
     ll << o;
     operate_line_(ll);
   }
@@ -99,7 +99,7 @@ namespace mod{
     log_warn(o.str());
   }
   void        LoggerCapability::log_warn(const std::string& o){
-    LoggerLine ll(LoggerLine::Level::CLC_WARN);
+    LoggerLine ll(LogLevel::CLC_WARN);
     ll << o;
     operate_line_(ll);
   }
@@ -108,7 +108,7 @@ namespace mod{
     log_err(o.str());
   }
   void        LoggerCapability::log_err(const std::string& o){
-    LoggerLine ll(LoggerLine::Level::CLC_ERROR);
+    LoggerLine ll(LogLevel::CLC_ERROR);
     ll << o;  
     operate_line_(ll);
   }
@@ -117,64 +117,65 @@ namespace mod{
     log_debug(vlevel,o.str());
   }
   void        LoggerCapability::log_debug(int vlevel, const std::string& o){
-    LoggerLine ll(static_cast<LoggerLine::Level>(static_cast<int>(LoggerLine::Level::CLC_DEBUG)+ vlevel));
+    LoggerLine ll(static_cast<LogLevel>(static_cast<int>(LogLevel::CLC_DEBUG)+ vlevel));
     ll << o;
     operate_line_(ll);
   }
-  void LoggerCapability::operate_stdout_colors_(const LoggerLine& l){
+  void LoggerCapability::operate_stdout_colors_(const LoggerLine& l) const {
     std::stringstream sstr;
     
-    switch(l.level()){
-      case LoggerLine::Level::CLC_ERROR:
+    switch(l.log_level()){
+      case LogLevel::CLC_ERROR:
         std::cout << __SIMPLELOGGER_COLOR_RED_ << ct::get_current_utc_string() 
         << " : ERR" << prefix_ << l.str() 
         << __SIMPLELOGGER_STDOUTCOLORS_RESET_ << std::endl;
         break;
-      case LoggerLine::Level::CLC_WARN:
+      case LogLevel::CLC_WARN:
         std::cout << __SIMPLELOGGER_COLOR_YELLOW_ << ct::get_current_utc_string() 
         << " : WRN" << prefix_<< l.str()
         << __SIMPLELOGGER_STDOUTCOLORS_RESET_ << std::endl;
         break;
-      case LoggerLine::Level::CLC_INFO:
+      case LogLevel::CLC_INFO:
         std::cout << __SIMPLELOGGER_COLOR_GREEN_ << ct::get_current_utc_string() 
         << " : INF" << prefix_ << l.str()
         << __SIMPLELOGGER_STDOUTCOLORS_RESET_ << std::endl;
         break;
-      case LoggerLine::Level::CLC_DEBUG:
+      case LogLevel::CLC_DEBUG:
       default:
-        if(l.level() <= verbosity_)
+        if(l.log_level() <= verbosity_)
         std::cout << __SIMPLELOGGER_COLOR_BLUE_ << ct::get_current_utc_string() 
-        << " : DBG(" << l.level() << ")" << prefix_ << l.str()
+        << " : DBG(" << l.log_level() << ")" << prefix_ << l.str()
         << __SIMPLELOGGER_STDOUTCOLORS_RESET_ << std::endl;
         break;
     }
     
 
   }
-  void LoggerCapability::operate_stdout_nocolors_(const LoggerLine& l){
+  void 
+  LoggerCapability::operate_stdout_nocolors_(const LoggerLine& l) const {
     std::stringstream sstr;
     
-    switch(l.level()){
-      case LoggerLine::Level::CLC_ERROR:
+    switch(l.log_level()){
+      case LogLevel::CLC_ERROR:
         std::cout << ct::get_current_utc_string() 
         << " : ERR : " << instance_name_ << " : " << l.str()
         << std::endl;
         break;
-      case LoggerLine::Level::CLC_WARN:
+      case LogLevel::CLC_WARN:
         std::cout << ct::get_current_utc_string() 
         << " : WRN : " << instance_name_ << " : " << l.str()
         << std::endl;
         break;
-      case LoggerLine::Level::CLC_INFO:
+      case LogLevel::CLC_INFO:
         std::cout << ct::get_current_utc_string() 
         << " : INF : " << instance_name_ << " : " << l.str()
          << std::endl;
         break;
-      case LoggerLine::Level::CLC_DEBUG:
+      case LogLevel::CLC_DEBUG:
       default:
-        if(l.level() <= verbosity_)
+        if(l.log_level() <= verbosity_)
         std::cout << ct::get_current_utc_string() 
-        << " : DBG(" << l.level() << ") : " << instance_name_ << " : " << l.str()
+        << " : DBG(" << l.log_level() << ") : " << instance_name_ << " : " << l.str()
         << std::endl;
         break;
     }
@@ -208,7 +209,6 @@ namespace mod{
       prefix_ = " : WTF! :";
     }
   }
-
 
 }
 }

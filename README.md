@@ -3,8 +3,16 @@
 
 ## SUMMARY
 
-* [INTRODUCTION AND BLAHBLAH](#introduction-blahblah)
-* [INSTALLATION](#installation)
+
+- [Coyot3pp lib](#coyot3pp-lib)
+  - [SUMMARY](#summary)
+  - [INTRODUCTION BLAHBLAH](#introduction-blahblah)
+  - [COMPONENTS AND DOCUMENTS](#components-and-documents)
+  - [INSTALLATION](#installation)
+    - [DEPENDENCES](#dependences)
+    - [CHOOSE COMPONENTS](#choose-components)
+    - [BUILD](#build)
+    - [INSTALL](#install)
 
 
 ## INTRODUCTION BLAHBLAH
@@ -37,6 +45,8 @@ As well, for many times I use it to recall myself some *stuffs* that I learned *
 
 Finally, I just called it *Coyot3pp* because *ACME* is just very used, *coyot3* is my nick and this library is FAR FAR FAR FAR FAR AWAY to be any kind of standard,...
 
+I also leave this here as kind of *CV*, so I can expose some of the things I can do.
+
 For all those that may have found this repo, may you find something useful.
 
 ## COMPONENTS AND DOCUMENTS
@@ -47,6 +57,9 @@ Each component has included its own documentation file:
 * [R3st](./communication/rest_connector/README.md)
 * [Mqtt](./communication/mqtt/README.md)
 * [Postgr3Sql](./database/postgresql/README.md)
+* [QSqlit3](./database//qsqlite/doc/README.md)
+* [Imag3](./av/image_content/doc/README.md)
+* [H264RtspServer](./av/rtsp_server/doc/README.md)
 
 ## INSTALLATION
 

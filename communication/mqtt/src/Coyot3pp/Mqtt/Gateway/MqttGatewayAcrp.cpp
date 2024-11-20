@@ -528,7 +528,7 @@ MqttGatewayAcrp::acrp_publisher_ack_common_callback(
     "received data for related publisher [" << atmi->getTopicBase() << "]");
   AcrpPacket acrp;
   bool res;
-  res = acrp.from_stream(data,data_length);
+  res = acrp.from_json_stream(data,data_length);
   if(!res)
   {
     CLOG_WARN("mqtt-gateway-acrp : acrp-publisher-ack-common-callback : "
@@ -630,7 +630,7 @@ bool MqttGatewayAcrp::acrp_subscription_common_callback(const std::string& topic
   }
   atmi->markIncomingActivity();
   AcrpPacket acrp;
-  res = acrp.from_stream(data,dataSize);
+  res = acrp.from_json_stream(data,dataSize);
   if(!res){
     CLOG_WARN("mqtt-gateway-acrp : acrp-subscription-common-callback : error "
     "parsing incoming packet for topic [" << topic << "]: data((" 

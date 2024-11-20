@@ -16,11 +16,11 @@ namespace image{
   ,just_launched_(false){
     class_name("imc-imgsec");
     log_info("constructor");
-    conf_task_init_(std::bind(&ImageContentImgSequence::task_init,this),true);
-    conf_task_init_(std::bind(&ImageContentImgSequence::task_start,this));
-    conf_task_pause_(std::bind(&ImageContentImgSequence::task_pause,this));
-    conf_task_stop_(std::bind(&ImageContentImgSequence::task_stop,this));
-    conf_task_end_(std::bind(&ImageContentImgSequence::task_end,this));
+    add_task_init(std::bind(&ImageContentImgSequence::task_init,this),true);
+    add_task_init(std::bind(&ImageContentImgSequence::task_start,this));
+    add_task_pause(std::bind(&ImageContentImgSequence::task_pause,this));
+    add_task_stop(std::bind(&ImageContentImgSequence::task_stop,this));
+    add_task_end(std::bind(&ImageContentImgSequence::task_end,this));
 
   }
   ImageContentImgSequence::~ImageContentImgSequence(){

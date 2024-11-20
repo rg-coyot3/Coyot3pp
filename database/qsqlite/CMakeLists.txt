@@ -10,6 +10,9 @@ file(GLOB LC3_SRCS_QSQLT
           src/${PROJECT_NAME}/${COYOT3PPCOMPONENT}/QSqlit3Connector/*.cpp
 )
 
+file(GLOB LC3_MOCS_QSQLT
+          include/${PROJECT_NAME}/${COYOT3PPCOMPONENT}/QSqlit3Connector/*.hpp)
+
 if(WIN32)
   message( FATAL_ERROR "QSQLT - not previewed for windows.")
 elseif(UNIX)
