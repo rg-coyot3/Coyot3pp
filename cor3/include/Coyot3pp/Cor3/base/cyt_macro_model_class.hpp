@@ -642,3 +642,45 @@
       IFN(CY_func_to_target_extra)(return CY_func_to_target_extra(i COMMA() o);)\
       IFE(CY_func_to_target_extra)(return true;)\
   }
+
+
+
+
+/**
+ * @brief ease my way to "transport" contents from one object to other. will create:\
+ *  * Cyt3Port<class-left>To<class-right>(const class-left& src, class-right& dest);
+ *  * Cyt3Port<class-left>To<class-right>(const class-right& src, class-left& dest);
+ * @param CY_class_left : class type 1
+ * @param CY_class_right : class type 2
+ * @param CY_namespace : not required, the namespace where it will be included
+ * @param CY_param_a2b_extras : not required, extra function name when transporting left to right
+ * @param CY_param_b2a_extras : not required, extra function name when transporting right to left
+ * @param ... : pairs of equivalences
+ */
+#define CYT3MACRO_model_classes_import_export_declarations(CY_class_left, CY_class_right, CY_namespace, CY_param_a2b_extras, CY_param_b2a_extras, ...)\
+  IFN(CY_namespace)(namespace CY_namespace{)\
+    bool Cyt3Port##CY_class_left##To##CY_class_right(const CY_class_left& source COMMA() CY_class_right& destination);\
+    bool Cyt3Port##CY_class_right##To##CY_class_left(const CY_class_right& source COMMA() CY_class_left& destination);\
+    IFN(CY_param_a2b_extras)(bool CY_param_a2b_extras(const CY_class_left& source COMMA() CY_class_right& destination);)\
+    IFN(CY_param_b2a_extras)(bool CY_param_b2a_extras(const CY_class_right& source COMMA() CY_class_left& destination);)\
+  IFN(CY_namespace)(})
+  
+  #define cyt3macro_model_classes_import_export_a2b_def(param_left,param_right)\
+    destination.param_right = source.param_left;
+
+  #define cyt3macro_model_classes_import_export_b2a_def(param_left,param_right)\
+    destination.param_left = source.param_right;
+
+#define CYT3MACRO_model_classes_import_export_definitions(CY_class_left, CY_class_right, CY_namespace, CY_param_a2b_extras, CY_param_b2a_extras, ...)\
+  IFN(CY_namespace)(namespace CY_namespace{)\
+    bool Cyt3Port##CY_class_left##To##CY_class_right(const CY_class_left& source, CY_class_right& destination){\
+      FOR_EACH_PAIR(cyt3macro_model_classes_import_export_a2b_def,__VA_ARGS__)\
+      IFE(CY_param_a2b_extras)(return true;)\
+      IFN(CY_param_a2b_extras)(return CY_param_a2b_extras(source,destination);)\
+    }\
+    bool Cyt3Port##CY_class_right##To##CY_class_left(const CY_class_right& source, CY_class_left& destination){\
+      FOR_EACH_PAIR(cyt3macro_model_classes_import_export_b2a_def,__VA_ARGS__)\
+      IFE(CY_param_b2a_extras)(return true;)\
+      IFN(CY_param_a2b_extras)(return CY_param_b2a_extras(source,destination);)\
+    }\
+  IFN(CY_namespace)(})

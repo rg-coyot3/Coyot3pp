@@ -17,17 +17,17 @@
 
 
   #define cyt3macro_model_class_serializable_sqliteio_coltypes_decs_(cy_var_name,cy_var_type,cy_col_name)\
-    static constexpr const char* cy_var_name = cy_var_type;\
-  
+    static constexpr const char* cy_var_name = cy_var_type;
+
   #define cyt3macro_model_class_serializable_sqliteio_coltypesEn_decs_(cy_var_name,cy_var_type,cy_col_name)\
-    DataType cy_var_name;\
+    DataType cy_var_name;
 
 
   #define cyt3macro_model_class_serializable_sqliteio_colnames_decs_(cy_var_name,cy_var_type,cy_col_name)\
-    static constexpr const char* cy_var_name = cy_col_name;\
+    static constexpr const char* cy_var_name = cy_col_name;
 
   #define cyt3macro_model_class_serializable_sqliteio_colactiv_decs_(cy_var_name,cy_var_type,cy_col_name)\
-    bool cy_var_name = true;\
+    bool cy_var_name = true;
 
 
 /**

@@ -8,6 +8,7 @@ option(LCY_BUILD_COMPONENT_REST          "Build with R3st components"        ON)
 option(LCY_BUILD_COMPONENT_MQTT          "Build with Mqtt components"        ON)
 option(LCY_BUILD_COMPONENT_POSTGRESQL    "Build with PostgreSql components"  ON)
 option(LCY_BUILD_COMPONENT_QSQLITE       "Build with QSqlite    components"  ON)
+option(LCY_BUILD_COMPONENT_SQLIT3        "Build with Sqlit3     components"  ON)
 option(LCY_BUILD_COMPONENT_IMAG3         "Build with Imag3      components"  ON)
 option(LCY_BUILD_COMPONENT_H264RTSP      "Build with H264Rtsp   components"  ON)
 option(LCY_BUILD_COMPONENT_LWSS          "Build with LwsServer  components"  ON)
@@ -75,7 +76,9 @@ endif()
 if(LCY_BUILD_COMPONENT_LWSS)
   add_subdirectory(services/websocket_server)
 endif()
-
+if(LCY_BUILD_COMPONENT_SQLIT3)
+  add_subdirectory(database/sqlite3)
+endif()
 # COMPONENTS DIRS INCLUDE - end
 
 
