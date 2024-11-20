@@ -30,6 +30,7 @@ namespace image{
   ,organization_(ec::ImcTreeOrganization::MOSAIC){
     class_name("imc-composition");
     log_info("constructor");
+
     add_task_init(std::bind(&ImageContentComposition::task_init,this),true);
     add_task_start(std::bind(&ImageContentComposition::task_start,this),true);
     add_task_pause(std::bind(&ImageContentComposition::task_pause,this),true);
