@@ -33,11 +33,11 @@ int main(int argc, char** argv){
   std::thread* thr = new std::thread([&]{
     CLOG_INFO("thread database read start")
     while(doloop){
-      if(example.select_table_items("") == false){
+      if(example.get_table_items("") == false){
         CLOG_ERROR("error getting all items")
       }else{
         int n = 0;
-        example.query_stack.for_each([&](const SimpleClass& item){
+        example.stack_input.for_each([&](const SimpleClass& item){
           CLOG_INFO(" items read " << n++ << ": " << item.to_string())
           return true;
         });
@@ -51,6 +51,7 @@ int main(int argc, char** argv){
   CLOG_INFO("writing database")
   while(doloop){
     SimpleClass newItem;
+    CLOG_INFO("pulse")
     newItem.name(coyot3::tools::generate_string_aphanumeric(10));
     newItem.surname(coyot3::tools::generate_string_aphanumeric(20));
     newItem.age(coyot3::tools::generate_natural_number(0,80));

@@ -327,47 +327,51 @@ ModuleBase::tasks_end_(){
 
 bool ModuleBase::add_task_init(ModuleTaskFunction f,bool prepend){
   _modconf_initializes = true;
+  tasks_stack_init_.push_back(f);
   if((prepend == true) && (tasks_stack_init_.size() != 0)){
-    tasks_stack_init_.insert(tasks_stack_init_.begin(),f);
-  }else{
-    tasks_stack_init_.push_back(f);
+    std::rotate(tasks_stack_init_.rbegin(),
+                tasks_stack_init_.rbegin()+1,
+                tasks_stack_init_.rend());
   }
   return true;
 }
 bool ModuleBase::add_task_start(ModuleTaskFunction f,bool prepend){
   _modconf_starts = true;
-  
+  tasks_stack_start_.push_back(f);
   if((prepend == true) && (tasks_stack_start_.size() != 0)){
-    tasks_stack_start_.insert(tasks_stack_init_.begin(),f);
-  }else{
-    tasks_stack_start_.push_back(f);
+    std::rotate(tasks_stack_start_.rbegin(),
+                tasks_stack_start_.rbegin()+1,
+                tasks_stack_start_.rend());
   }
   return true;
 }
 bool ModuleBase::add_task_pause(ModuleTaskFunction f,bool prepend){
   _modconf_pauses = true;
+  tasks_stack_pause_.push_back(f);
   if((prepend == true) && (tasks_stack_pause_.size() != 0)){
-    tasks_stack_pause_.insert(tasks_stack_init_.begin(),f);
-  }else{
-    tasks_stack_pause_.push_back(f);
+    std::rotate(tasks_stack_pause_.rbegin(),
+                tasks_stack_pause_.rbegin()+1,
+                tasks_stack_pause_.rend());
   }
   return true;
 }
 bool ModuleBase::add_task_stop(ModuleTaskFunction f,bool prepend){
   _modconf_stops = true;
+  tasks_stack_stop_.push_back(f);
   if((prepend == true) && (tasks_stack_stop_.size() != 0)){
-    tasks_stack_stop_.insert(tasks_stack_init_.begin(),f);
-  }else{
-    tasks_stack_stop_.push_back(f);
+    std::rotate(tasks_stack_stop_.rbegin(),
+                tasks_stack_stop_.rbegin()+1,
+                tasks_stack_stop_.rend());
   }
   return true;
 }
 bool ModuleBase::add_task_end(ModuleTaskFunction f,bool prepend){
   _modconf_ends = true;
+  tasks_stack_end_.push_back(f);
   if((prepend == true) && (tasks_stack_end_.size() != 0)){
-    tasks_stack_end_.insert(tasks_stack_init_.begin(),f);
-  }else{
-    tasks_stack_end_.push_back(f);
+    std::rotate(tasks_stack_end_.rbegin(),
+                tasks_stack_end_.rbegin()+1,
+                tasks_stack_end_.rend());
   }
   return true;
 }

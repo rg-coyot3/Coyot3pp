@@ -46,7 +46,7 @@ namespace sqlite{
   }
   bool sqlit3_get_col(sqlite3_stmt* stmt, int c, double& d){
     if(sqlite3_column_type(stmt,c) != SQLITE_FLOAT)return false;
-    d = static_cast<double>(sqlite3_column_int64(stmt,c));
+    d = static_cast<double>(sqlite3_column_double(stmt,c));
     return true;
   }
   bool sqlit3_get_col(sqlite3_stmt* stmt, int c, std::vector<uint8_t>& d){
