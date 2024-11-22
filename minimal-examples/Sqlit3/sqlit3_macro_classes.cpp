@@ -25,6 +25,7 @@ CYT3MACRO_model_class_set_stack_definitions(SimpleClass,)
 
 
 
+
 CYT3MACRO_model_class_serializable_sqlit3_definitions(
   SimpleClass
   , ( )
@@ -35,4 +36,7 @@ CYT3MACRO_model_class_serializable_sqlit3_definitions(
   , height      , "REAL"                                  , "height"
 )
 
+
 CYT3MACRO_model_class_serializable_sqlit3_autoinsert_definitions(SimpleClass)
+
+  

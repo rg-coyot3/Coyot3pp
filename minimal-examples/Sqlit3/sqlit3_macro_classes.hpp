@@ -31,5 +31,4 @@ CYT3MACRO_model_class_serializable_sqlit3_declarations(
 
 CYT3MACRO_model_class_serializable_sqlit3_autoinsert_declarations(SimpleClass)
 
-
-
+  
