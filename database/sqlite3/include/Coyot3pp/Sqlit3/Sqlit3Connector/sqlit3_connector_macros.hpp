@@ -43,12 +43,14 @@ class CY_class_name##Sqlit3IO : public coyot3::ddbb::sqlite::Sqlit3Connector{\
     CY_class_name##Stack stack;\
     CY_class_name##Stack query_stack;\
     \
-    bool  select_table_items(std::string& err, const std::string& where = std::string());\
-    bool  select_table_items(std::string& err);\
+    bool  select_table_items(std::string& err, const std::string& where);\
+    bool  select_table_items(const std::string& where);\
     bool  insertion_field_activation(const std::string& colName) const;\
     bool  insertion_field_activation(const std::string& colName,bool acivation);\
+    size_t push_item(const CY_class_name& i);\
     std::string table_name(const std::string& name);\
     std::string table_name() const;\
+    bool  insert_table_items();\
     bool  insert_table_items(std::string& err);\
     bool  check_create_table(std::string& err);\
     bool  volatile_stack() const;\
@@ -188,7 +190,11 @@ class CY_class_name##Sqlit3IO : public coyot3::ddbb::sqlite::Sqlit3Connector{\
     return tablename_;\
   }\
   bool CY_class_name##Sqlit3IO::volatile_stack() const{return volatile_stack_;}\
-  bool CY_class_name##Sqlit3IO::volatile_stack(bool v){return (volatile_stack_ = v);}
+  bool CY_class_name##Sqlit3IO::volatile_stack(bool v){return (volatile_stack_ = v);}\
+  size_t CY_class_name##Sqlit3IO::push_item(const CY_class_name& i){\
+    stack.push_back(i);\
+    return stack.size();\
+  }
 
 
 // DATA TYPE MATRIX CONFIGURATION
@@ -234,6 +240,12 @@ class CY_class_name##Sqlit3IO : public coyot3::ddbb::sqlite::Sqlit3Connector{\
 
 
   #define cyt3macro_model_class_serializable_sqlit3_def_insert_items_(CY_class_name, ...)\
+  bool CY_class_name##Sqlit3IO::insert_table_items(){\
+    std::string err;\
+    bool result = insert_table_items(err);\
+    if(result == false)log_warn(o() << "insert-table-items : error inserting : err=" << err);\
+    return result;\
+  }\
   bool CY_class_name##Sqlit3IO::insert_table_items(std::string& err){\
     std::stringstream sstr;\
     sstr << query_iq_prefix_;\
@@ -322,7 +334,15 @@ class CY_class_name##Sqlit3IO : public coyot3::ddbb::sqlite::Sqlit3Connector{\
     log_debug(5,o() << "select-table-items : read [" << linesread << "] lines.");\
     sqlite3_finalize(q);\
     return cleanread;\
-  }    
+  }\
+  bool CY_class_name##Sqlit3IO::select_table_items(const std::string& where){\
+    std::string err;\
+    bool res = select_table_items(err,where);\
+    if(res == false){\
+      log_warn( o() << "select-table-items : error : err=" << err << "; select * where (" << where << ")");\
+    }\
+    return res;\
+  }
 
 // CHECK TABLE
 
@@ -360,4 +380,103 @@ cyt3macro_model_class_serializable_sqlit3_def_insert_items_(CY_class_name, __VA_
 \
 cyt3macro_model_class_serializable_sqlit3_def_query_items_(CY_class_name, __VA_ARGS__)\
 \
-cyt3macro_model_class_serializable_sqlit3_def_check_table(CY_class_name, __VA_ARGS__)\
+cyt3macro_model_class_serializable_sqlit3_def_check_table(CY_class_name, __VA_ARGS__) 
+
+
+
+
+#define CYT3MACRO_model_class_serializable_sqlit3_autoinsert_declarations(CY_class_name)\
+class CY_class_name##SqliteAutoIO : public CY_class_name##Sqlit3IO{\
+  public:\
+    CY_class_name##SqliteAutoIO();\
+    virtual ~CY_class_name##SqliteAutoIO();\
+    \
+    int64_t insertion_interval() const;\
+    int64_t insertion_interval(int64_t i);\
+    \
+    void    on_error_callback_set(std::function<bool()> cb);\
+    \
+  protected:\
+    int64_t interval_;\
+    coyot3::tools::ControlThread* cth_;\
+    std::function<bool()> on_error_cb_;\
+    \
+    void insertion_task_();\
+    \
+    bool task_start_();\
+    bool task_stop_();\
+    \
+};
+
+
+
+
+
+
+
+  #define cytemacro_model_class_serializable_sqlit3_autoinsert_constrdestr_def_(CY_class_name)\
+    CY_class_name##SqliteAutoIO::CY_class_name##SqliteAutoIO()\
+    :CY_class_name##Sqlit3IO()\
+    ,interval_(10000)\
+    ,cth_(nullptr)\
+    {\
+      class_name(#CY_class_name "SqliteAutoIO-instance");\
+      add_task_start(std::bind(&CY_class_name##SqliteAutoIO::task_start_,this));\
+      add_task_stop(std::bind(&CY_class_name##SqliteAutoIO::task_stop_,this), true);\
+    }\
+    \
+    CY_class_name##SqliteAutoIO::~CY_class_name##SqliteAutoIO(){\
+    }
+
+
+  #define cytemacro_model_class_serializable_sqlit3_autoinsert_pubmethods_def_(CY_class_name)\
+    int64_t CY_class_name##SqliteAutoIO::insertion_interval() const{\
+      return interval_;\
+    }\
+    int64_t CY_class_name##SqliteAutoIO::insertion_interval(int64_t i){\
+      return interval_ = i;\
+    }\
+    void CY_class_name##SqliteAutoIO::on_error_callback_set(std::function<bool()> cb){\
+      on_error_cb_=cb;\
+    }
+
+  #define cytemacro_model_class_serializable_sqlit3_autoinsert_startstop_def_(CY_class_name)\
+    bool CY_class_name##SqliteAutoIO::task_start_(){\
+      cth_ = new(std::nothrow) coyot3::tools::ControlThread(std::bind(&CY_class_name##SqliteAutoIO::insertion_task_,this),#CY_class_name "SqliteAutoIO-inst-th");\
+      if(cth_ == nullptr){\
+        log_err("task-start- : error creating control-thread! no mem?");\
+        return false;\
+      }\
+      cth_->setInterval(interval_);\
+      log_info("task-start- : starting auto-insertion thread");\
+      return cth_->start();\
+    }\
+    \
+    bool CY_class_name##SqliteAutoIO::task_stop_(){\
+      log_info("task-stop- : stopping control thread");\
+      cth_->stop();\
+      delete cth_;\
+      cth_=nullptr;\
+      return true;\
+    }
+
+  #define cytemacro_model_class_serializable_sqlit3_autoinsert_insertion_def_(CY_class_name)\
+    void CY_class_name##SqliteAutoIO::insertion_task_(){\
+      if(insert_table_items() == false){\
+        if(on_error_cb_)on_error_cb_();\
+      }\
+    }
+    
+
+
+#define CYT3MACRO_model_class_serializable_sqlit3_autoinsert_definitions(CY_class_name)\
+  \
+  cytemacro_model_class_serializable_sqlit3_autoinsert_constrdestr_def_(CY_class_name)\
+  \
+  cytemacro_model_class_serializable_sqlit3_autoinsert_pubmethods_def_(CY_class_name)\
+  \
+  cytemacro_model_class_serializable_sqlit3_autoinsert_startstop_def_(CY_class_name)\
+  \
+  cytemacro_model_class_serializable_sqlit3_autoinsert_insertion_def_(CY_class_name)
+
+

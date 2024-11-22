@@ -220,7 +220,7 @@ namespace mod{
         && (state_ != ec::CytModuleState::STOPPED))
     {
       log_info("end : mod stops but is not stopped. Invoking stop now");
-      Stop();
+      _priv_stop();
     }
     if(_modconf_ends == false)return true;
     if(check_state_for_end(force) == false)return false;
