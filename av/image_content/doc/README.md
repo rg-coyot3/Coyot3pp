@@ -22,6 +22,55 @@ As a solution, it came to me to use a wrapper to `cv::Mat` and use the avantages
 
 ### `ImageContent` 
 
+
+`ImageContent(const std::string& name)` is the base class, with the goal to be able to easily invoke effects to the final product of an image.
+
+To configure the `ImageContent` use a `ImageContentParams` instance:
+* `width`, `height`.
+* `show_preview(bool)`
+* `show_name(bool)`
+* `effects` : is of type `ImageContentEffectsParams`
+  * `rotation(int)`
+  * `transparency(double)`
+  * `src_shifting_x(int)`, `src_shifting_y(int)`
+  * `black_and_white(bool)`
+  * `border_width(int)`.
+
+
+The `ImageContent` class inherits from the `coyot3::mod::ModuleBase`, meaning that is designed to include (if needed) initialization, starting, pausing, stopping and ending methods that need to be configured at the constructor of the class. 
+
+The `ImageContent` class is taught to be the base for image processing units that are going to be used by other objects, simplifying its use by:
+
+* configuring the instance
+* initializing the instance
+* starting the instance...
+
+> *that simple*
+
+The `ImageContent` class and child classes need `Init()` *initialization* after the configuration of the class.
+
+
+### `ImageContentCvVideoCap`.
+
+To be able to use the benefits of the `cv::VideoCap` source. 
+Can be invoked used `ImageContentCvVideocap(std::string name, std::string video_source)`
+
+### `ImageContentImgSequence`
+
+To be able to include sequence of images.
+
+### `ImageContentDisplayImage` 
+
+To create a source from the desktop image.
+
+### `ImageContentComposition`
+
+To be able to add multiple sources and create a single one. The instance will automatically create a mosaic with it. It is possible to select a specific source to see it bigger.
+
+### CREATE NEW CLASSES
+
+
+
 `ImageContent(const std::string& name)` is the base class, with the goal to be able to easily invoke effects to the final product of an image.
 
 To configure the `ImageContent` use a `ImageContentParams` instance:

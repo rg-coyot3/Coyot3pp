@@ -13,7 +13,7 @@ namespace sqlite{
   {
     class_name("sqlit3connector");
     add_task_start(std::bind(&Sqlit3Connector::start,this));
-    add_task_stop(std::bind(&Sqlit3Connector::start,this));
+    add_task_stop(std::bind(&Sqlit3Connector::stop,this));
     log_info("created");
   }
   Sqlit3Connector::~Sqlit3Connector(){

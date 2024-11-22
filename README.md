@@ -3,7 +3,6 @@
 
 ## SUMMARY
 
-
 - [Coyot3pp lib](#coyot3pp-lib)
   - [SUMMARY](#summary)
   - [INTRODUCTION BLAHBLAH](#introduction-blahblah)
@@ -58,6 +57,7 @@ Each component has included its own documentation file:
 * [Mqtt](./communication/mqtt/README.md)
 * [Postgr3Sql](./database/postgresql/README.md)
 * [QSqlit3](./database//qsqlite/doc/README.md)
+* [Sqlit3](./database/sqlite3/doc/README.md)
 * [Imag3](./av/image_content/doc/README.md)
 * [H264RtspServer](./av/rtsp_server/doc/README.md)
 

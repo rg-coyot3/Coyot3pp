@@ -5,7 +5,7 @@
 CYT3MACRO_model_class_definitions(
   SimpleClass
   ,
-  , ( )
+  , ( std::string to_string() const)
   , ( )
     , id      , int64_t         , 
     , name    , std::string     , 
@@ -14,7 +14,16 @@ CYT3MACRO_model_class_definitions(
     , height  , double          ,   
   )
 
+
+  std::string SimpleClass::to_string() const{
+    std::stringstream sstr;
+    sstr << "id=" << id() << ";name=" << name() << ";"
+      "surname=" << surname() << ";age=" << age() << ";height=" << height();
+    return sstr.str();
+  }
 CYT3MACRO_model_class_set_stack_definitions(SimpleClass,)
+
+
 
 
 CYT3MACRO_model_class_serializable_sqlit3_definitions(
@@ -28,3 +37,6 @@ CYT3MACRO_model_class_serializable_sqlit3_definitions(
 )
 
 
+CYT3MACRO_model_class_serializable_sqlit3_autoinsert_definitions(SimpleClass)
+
+  

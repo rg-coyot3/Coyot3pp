@@ -63,7 +63,6 @@ int main(int argv, char **argc)
   item.name("siete");
   item.path(IMAG3_EXAMPLES_DIRECTORY "/coyot3-07.png");
   seq.params_imgsec().sequence().push_back(item);
-
   seq.params_imgsec().interval(3000);
   seq.params_imgsec().mode(cai::ec::ImageContentImgSequenceMode::SEQUENCE_NORMAL);
 

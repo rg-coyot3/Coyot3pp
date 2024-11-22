@@ -29,11 +29,20 @@ if(LCY_BUILD_WITH_MINIMAL_EXAMPLES)
     Cor3
   )
 
-  add_executable(sqlit3_macros_example
-   ${COYOT3PP_MINIMAL_EXAMPLES_SRC_DIR}/Sqlit3/sqlit3_macros_example.cpp
-   ${COYOT3PP_MINIMAL_EXAMPLES_SRC_DIR}/Sqlit3/sqlit3_macro_classes.cpp
+  add_executable(sqlit3_macros_example_1
+    ${COYOT3PP_MINIMAL_EXAMPLES_SRC_DIR}/Sqlit3/sqlit3_macros_example_1.cpp
+    ${COYOT3PP_MINIMAL_EXAMPLES_SRC_DIR}/Sqlit3/sqlit3_macro_classes.cpp
   )
-  target_link_libraries(sqlit3_example
+  target_link_libraries(sqlit3_macros_example_1
+    ${COYOT3PPCOMPONENT}
+    Cor3  
+  )
+
+  add_executable(sqlit3_macros_example_2
+    ${COYOT3PP_MINIMAL_EXAMPLES_SRC_DIR}/Sqlit3/sqlit3_macros_example_2.cpp
+    ${COYOT3PP_MINIMAL_EXAMPLES_SRC_DIR}/Sqlit3/sqlit3_macro_classes.cpp
+  )
+  target_link_libraries(sqlit3_macros_example_2
     ${COYOT3PPCOMPONENT}
     Cor3  
   )

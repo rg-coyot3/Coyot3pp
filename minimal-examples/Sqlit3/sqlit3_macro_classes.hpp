@@ -6,7 +6,7 @@ namespace csq = coyot3::ddbb::sqlite;
 CYT3MACRO_model_class_declarations(
   SimpleClass
   ,
-  , ( )
+  , ( std::string to_string() const )
   , ( )
     , id      , int64_t         , 
     , name    , std::string     , 
@@ -29,3 +29,6 @@ CYT3MACRO_model_class_serializable_sqlit3_declarations(
 )
 
 
+CYT3MACRO_model_class_serializable_sqlit3_autoinsert_declarations(SimpleClass)
+
+  
