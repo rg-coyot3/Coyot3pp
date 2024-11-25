@@ -247,6 +247,7 @@
 
 
 
+
 /**
  * @brief Declares an indexed Set / Array class of <CY_class_name>, idexed by <CY_member_index_property>.
  *  Declares a map the type <CY_class_name>MappedSetMapType and a basic methods set:
@@ -277,11 +278,14 @@
     bool              remove(CY_class_name index); \
     bool              update(const CY_class_name & o);\
     bool              is_member(CY_class_name::CY_member_index_property##_t index) const;\
+    CY_class_name&    first();\
+    CY_class_name     first() const;\
     CY_class_name     get(CY_class_name::CY_member_index_property##_t index) const; \
     CY_class_name&    get(CY_class_name::CY_member_index_property##_t index); \
     std::size_t       size() const;\
     std::size_t       for_each(std::function<bool(const CY_class_name&)> func) const;\
     std::size_t       for_each(std::function<bool(CY_class_name&)> func);\
+    std::size_t       for_each_member(std::function<bool(CY_class_name::CY_member_index_property##_t)> func) const;\
     \
     protected: \
       CY_class_name##MappedSetMapType map_;\
@@ -367,7 +371,13 @@
   #define cyt3macro_model_class_set_mapped_def_size_(CY_class_name,CY_member_index_property)\
     std::size_t       CY_class_name##MappedSet::size() const{\
       return map_.size();\
-    } 
+    }\
+    CY_class_name& CY_class_name##MappedSet::first(){\
+      return map_.begin()->second;\
+    }\
+    CY_class_name CY_class_name##MappedSet::first() const{\
+      return map_.begin()->second;\
+    }
 
   #define cyt3macro_model_class_set_mapped_def_update_(CY_class_name,CY_member_index_property)\
     bool              CY_class_name##MappedSet::update(const CY_class_name & o){\
@@ -393,6 +403,15 @@
         std::size_t res = 0;\
         for(it = map_.begin();it != map_.end();++it){\
           if(func(it->second) == true) ++res;\
+        }\
+        return res;\
+      }\
+      std::size_t CY_class_name##MappedSet::for_each_member(std::function<bool(CY_class_name::CY_member_index_property##_t)> func) const{\
+        if(size() == 0)return 0;\
+        CY_class_name##MappedSetMapType::const_iterator it;\
+        std::size_t res = 0;\
+        for(it = map_.begin();it != map_.end();++it){\
+          if(func(it->first) == true) ++res;\
         }\
         return res;\
       }
@@ -432,6 +451,8 @@
 
 
 //'Droid Sans Mono', 'monospace', monospace
+
+
 
 
 
