@@ -3,9 +3,8 @@
 #include "../topics/Subscription.hpp"
 
 
-namespace coyot3{
-namespace communication{
-namespace mqtt{
+namespace coyot3::communication::mqtt{
+
 
   CYT3MACRO_enum_class_declarations(
     MosqClientState
@@ -22,12 +21,23 @@ namespace mqtt{
   typedef MqttClientCallbacksOnEventSimple::iterator        MqttClientCallbacksOnEventSimpleIter;
   typedef std::pair<int ,MqttClientCallbackOnEventSimple>   MqttClientCallbacksOnEventSimplePair;
 
+  // example variadic arguments... c-style
+  struct CientDataModelError : std::exception{
+      char text[1000];
+
+      CientDataModelError(char const* fmt, ...) __attribute__((format(printf,2,3)));
+      
+
+      char const* what() const noexcept { return text; }
+  };
+
   CYT3MACRO_model_class_declarations(
     ClientDataModel
     ,
     , ( 
 
-        void set_state(ec::MosqClientState s)
+        void set_state(ec::MosqClientState s),
+        Subscription& get_subscription_by_id(int64_t id)
     )
     , ( )
       , ts_creation                 , int64_t                           , 0
@@ -39,18 +49,18 @@ namespace mqtt{
       , ts_last_disconnection       , int64_t                           , 0
       , total_num_reconnections     , int64_t                           , 0
 
-      , subscriptions_config        , SubscriptionMappedSet             ,
+      , subscriptions_config        , cmqc_subscriptions_treeMappedSet  ,
+      , subscriptions_active        , cmqc_subscriptions_treeMappedSet  ,
       , publishers_config           , PublisherMappedSet                , 
 
+      , subscriptions_pending_ids   , std::vector<int64_t>              , 
       , subscriptions_pending       , SubscriptionMappedSet             , 
 
       , callbacks_on_connection     , MqttClientCallbacksOnEventSimple  , 
       , callbacks_on_disconnection  , MqttClientCallbacksOnEventSimple  , 
   )
 
-  
 
 
-}
-}
+
 }

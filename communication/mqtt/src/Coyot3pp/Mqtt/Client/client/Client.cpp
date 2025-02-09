@@ -25,6 +25,12 @@ namespace mqtt{
   }
 
 
+  Client::~Client(){
+    log_warn("destroying instance. forcing end.");
+    End(true);
+  }
+
+
 }
 }
 }

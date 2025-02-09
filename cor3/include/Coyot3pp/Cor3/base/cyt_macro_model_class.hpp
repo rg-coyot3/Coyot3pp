@@ -238,7 +238,36 @@
   FOR_EACH_TRIPLES_WITH_01_STATIC(cyt3macro_model_class_getters_def_,CY_class_name,PASS_PARAMETERS(CY_enumclass_deps))\
   FOR_EACH_TRIPLES_WITH_01_STATIC(cyt3macro_model_class_setters_def_,CY_class_name,PASS_PARAMETERS(CY_enumclass_deps))\
 
-  
+
+#define CYT3MACRO_model_class_definitions_no_eq_overload(CY_class_name, CY_parent_class, CY_additional_methods, CY_enumclass_deps, ...) \
+  CY_class_name::CY_class_name()\
+    IFN(CY_parent_class)(:CY_parent_class()){} \
+  CY_class_name::~CY_class_name(){}\
+  IFN(CY_parent_class)(CY_class_name::CY_class_name(const CY_parent_class & o):CY_parent_class(o){}) \
+  CY_class_name::CY_class_name(const CY_class_name & o){*this = o;}\
+  CY_class_name::CY_class_name(\
+          cyt3macro_privdev_model_class_dec_tr_params(__VA_ARGS__)\
+          IFN(__VA_ARGS__)(IFN(PASS_PARAMETERS(CY_enumclass_deps))(COMMA()))\
+          cyt3macro_privdev_model_class_dec_tr_params(PASS_PARAMETERS(CY_enumclass_deps))\
+  ){\
+    FOR_EACH_TRIPLES(cyt3macro_model_class_def_tr_assign_,__VA_ARGS__)\
+    FOR_EACH_TRIPLES(cyt3macro_model_class_def_tr_assign_,PASS_PARAMETERS(CY_enumclass_deps))\
+  }\
+  CY_class_name & CY_class_name::operator=(const CY_class_name & o){ \
+    IFN(CY_parent_class)(CY_parent_class::operator=(o);)\
+    FOR_EACH_TRIPLES(cyt3macro_model_class_copyitem_def_,__VA_ARGS__)\
+    return *this; \
+  } \
+  \
+  cyt3macro_privdev_model_class_get_model_template_def_(CY_class_name, CY_parent_class, CY_additional_methods, CY_enumclass_deps, __VA_ARGS__)\
+  bool CY_class_name::operator!=(const CY_class_name & o) const{\
+    return !(*this == o); \
+  } \
+  FOR_EACH_TRIPLES_WITH_01_STATIC(cyt3macro_model_class_getters_def_,CY_class_name,__VA_ARGS__)\
+  FOR_EACH_TRIPLES_WITH_01_STATIC(cyt3macro_model_class_setters_def_,CY_class_name,__VA_ARGS__)\
+  FOR_EACH_TRIPLES_WITH_01_STATIC(cyt3macro_model_class_getters_def_,CY_class_name,PASS_PARAMETERS(CY_enumclass_deps))\
+  FOR_EACH_TRIPLES_WITH_01_STATIC(cyt3macro_model_class_setters_def_,CY_class_name,PASS_PARAMETERS(CY_enumclass_deps))\
+
 
 ////////////////////////////////////
 ////////////////////////////////////
@@ -286,9 +315,11 @@
     std::size_t       for_each(std::function<bool(const CY_class_name&)> func) const;\
     std::size_t       for_each(std::function<bool(CY_class_name&)> func);\
     std::size_t       for_each_member(std::function<bool(CY_class_name::CY_member_index_property##_t)> func) const;\
+    void              clear();\
     \
     protected: \
       CY_class_name##MappedSetMapType map_;\
+      mutable std::mutex              mtx_;\
   };
 
 
@@ -309,6 +340,7 @@
   //def op =
   #define cyt3macro_model_class_set_mapped_def_opassign_(CY_class_name)\
     CY_class_name##MappedSet& CY_class_name##MappedSet::operator=(const CY_class_name##MappedSet& o){\
+      std::lock_guard<std::mutex> guard(mtx_);\
       map_ = o.map_;\
       return *this;\
     }
@@ -318,6 +350,7 @@
   //def op ==
   #define cyt3macro_model_class_set_mapped_def_opeq_(CY_class_name)\
     bool CY_class_name##MappedSet::operator==(const CY_class_name##MappedSet& o) const {\
+      std::lock_guard<std::mutex> guard(mtx_);\
       if(size() != o.size())return false;\
       CY_class_name##MappedSetMapType::const_iterator i1;\
       for(i1 = map_.begin();i1 != map_.end();i1++){\
@@ -334,6 +367,7 @@
   //def insert
   #define cyt3macro_model_class_set_mapped_def_insert_(CY_class_name,CY_member_index_property)\
     bool              CY_class_name##MappedSet::insert(const CY_class_name & o){\
+      std::lock_guard<std::mutex> guard(mtx_);\
       if(is_member(o.CY_member_index_property()) == true)return false;\
       map_.insert(std::make_pair(o.CY_member_index_property(),o));\
       return true;\
@@ -342,17 +376,20 @@
   //def removes
   #define cyt3macro_model_class_set_mapped_def_removes_(CY_class_name,CY_member_index_property) \
     bool  CY_class_name##MappedSet::remove(CY_class_name::CY_member_index_property##_t index){\
+      std::lock_guard<std::mutex> guard(mtx_);\
       if(is_member(index) == false){return false;}\
       map_.erase(map_.find(index));\
       return true;\
     } \
     bool  CY_class_name##MappedSet::remove(CY_class_name index){\
+      std::lock_guard<std::mutex> guard(mtx_);\
       return remove(index.CY_member_index_property());\
     } 
 
   //def is_member
   #define cyt3macro_model_class_set_mapped_def_is_member(CY_class_name,CY_member_index_property) \
     bool CY_class_name##MappedSet::is_member(CY_class_name::CY_member_index_property##_t index) const {\
+      std::lock_guard<std::mutex> guard(mtx_);\
       return (map_.find(index) != map_.end());\
     }
 
@@ -379,8 +416,15 @@
       return map_.begin()->second;\
     }
 
+  #define cyt3macro_model_class_set_mapped_def_clear_(CY_class_name,CY_member_index_property)\
+    void CY_class_name##MappedSet::clear(){\
+      std::lock_guard<std::mutex> guard(mtx_);\
+      map_.clear();\
+    }
+
   #define cyt3macro_model_class_set_mapped_def_update_(CY_class_name,CY_member_index_property)\
     bool              CY_class_name##MappedSet::update(const CY_class_name & o){\
+      std::lock_guard<std::mutex> guard(mtx_);\
       CY_class_name##MappedSetMapType::iterator i1 = map_.find(o.CY_member_index_property());\
       if(i1 == map_.end())return false;\
       i1->second = o;\
@@ -389,6 +433,7 @@
 
   #define cyt3macro_model_class_set_mapped_def_foreachs_(CY_class_name,CY_member_index_property)\
       std::size_t CY_class_name##MappedSet::for_each(std::function<bool(const CY_class_name&)> func) const{\
+        std::lock_guard<std::mutex> guard(mtx_);\
         if(size() == 0)return 0;\
         CY_class_name##MappedSetMapType::const_iterator it;\
         std::size_t res = 0;\
@@ -398,6 +443,7 @@
         return res;\
       }\
       std::size_t CY_class_name##MappedSet::for_each(std::function<bool(CY_class_name&)> func){\
+        std::lock_guard<std::mutex> guard(mtx_);\
         if(size() == 0)return 0;\
         CY_class_name##MappedSetMapType::iterator it;\
         std::size_t res = 0;\
@@ -443,6 +489,8 @@
   \
   cyt3macro_model_class_set_mapped_def_size_(CY_class_name,CY_member_index_property)\
   \
+  cyt3macro_model_class_set_mapped_def_clear_(CY_class_name,CY_member_index_property)\
+  \
   cyt3macro_model_class_set_mapped_def_update_(CY_class_name,CY_member_index_property)\
   \
   cyt3macro_model_class_set_mapped_def_foreachs_(CY_class_name,CY_member_index_property)
@@ -483,11 +531,12 @@
       std::size_t forEach(std::function<bool(const CY_class_name &)> func) const;\
       std::size_t for_each(std::function<bool(CY_class_name &)> func);\
       std::size_t for_each(std::function<bool(const CY_class_name &)> func) const;\
+      std::size_t for_each_and_remove(std::function<bool(CY_class_name &)> func);\
       CY_class_name& at(int index);\
       const CY_class_name& at(int index) const;\
     protected:\
       std::vector<CY_class_name>                stack_;\
-      std::mutex                                stack_mtx_;\
+      mutable std::mutex                        stack_mtx_;\
       std::size_t                              default_max_size_;\
   };
 
@@ -526,6 +575,7 @@
         }\
         std::size_t CY_class_name##Stack::for_each(std::function<bool(CY_class_name &)> func){ \
           CY_class_name##StackType::iterator i; \
+          std::lock_guard<std::mutex> guard(stack_mtx_);\
           std::size_t ok = 0; \
           for(i=stack_.begin();i != stack_.end(); ++i){ \
             if(func(*i)==true)++ok; \
@@ -538,11 +588,23 @@
         std::size_t CY_class_name##Stack::for_each(std::function<bool(const CY_class_name &)> func)const{\
           CY_class_name##StackType::const_iterator i; \
           std::size_t ok = 0; \
+          std::lock_guard<std::mutex> guard(stack_mtx_);\
           for(i=stack_.begin();i != stack_.end(); ++i){ \
             if(func(*i)==true) ++ok; \
           } \
           return ok; \
-        } 
+        }\
+        std::size_t CY_class_name##Stack::for_each_and_remove(std::function<bool(CY_class_name &)> func){\
+          if(stack_.size() == 0)return 0;\
+          std::lock_guard<std::mutex> guard(stack_mtx_);\
+          CY_class_name##StackType::iterator i = stack_.begin();\
+          std::size_t s = 0;\
+          do{\
+            if(func(*i) == true){s++;i++;}\
+            else{stack_.erase(i++);}\
+          }while(i != stack_.end());\
+          return s;\
+        }
 
 
 

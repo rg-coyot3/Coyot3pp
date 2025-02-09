@@ -82,10 +82,17 @@
     macro(a1,a2)                                                     \
     __VA_OPT__(FOR_EACH_PAIR_AGAIN_WITH_CONSTANT PARENS (macro, a1, __VA_ARGS__))
 
-#define FOR_EACH_PAIR_WITH_CONSTANT(macro, ...) \
-  __VA_OPT__(EXPAND(FOR_EACH_PAIR_WITH_CONSTANT_HELPER(macro, __VA_ARGS__)))
-// foreach use pair arguments : end
 
+    #define FOR_EACH_PAIR_AGAIN_PR_WITH_CONSTANT() FOR_EACH_PAIR_WITH_CONSTANT_PR_HELPER
+
+  #define FOR_EACH_PAIR_WITH_CONSTANT_PR_HELPER(macro, V_CONSTANT, a1, a2, ...)                 \
+    macro(V_CONSTANT,a1,a2)                                                     \
+    __VA_OPT__(FOR_EACH_PAIR_AGAIN_PR_WITH_CONSTANT PARENS (macro, V_CONSTANT, __VA_ARGS__))
+
+
+#define FOR_EACH_PAIR_WITH_CONSTANT(macro, V_CONSTANT, ...) \
+  __VA_OPT__(EXPAND(FOR_EACH_PAIR_WITH_CONSTANT_PR_HELPER(macro, V_CONSTANT, __VA_ARGS__)))
+// foreach use pair arguments : end
 
 // foreach with triples : begin
 #define FOR_EACH_TRIPLES(macro, ...) \
@@ -109,4 +116,5 @@
 #define FOR_EACH_TRIPLES_WITH_01_STATIC_HELPER(macro,V_STATIC,a1,a2,a3,...) \
   macro(V_STATIC,a1,a2,a3) \
   __VA_OPT__(FOR_EACH_TRIPLES_WITH_01_STATIC_HELPER_RE PARENS (macro, V_STATIC , __VA_ARGS__ ))
+  
 // foreach triples with 1 static : end

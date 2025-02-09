@@ -14,6 +14,7 @@ namespace mqtt{
     , LOW
     , MEDIUM
     , HIGH
+    , HIGH_WHEN_AVAILABLE
     , DEFAULT
   )
 
@@ -29,8 +30,8 @@ CYT3MACRO_model_class_definitions(
     std::vector<uint8_t>& payload(const std::string& p),
     std::string payload_stringify() const,
     std::basic_string<uint8_t> payload_bstringify() const,
-    Message(const uint8_t* p COMMA() std::size_t s),
-    Message(const std::string& p),
+    Message(const std::string& topic COMMA() const uint8_t* p COMMA() std::size_t s),
+    Message(const std::string& topic COMMA() const std::string& p),
     std::string to_string()
   )
   , ( )
@@ -41,20 +42,28 @@ CYT3MACRO_model_class_definitions(
     , payload       , std::vector<uint8_t>  , 
     , priority      , ec::MessagePriorityLevel  , ec::MessagePriorityLevel::DEFAULT
     , retries       , int                   , 0
+    , token         , int                   , 0
 )
 
 
 
   CYT3MACRO_model_class_set_mapped_definitions(Message, id)
-  
+  CYT3MACRO_model_class_set_stack_definitions(Message, )
 
-  Message::Message(const uint8_t* p, std::size_t s){
+
+  Message::Message(const std::string& t, const uint8_t* p, std::size_t s){
+    topic(t);
     payload(p,s);
     gents_now();
+    retries(0);
+    token(0);
   }
-  Message::Message(const std::string& p){
+  Message::Message(const std::string& t, const std::string& p){
+    topic(t);
     payload(p);
     gents_now();
+    retries(0);
+    token(0);
   }
 
 
@@ -98,6 +107,11 @@ CYT3MACRO_model_class_definitions(
     }
     return str;
   }
+  
+
+  
+  
+
 
 }
 }

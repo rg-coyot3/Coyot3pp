@@ -91,6 +91,7 @@ std::string mqtt_on_connect_return_code_version_5(int rc);
                                   int mid);
     
     public:
+
       typedef coyot3::tools::ControlThread ControlThread;
         typedef MqttClientCallbackOnEventSimple CallbackOnEventSimple;
         typedef MqttClientCallbacksOnEventSimple CallbacksOnEventSimple;
@@ -103,13 +104,57 @@ std::string mqtt_on_connect_return_code_version_5(int rc);
 
       ClientConfiguration& config(const ClientConfiguration& configuration);
       const ClientConfiguration& config() const;
+    
 
-
+      bool register_subscription(const std::string& topic,
+                                    int mqttQos,
+                                    MqttClientOnMessageCallback cb);
       bool register_subscription(const std::string& topic,
                                     int mqttQos,
                                     int64_t& id,
                                     MqttClientOnMessageCallback cb);
       bool register_publisher(const std::string& topic, int mqttQos,int64_t& id);
+
+      
+
+
+      /**
+       * @brief lowest level public publication exposed method.
+       * 
+       * @param topic 
+       * @param payload 
+       * @param length 
+       * @param priority 
+       * @return true : publication taken in count OK.
+       * @return false : error publishing. (mainly because the client is not connected.)
+       */
+      bool publish(const std::string& topic, 
+                  const uint8_t* payload,
+                  std::size_t length,
+                  ec::MessagePriorityLevel priority = ec::MessagePriorityLevel::DEFAULT);
+      bool publish(const std::string& topic, 
+                  const uint8_t* payload,
+                  std::size_t length,
+                  int qos);
+
+
+      template<typename T>
+      bool publish(const std::string& topic,
+                  const T& payload,
+                  ec::MessagePriorityLevel priority = ec::MessagePriorityLevel::DEFAULT){
+        std::stringstream sstr;
+        sstr << payload;
+        return publish(topic, (uint8_t*)sstr.str().c_str(), sstr.str().size(), priority);
+      }
+
+      template<typename T>
+      bool publish(const std::string& topic,
+                  const T& payload,
+                  int qos){
+        std::stringstream sstr;
+        sstr << payload;
+        return publish(topic, (uint8_t*)sstr.str().c_str(), sstr.str().size(), qos);
+      }
       
       int  on_connection_callback_add(CallbackOnEventSimple cb);
       int  on_disconnection_callback_add(CallbackOnEventSimple cb);
@@ -118,6 +163,7 @@ std::string mqtt_on_connect_return_code_version_5(int rc);
       std::string client_id() const;
 
     protected:
+
 
       bool init_();
       bool start_();
@@ -141,10 +187,18 @@ std::string mqtt_on_connect_return_code_version_5(int rc);
 
       MessageMappedSet message_stack_prim_;
       MessageMappedSet message_stack_sec_;
+      /** to republish because it was important but at the moment of the 
+       *  republish it was not connected, and to store messages when forcing 
+       *  reconnections.
+       */
+      MessageStack     message_stack_repub_; 
+      void             backup_stack_prim_to_repub_();
+
     private:
       
       struct mosquitto*   client_;
       std::mutex          client_tx_mtx_; ///!< control to send only one comm.
+      std::mutex          client_models_mtx_;
 
 
       ClientDataModel     model;
@@ -158,7 +212,6 @@ std::string mqtt_on_connect_return_code_version_5(int rc);
       ControlThread* th_sec_;
 
 
-
       bool connect_to_broker_();
       bool disconnect_from_broker_();
 
@@ -167,12 +220,41 @@ std::string mqtt_on_connect_return_code_version_5(int rc);
 
       bool prepare_subscriptions_();
         bool make_subscriptions_();
+        bool all_subscriptions_are_done_();
+
+      
+      bool publish_(const std::string& topic, 
+                  const uint8_t* payload,
+                  std::size_t length,
+                  ec::MessagePriorityLevel priority);
+      bool publish_(const std::string& topic, 
+                  const uint8_t* payload,
+                  std::size_t length,
+                  int qos);
+      /**
+       * @brief simple mqtt publish 
+       * 
+       * @param t topic
+       * @param p payload ptr
+       * @param s payload size
+       * @param q mqtt qos (by default = 0)
+       * @param mid mosquitto message id to control sent packets.
+       * @return true : published ok.
+       * @return false : not published because of any error.
+       */
+      bool publish_payload_v3_(
+              const std::string& t, 
+              const uint8_t* p, 
+              int s, 
+              int q,
+              int* mid);
 
       
     public:
 
       static constexpr const int64_t CONTROLLER_INTERVAL_NORMAL = 1000;
       static constexpr const int64_t CONTROLLER_INTERVAL_INTENSIVE = 250;
+      static std::string mosq_rc_stringify(int rc);
 
   };
 

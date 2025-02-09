@@ -15,7 +15,7 @@ typedef std::vector<std::string> CytStringSet;
 
 std::string  CytStringSetStringify(const CytStringSet& i);
 std::string  CytStringSetStringify(const CytStringSet& i,const std::string& joinString);
-CytStringSet CytStringSetCreate(const std::string& input,const char* key);
+CytStringSet CytStringSetCreate(const std::string& input,const char key);
 
   struct CytStringSetJsIO 
   : public JsonSerializablePacketBase
@@ -26,6 +26,8 @@ CytStringSet CytStringSetCreate(const std::string& input,const char* key);
 
     virtual bool        from_json(const Json::Value& source) override;
     virtual Json::Value to_json() const override;
+            bool        json_from_file(const std::string& file_path);
+            bool        json_to_file(const std::string& file_path);
 
     //compatibility with cyt3macros
     static std::string get_serialization_model_template(int l__ = 0);

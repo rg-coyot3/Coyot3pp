@@ -13,8 +13,8 @@ std::string  CytStringSetStringify(const CytStringSet& i)
   }
   return res;
 }
-std::string  CytStringSetStringify(const CytStringSet& i,const std::string& joinString)
-{
+std::string  CytStringSetStringify(const CytStringSet& i,
+                                  const std::string& joinString){
   std::string res;
   bool notFirst = false;
   for(const std::string& item : i){
@@ -26,13 +26,22 @@ std::string  CytStringSetStringify(const CytStringSet& i,const std::string& join
   }
   return res;
 }
-CytStringSet CytStringSetCreate(const std::string& input,const char* key)
+
+CytStringSet CytStringSetCreate(const std::string& input,const char key)
 {
   CytStringSet res;
   stringSplit(input,key,res);
   return res;
 }
 
+bool CytStringSetJsIO::json_from_file(const std::string& file_path){
+  return save_json_to_file(file_path.c_str(),to_json());
+}
+bool CytStringSetJsIO::json_to_file(const std::string& file_path){
+  Json::Value js;
+  if(!load_json_from_file(file_path.c_str(),js)== false)return false;
+  return from_json(js);
+}
 
 CytStringSetJsIO::CytStringSetJsIO():CytStringSet(){}
 CytStringSetJsIO::CytStringSetJsIO(const CytStringSet& o):CytStringSet(o){}

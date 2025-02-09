@@ -14,6 +14,7 @@ namespace mqtt{
     , LOW = 0
     , MEDIUM = 1
     , HIGH = 2
+    , HIGH_WHEN_AVAILABLE = 3
     , DEFAULT = 10
   )
 
@@ -28,8 +29,8 @@ namespace mqtt{
     std::vector<uint8_t>& payload(const std::string& p),
     std::string payload_stringify() const,
     std::basic_string<uint8_t> payload_bstringify() const,
-      Message(const uint8_t* p COMMA() std::size_t s),
-      Message(const std::string& p),
+      Message(const std::string& t COMMA() const uint8_t* p COMMA() std::size_t s),
+      Message(const std::string& t COMMA() const std::string& p),
     std::string to_string()
   )
   , ( )
@@ -40,9 +41,11 @@ namespace mqtt{
     , payload       , std::vector<uint8_t>  , 
     , priority      , ec::MessagePriorityLevel  , ec::MessagePriorityLevel::DEFAULT
     , retries       , int                   , 0
+    , token         , int                   , 0
 )
 
   CYT3MACRO_model_class_set_mapped_declarations(Message, id)
+  CYT3MACRO_model_class_set_stack_declarations(Message, )
   
 
 

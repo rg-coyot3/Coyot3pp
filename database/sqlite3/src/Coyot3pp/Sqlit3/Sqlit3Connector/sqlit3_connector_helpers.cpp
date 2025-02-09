@@ -41,6 +41,7 @@ namespace sqlite{
     memcpy(buffer,pl,static_cast<size_t>(ps));
     buffer[ps] = '\0';
     d= buffer;
+    d = quote_decode(d);
     delete buffer;
     return true;
   }
@@ -58,6 +59,27 @@ namespace sqlite{
       d.push_back(((uint8_t*)pl)[i]);
     }
     return true;
+  }
+
+
+
+  std::string quote_encode(const std::string& input){
+    std::size_t p=0;
+    std::string r = input;
+    while((p = r.find_first_of("'",p)) != std::string::npos){
+      r.replace(p,1,"&lsquo;");
+      p++;
+    }
+    return r;
+  }
+  std::string quote_decode(const std::string& input){
+    std::size_t p=0;
+    std::string r = input;
+    while((p = r.find_first_of("&lsquo;")) != std::string::npos){
+      r.replace(p,7,"'");
+      p++;
+    }
+    return r;
   }
 }
 }

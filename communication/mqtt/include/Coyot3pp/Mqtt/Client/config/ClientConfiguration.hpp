@@ -7,6 +7,7 @@ namespace communication{
 namespace mqtt{
 
 
+
 CYT3MACRO_model_class_declarations(
   ClientConfiguration
   , 

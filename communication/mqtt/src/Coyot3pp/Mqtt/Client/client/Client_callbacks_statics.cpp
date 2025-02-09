@@ -6,20 +6,13 @@ namespace coyot3{
 namespace communication{
 namespace mqtt{
 
-int  mosq_on_tls_certs_password_callback(char *buff, 
-                              int size, 
-                              int rwflag, 
-                              void *userdata){
-  
-}
-
 void mosq_on_client_connects(struct mosquitto* client,
                               void* userdata,
                               int result){
   static_cast<Client*>(userdata)->on_mosq_client_connects(result);                                
 }
 
-void mosq_on_client_disconnect(struct mosquitto* c,
+void mosq_on_client_disconnects(struct mosquitto* c,
                               void* userdata, 
                               int rc){
   static_cast<Client*>(userdata)->on_mosq_client_disconnects(rc);

@@ -26,19 +26,18 @@ namespace mqtt{
     return l;
   }
   
-  
-  
-  
   int MOSQUITTO_LIB_INITIATED = false;
 
   bool Client::connect_to_broker_(){
+    std::lock_guard<std::mutex> guard(client_tx_mtx_);
+    
     if(config_.debug_mode() == true){
       log_warn("client in debug mode.");
       return true;
     }
-
+    backup_stack_prim_to_repub_(); // in case of reconnection, backup important messages. 
     if(MOSQUITTO_LIB_INITIATED == false){
-      log_info("connect-to-broker- : initializing mosquitto lib");
+      log_debug(3,"connect-to-broker- : initializing mosquitto lib");
       if(mosquitto_lib_init() != MOSQ_ERR_SUCCESS){
         log_err("ERROR INITIALIZING MOSQUITTO LIB INIT");
         return false;
@@ -238,7 +237,7 @@ namespace mqtt{
 
 
 
-
+  // ON CONNECTION
   void Client::on_mosq_client_connects(int rc){
     log_debug(3, o() << "on-client-connects- : code [" 
       << mosquitto_error_codes_descriptions(rc) << "]");
@@ -259,7 +258,9 @@ namespace mqtt{
       << mosquitto_error_codes_descriptions(rc) << "]");
       model.state(ec::MosqClientState::DISCONNECTED);
       model.ts_last_transition(ct::get_current_timestamp());
+      return;
     }
+    
 
     // TO-DO
     // if(full_reset_connection_ == true){
@@ -277,13 +278,53 @@ namespace mqtt{
         p.second(rc == MOSQ_ERR_SUCCESS);
       }
     }
-
-
+    
+    prepare_subscriptions_();
   }
   
-  
 
-  
+
+
+
+  bool
+  Client::disconnect_from_broker_(){
+    std::lock_guard<std::mutex> guard(client_tx_mtx_);
+    if(client_ == nullptr){
+      log_debug(5,"disconnect-from-broker- : mosquitto client not "
+      "instantiated");
+      return false;
+    }
+    log_debug(5,"disconnect-from-broker- : disconnecting from broker and "
+    "forcing loop stop");
+    mosquitto_disconnect(client_);
+    mosquitto_loop_stop(client_,true);
+    mosquitto_destroy(client_);
+    client_ = nullptr;
+    log_info("disconnect-from-broker- : done");
+    model.state(ec::MosqClientState::DISCONNECTED);
+    return true;
+  }
+
+
+
+
+
+
+
+  void
+  Client::on_mosq_client_disconnects(int reason){
+    model.state(ec::MosqClientState::DISCONNECTED);
+    if(reason != 0){
+      log_warn("on-mosq-client-disconnect- : unexpected disconnection");
+    }else{
+      log_debug(3,"on-mosq-client-disconnect- : disconnected");
+    }
+    if(model.callbacks_on_disconnection().size() == 0)return;
+    log_debug(3,"on-mosq-client-disconnect- : invoking callbacks");
+    for(MqttClientCallbacksOnEventSimplePair c : model.callbacks_on_disconnection()){
+      c.second(reason == 0);
+    }
+  }
 }
 }
 }

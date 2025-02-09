@@ -6,6 +6,7 @@
 namespace coyot3{
 namespace ddbb{
 namespace sqlite{
+  
   bool sqlit3_get_col(sqlite3_stmt* stmt, int c, bool& d);
   bool sqlit3_get_col(sqlite3_stmt* stmt, int c, int& d);
   bool sqlit3_get_col(sqlite3_stmt* stmt, int c, int64_t& d);
@@ -15,7 +16,9 @@ namespace sqlite{
   bool sqlit3_get_col(sqlite3_stmt* stmt, int c, std::string& d);
   bool sqlit3_get_col(sqlite3_stmt* stmt, int c, double& d);
   bool sqlit3_get_col(sqlite3_stmt* stmt, int c, std::vector<uint8_t>& d);
-  
+
+  std::string quote_encode(const std::string& input);
+  std::string quote_decode(const std::string& input);
   
 }
 }
