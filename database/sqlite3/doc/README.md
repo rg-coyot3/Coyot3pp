@@ -97,25 +97,6 @@ This macro will extend the `Sqlit3IO` class to make it capable to automatically 
 
 Needs for the `<name-of-the-class>SqliteIO` class be declared.
 
-```cpp
-CYT3MACRO_model_class_serializable_sqlit3_autoinsert_declarations(<name-of-the-class>)
-```
-
-*nothing more*
-
-### `Sqlit3IO` extension:
-
-This will create a class of type `Sqlit3AutoIO`, extending the `Sqlit3IO` class with the following methods:
-
-* `int64_t insertion_interval(int64_t i)` to set the interval in milliseconds to make the insertions. *To be invoked when configuring the connector.*
-* `bool Start()` will now:
-  * open the connection with the database.
-  * check the creation of the table associated to the class.
-  * launch a thread that will automatically check the state of the `stack_output` and push the data to the database.
-* `bool Stop()` will now:
-  * stop the thread
-  * close the database.
-
 
 
 

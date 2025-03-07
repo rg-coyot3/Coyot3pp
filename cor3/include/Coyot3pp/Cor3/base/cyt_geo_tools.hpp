@@ -24,16 +24,6 @@
 #include <jsoncpp/json/json.h>
 #include <list>
 
-// typedef boost::geometry::model::point<
-//     double, 2, boost::geometry::cs::spherical_equatorial<boost::geometry::degree>
-// > spherical_point;
-
-// spherical_point p(lon1_degree, lat1_degree);
-// spherical_point q(lon2_degree, lat2_degree);
-// double dist = boost::geometry::distance(p, q);
-// double const earth_radius = 6371.0; // Km
-// double dist_km = dist*earth_radius;
-
 
 namespace coyot3{
 namespace tools{
