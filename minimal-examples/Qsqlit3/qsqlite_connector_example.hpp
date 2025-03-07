@@ -32,7 +32,7 @@
   CYT3MACRO_model_class_declarations(
     ServiceStopDAO
     , DatabaseEntityDAO
-    , ( )
+    , ( std::string to_string())
     , ( )
       , active              , bool                         , false
       , latitude            , double                       , 0.0
@@ -58,13 +58,14 @@
   CYT3MACRO_model_class_serializable_qsqlite_declarations(
       ServiceStopDAO
     , ( )
-    , id                  , "INTEGER PRIMARY KEY AUTOINCREMENT"   , "id"
-    , name                , "TEXT"                                , "name"
-    , description         , "TEXT"                                , "description"
-    , active              , "INTEGER"                             , "active"
-    , latitude            , "NUMERIC"                             , "latitude"
-    , longitude           , "NUMERIC"                             , "longitude"
-    , altitude            , "NUMERIC"                             , "altitude"
+    , id                  , "id"            , "INTEGER PRIMARY KEY AUTOINCREMENT"   
+
+    , name                , "name"          , "TEXT"                                
+    , description         , "description"   , "TEXT"                                
+    , active              , "active"        , "INTEGER"                             
+    , latitude            , "latitude"      , "NUMERIC"                             
+    , longitude           , "longitude"     , "NUMERIC"                             
+    , altitude            , "altitude"      , "NUMERIC"                             
   )
 
 
@@ -103,8 +104,11 @@
   
 
       bool                                    initialize_read();
+      std::size_t                             ts_;
     protected slots:
       void timer_check_status_callback();
+      void update_random_line();
+      void delete_random_line();
 
 
 

@@ -1,4 +1,4 @@
-#include <Coyot3pp/R3st/Client.h>
+#include <Coyot3pp/R3st/Cli3nt/Client.h>
 
 
 namespace rest = coyot3::communication::rest;

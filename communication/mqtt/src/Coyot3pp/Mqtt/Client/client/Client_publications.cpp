@@ -163,8 +163,8 @@ void Client::backup_stack_prim_to_repub_(){
   if(message_stack_prim_.size() == 0)return;
   log_debug(1,"backup-stack-prim-to-repub-");
   message_stack_prim_.for_each([&](const Message& m){
-    log_debug(3,"backup-stack-prim-to-repub- : backing up for repub msg (t=" <<
-    m.topic() << ",p=" << m.payload_stringify() << ")");
+    log_debug(3, o() << "backup-stack-prim-to-repub- : backing up for repub "
+    "msg (t=" << m.topic() << ",p=" << m.payload_stringify() << ")");
     message_stack_repub_.push_back(m);
     return true;
   });

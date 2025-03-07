@@ -1,5 +1,5 @@
 
-set(COYOT3PPCOMPONENT          R3st)
+set(COYOT3PPCOMPONENT          R3stCli3nt)
 set(COYOT3PPCOMPONENTVERSION   1.0)
 
 
@@ -17,8 +17,8 @@ set(LCOYOT3PPR3ST_EXTERNAL_DEPENDENCES
   Cor3
 )
 
-file(GLOB LC3_SRCS_R3ST
-          src/${PROJECT_NAME}/${COYOT3PPCOMPONENT}/*.cpp)
+file(GLOB_RECURSE LC3_SRCS_R3ST
+          src/${PROJECT_NAME}/*.cpp)
 
 
 

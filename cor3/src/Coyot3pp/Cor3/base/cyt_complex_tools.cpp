@@ -75,6 +75,27 @@ bool CytStringSetJsIO::from_json(const Json::Value& source){
 std::string CytStringSetJsIO::get_serialization_model_template(int l__){
   return indentation(l__) + "[array-of-strings]";
 }
+std::string CytStringSetJsIO::check_input_model(const Json::Value& source, int l__){
+  std::stringstream sstr;
+  if(source.isArray() == false){
+    sstr << coyot3::tools::indentation(l__) << " !!! TYPE ERROR !!! [cyt3stringset] (not array)" << std::endl;
+  }else{
+    Json::ArrayIndex i, s = source.size();
+    bool hasErrors = false;
+    for(i = 0;i < s; ++i){
+      if(source[i].isString() == false){
+        sstr << coyot3::tools::indentation(l__ + 2) 
+        << " !!! TYPE ERROR !!! [cyt3stringset] element(" << i << ") is NOT string" 
+        << std::endl;
+        hasErrors = true;
+      }
+    }
+    if(hasErrors == false){
+      sstr << coyot3::tools::indentation(l__) << " [cyt3stringset] ok" << std::endl;
+    }
+  }
+  return sstr.str();
+}
 
 Json::Value as_json(const coyot3::tools::JsonSerializablePacketBase& src){return src.to_json();}
 

@@ -205,17 +205,6 @@ void Client::on_mosq_client_message(const struct mosquitto_message* message){
   }
 
 
-
-
-  bool Client::prepare_subscriptions_(){
-    log_debug(3,"prepare-subscriptions- : ensuring make subscription at next iteration");
-    model.subscriptions_config().for_each([&](cmqc_subscriptions_tree& s){
-      s.subscribed(false);
-      return true;
-    });
-    return true;
-  }
-
   bool Client::all_subscriptions_are_done_(){
     bool allgood = true;
     model.subscriptions_config().for_each([&](cmqc_subscriptions_tree& s){
@@ -294,7 +283,7 @@ void Client::on_mosq_client_message(const struct mosquitto_message* message){
     model.subscriptions_config().for_each([&](cmqc_subscriptions_tree& s){
       s.ts_connection_launch(0);
       s.ts_connection_done(0);
-
+      s.subscribed(false);
       return true;
     });
     return true;
@@ -313,7 +302,7 @@ void Client::on_mosq_client_message(const struct mosquitto_message* message){
     message_stack_prim_.clear();
 
     disconnect_from_broker_();
-
+    return true;
   }
 
 }

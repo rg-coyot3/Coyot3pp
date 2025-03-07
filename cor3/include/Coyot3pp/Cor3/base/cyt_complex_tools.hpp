@@ -31,6 +31,7 @@ CytStringSet CytStringSetCreate(const std::string& input,const char key);
 
     //compatibility with cyt3macros
     static std::string get_serialization_model_template(int l__ = 0);
+    std::string        check_input_model(const Json::Value& source, int l__ = 0);
   };
 
 Json::Value as_json(const coyot3::tools::JsonSerializablePacketBase& src);

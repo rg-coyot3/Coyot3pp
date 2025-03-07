@@ -8,7 +8,7 @@ namespace coyot3::communication::mqtt{
   bool Client::init_(){
     
     th_main_ = new(std::nothrow) ct::ControlThread(
-      std::bind(Client::task_controller,this),
+      std::bind(&Client::task_controller,this),
       "controller-" + name());
     if(th_main_ == nullptr){
       log_err("init- : fatal error reserving memory to controller task thread");

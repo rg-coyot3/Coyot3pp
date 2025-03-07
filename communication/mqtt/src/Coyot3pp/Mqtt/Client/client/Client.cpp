@@ -10,7 +10,13 @@ namespace mqtt{
   :ModuleBase(name)
   ,config_()
 
+  ,client_(nullptr)
+  ,model()
+  ,full_reset_flag_(false)
+
   ,th_main_(nullptr)
+  ,th_main_interval_(1000)
+
   ,th_sec_(nullptr)
   
   {

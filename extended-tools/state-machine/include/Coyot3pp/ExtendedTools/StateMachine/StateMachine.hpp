@@ -60,6 +60,8 @@ const char* eventName::type(){ \
 #define CYT3MACRO_boost_statechart_event_list_definitions(...)\
   FOR_EACH_TRIPLES(CYT3MACRO_boost_statechart_event_simple_definitions, __VA_ARGS__)
 
+namespace coyot3::state_machine{
+
 
   CYT3MACRO_model_class_declarations(
     StateMachineLogLine
@@ -78,7 +80,7 @@ const char* eventName::type(){ \
   )
 
     CYT3MACRO_model_class_set_stack_declarations(StateMachineLogLine, 2000)
-
+}
 
   #define CYT3MACRO_boost_statechart_header(stateMachineName, initialState)\
   \
@@ -208,21 +210,22 @@ const char* eventName::type(){ \
 
 
 
+
           #define cytemacro_boost_statechart_state_commons_def_destr_extrap02(destructorExtra,...)\
-            destructorExtra();
+            IFN(destructorExtra)(destructorExtra();)
         
         #define cytemacro_boost_statechart_state_commons_def_destr_extrap01(a1,...)\
-          IFN(__VA_ARGS__)(cytemacro_boost_statechart_state_commons_def_constr_extrap02(__VA_ARGS__))
+          IFN(__VA_ARGS__)(cytemacro_boost_statechart_state_commons_def_destr_extrap02(__VA_ARGS__))
 
       #define cytemacro_boost_statechart_state_commons_def_destr_extrap00(a1,...)\
         IFN(__VA_ARGS__)(cytemacro_boost_statechart_state_commons_def_destr_extrap01(__VA_ARGS__))
 
     #define cytemacro_boost_statechart_state_commons_def_destr_extrap(...)\
-      IFN(__VA_ARGS__)(cytemacro_boost_statechart_state_commons_def_constr_extrap00(__VA_ARGS__))
+      IFN(__VA_ARGS__)(cytemacro_boost_statechart_state_commons_def_destr_extrap00(__VA_ARGS__))
 
 
         #define cytemacro_boost_statechart_state_commons_def_constr_extrap01(constructionExtra,...)\
-          constructionExtra();
+          IFN(constructionExtra)(constructionExtra();)
 
       #define cytemacro_boost_statechart_state_commons_def_constr_extrap00(a1,...)\
         IFN(__VA_ARGS__)(cytemacro_boost_statechart_state_commons_def_constr_extrap01(__VA_ARGS__))

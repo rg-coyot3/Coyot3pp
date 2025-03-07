@@ -85,34 +85,6 @@ CYT3MACRO_model_class_definitions(
     timer_status_interval = config_.check_state_interval();
     return true;
   }
-  // bool QSqlit3Connector::check_configuration_structure()
-  // {
-  //   if( 
-  //       !coyot3::tools::json_contains_member(config,Config::db_location)
-  //     ||!coyot3::tools::json_contains_member(config,Config::connection_name)
-  //     ||!coyot3::tools::json_contains_member(config,Config::check_state_interval)
-  //   ){
-  //     CLOG_ERROR("SQLITE CONNECTOR : set-configuration : review the configuration structure");
-  //     return false;
-  //   }
-  //   try{
-  //     dbname = config[Config::db_location].asString();
-  //     timer_status_interval = config[Config::check_state_interval].asInt();
-  //     connection_name = config[Config::connection_name].asString();
-  //   }catch(const Json::Exception& e)
-  //   {
-  //     CLOG_ERROR("SQLITE CONNECTOR : init : error acquiring configuration : "
-  //       "err(" << e.what());
-  //     state = State::ERROR;
-  //     return false;
-  //   }catch(...){
-  //     CLOG_ERROR("SQLITE CONNECTOR : init : error acquiring configuration : "
-  //       "unkown");
-  //     return false;
-  //   }
-  //   CLOG_DEBUG(5,"SQLITE CONNECTOR : set-configuration : config structure ok");
-  //   return true;
-  // }
   bool 
   QSqlit3Connector::Init()
   {
@@ -129,13 +101,6 @@ CYT3MACRO_model_class_definitions(
       return false;
     }
     
-    // if(!check_configuration_structure())
-    // {
-    //   CLOG_ERROR("SQLITE CONNECTOR : init : check configuration structure error");
-    //   state = State::ERROR;
-    //   return false;
-    // }
-
     if(timer_status_interval < 3000){
       CLOG_WARN("sqlite-connector : init : timer status interval updated to 3 "
         "seconds")
@@ -436,6 +401,56 @@ CYT3MACRO_model_class_definitions(
     err = lastErrorString;
     return success;
   }
+  bool 
+  QSqlit3Connector::makeQuery(const QString& queryString){
+    std::string err;
+    return makeQuery(queryString, err);
+  }
+
+
+
+
+  bool 
+  QSqlit3Connector::makeQuery(const QString& queryString, std::string& err)
+  {
+    bool success = false;
+    std::lock_guard<std::mutex> guard(dbmutex);
+    if(external_instance_ != nullptr){
+      return external_instance_->makeQuery(queryString, err);
+    }
+    if(state != State::LAUNCHED)
+    {
+      CLOG_WARN("SQLITE-CONNECTOR : make-query : state is not "
+        "LAUNCHED : (" << ModuleStateToString(state) << ")");
+      return false;
+    }
+    QSqlQuery q(*database);
+
+    if(!q.prepare(queryString))
+    {
+      lastErrorString = q.lastError().text().toStdString();
+      CLOG_WARN("SQLITE-CONNECTOR : make-query : "
+        "error preparing query [" << lastErrorString << "](( " 
+        << queryString.toStdString() << " ))");
+      
+      return false;
+    }
+    CLOG_DEBUG(6,"SQLITE-CONNECTOR : make-query : sending query ((" 
+      << queryString.toStdString() 
+      << "))");
+    if(q.exec())
+    {
+      success = true;
+      CLOG_DEBUG(3,"SQLITE-CONNECTOR : make-query : succeeded");
+    }else{
+      lastErrorString = q.lastError().text().toStdString();
+      CLOG_WARN("SQLITE-CONNECTOR : make update-query : error making "
+        "update query : [" << lastErrorString << "](( "
+        << queryString.toStdString() << " ))");
+    }
+    err = lastErrorString;
+    return success;
+  }
 
   bool 
   QSqlit3Connector::makeCreateTableQuery(const QString& queryString){
@@ -563,6 +578,8 @@ CYT3MACRO_model_class_definitions(
     slaves_.erase(it);
     return true;
   }
+
+
 
 }
 }

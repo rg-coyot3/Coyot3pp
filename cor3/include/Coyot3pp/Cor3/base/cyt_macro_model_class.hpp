@@ -268,6 +268,30 @@
   FOR_EACH_TRIPLES_WITH_01_STATIC(cyt3macro_model_class_getters_def_,CY_class_name,PASS_PARAMETERS(CY_enumclass_deps))\
   FOR_EACH_TRIPLES_WITH_01_STATIC(cyt3macro_model_class_setters_def_,CY_class_name,PASS_PARAMETERS(CY_enumclass_deps))\
 
+  #define CYT3MACRO_model_class_definitions_no_opsoverload(CY_class_name, CY_parent_class, CY_additional_methods, CY_enumclass_deps, ...) \
+  CY_class_name::CY_class_name()\
+    IFN(CY_parent_class)(:CY_parent_class()){} \
+  CY_class_name::~CY_class_name(){}\
+  IFN(CY_parent_class)(CY_class_name::CY_class_name(const CY_parent_class & o):CY_parent_class(o){}) \
+  CY_class_name::CY_class_name(const CY_class_name & o){*this = o;}\
+  CY_class_name::CY_class_name(\
+          cyt3macro_privdev_model_class_dec_tr_params(__VA_ARGS__)\
+          IFN(__VA_ARGS__)(IFN(PASS_PARAMETERS(CY_enumclass_deps))(COMMA()))\
+          cyt3macro_privdev_model_class_dec_tr_params(PASS_PARAMETERS(CY_enumclass_deps))\
+  ){\
+    FOR_EACH_TRIPLES(cyt3macro_model_class_def_tr_assign_,__VA_ARGS__)\
+    FOR_EACH_TRIPLES(cyt3macro_model_class_def_tr_assign_,PASS_PARAMETERS(CY_enumclass_deps))\
+  }\
+  \
+  cyt3macro_privdev_model_class_get_model_template_def_(CY_class_name, CY_parent_class, CY_additional_methods, CY_enumclass_deps, __VA_ARGS__)\
+  bool CY_class_name::operator!=(const CY_class_name & o) const{\
+    return !(*this == o); \
+  } \
+  FOR_EACH_TRIPLES_WITH_01_STATIC(cyt3macro_model_class_getters_def_,CY_class_name,__VA_ARGS__)\
+  FOR_EACH_TRIPLES_WITH_01_STATIC(cyt3macro_model_class_setters_def_,CY_class_name,__VA_ARGS__)\
+  FOR_EACH_TRIPLES_WITH_01_STATIC(cyt3macro_model_class_getters_def_,CY_class_name,PASS_PARAMETERS(CY_enumclass_deps))\
+  FOR_EACH_TRIPLES_WITH_01_STATIC(cyt3macro_model_class_setters_def_,CY_class_name,PASS_PARAMETERS(CY_enumclass_deps))\
+
 
 ////////////////////////////////////
 ////////////////////////////////////
@@ -305,7 +329,7 @@
     bool              insert(const CY_class_name & o); \
     bool              remove(CY_class_name::CY_member_index_property##_t index); \
     bool              remove(CY_class_name index); \
-    bool              update(const CY_class_name & o);\
+    bool              update(const CY_class_name & o, bool force = true);\
     bool              is_member(CY_class_name::CY_member_index_property##_t index) const;\
     CY_class_name&    first();\
     CY_class_name     first() const;\
@@ -423,10 +447,10 @@
     }
 
   #define cyt3macro_model_class_set_mapped_def_update_(CY_class_name,CY_member_index_property)\
-    bool              CY_class_name##MappedSet::update(const CY_class_name & o){\
+    bool              CY_class_name##MappedSet::update(const CY_class_name & o, bool force){\
       std::lock_guard<std::mutex> guard(mtx_);\
       CY_class_name##MappedSetMapType::iterator i1 = map_.find(o.CY_member_index_property());\
-      if(i1 == map_.end())return false;\
+      if(i1 == map_.end())if(force == true)return insert(o);else return false;\
       i1->second = o;\
       return true;\
     }

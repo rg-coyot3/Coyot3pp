@@ -14,9 +14,7 @@
 
 
 
-namespace coyot3{
-namespace communication{
-namespace mqtt{
+namespace coyot3::communication::mqtt{
 
 
 
@@ -259,6 +257,4 @@ std::string mqtt_on_connect_return_code_version_5(int rc);
   };
 
 
-}
-}
 }

@@ -30,7 +30,7 @@ namespace mqtt{
   
 
 
-  CYT3MACRO_model_class_definitions(
+  CYT3MACRO_model_class_definitions_no_opsoverload(
     ClientDataModel
     ,
     , ( 
@@ -58,6 +58,45 @@ namespace mqtt{
       , callbacks_on_disconnection  , MqttClientCallbacksOnEventSimple  , 
   )
 
+  bool ClientDataModel::operator==(const ClientDataModel &o) const { 
+    return (
+        (ts_creation_ == o.ts_creation_) 
+      && (state_ == o.state_) 
+      && (mosquitto_id_ == o.mosquitto_id_) 
+      && (ts_last_transition_ == o.ts_last_transition_) 
+      && (ts_first_connection_ == o.ts_first_connection_) 
+      && (ts_last_connection_ == o.ts_last_connection_) 
+      && (ts_last_disconnection_ == o.ts_last_disconnection_) 
+      && (total_num_reconnections_ == o.total_num_reconnections_) 
+      && (subscriptions_config_ == o.subscriptions_config_) 
+      && (subscriptions_active_ == o.subscriptions_active_) 
+      && (publishers_config_ == o.publishers_config_) 
+      && (subscriptions_pending_ids_ == o.subscriptions_pending_ids_) 
+      && (subscriptions_pending_ == o.subscriptions_pending_) 
+      && (callbacks_on_connection_.size() == o.callbacks_on_connection_.size()) 
+      && (callbacks_on_disconnection_.size() == o.callbacks_on_disconnection_.size())
+    ); 
+    
+  }
+  ClientDataModel& ClientDataModel::operator=(const ClientDataModel &o) { 
+    ts_creation_ = o.ts_creation_; 
+    state_ = o.state_; 
+    mosquitto_id_ = o.mosquitto_id_; 
+    ts_last_transition_ = o.ts_last_transition_; 
+    ts_first_connection_ = o.ts_first_connection_; 
+    ts_last_connection_ = o.ts_last_connection_; 
+    ts_last_disconnection_ = o.ts_last_disconnection_; 
+    total_num_reconnections_ = o.total_num_reconnections_; 
+    subscriptions_config_ = o.subscriptions_config_; 
+    subscriptions_active_ = o.subscriptions_active_; 
+    publishers_config_ = o.publishers_config_; 
+    subscriptions_pending_ids_ = o.subscriptions_pending_ids_; 
+    subscriptions_pending_ = o.subscriptions_pending_; 
+    callbacks_on_connection_ = o.callbacks_on_connection_; 
+    callbacks_on_disconnection_ = o.callbacks_on_disconnection_;
+    return *this;
+  }
+  
 
 
 

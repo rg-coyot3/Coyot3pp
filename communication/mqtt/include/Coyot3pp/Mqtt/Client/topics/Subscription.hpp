@@ -13,17 +13,17 @@ namespace mqtt{
   CYT3MACRO_model_class_declarations(
     Subscription
     ,
-    , ( 
-        MqttClientOnMessageCallback callback
-      )
+    , ( )
     , ( )
       , id                    , int64_t                     , 
       , active                , bool                        , true
+      , subscribed            , bool                        , false
       , topic                 , std::string                 , ""
       , mosquitto_qos         , int                         , 
+      , mosquitto_subid       , int                         , 
       , ts_last_msg           , int64_t                     , 0
       , msg_count             , int64_t                     , 0
-      , callback              , MqttClientOnMessageCallback ,
+      , callback              , MqttClientOnMessageCallback , 
   )
 
 

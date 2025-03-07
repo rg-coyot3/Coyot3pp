@@ -5,6 +5,7 @@ project(Coyot3pp LANGUAGES CXX VERSION 1.0)
 
 option(LCY_BUILD_WITH_MINIMAL_EXAMPLES   "Build with minimal examples"       ON)
 option(LCY_BUILD_COMPONENT_REST          "Build with R3st components"        ON)
+option(LCY_BUILD_COMPONENT_REST_SERVER   "Build with Simple REST server"     ON)
 option(LCY_BUILD_COMPONENT_MQTT          "Build with Mqtt components"        ON)
 option(LCY_BUILD_COMPONENT_POSTGRESQL    "Build with PostgreSql components"  ON)
 option(LCY_BUILD_COMPONENT_QSQLITE       "Build with QSqlite    components"  ON)
@@ -78,6 +79,9 @@ if(LCY_BUILD_COMPONENT_LWSS)
 endif()
 if(LCY_BUILD_COMPONENT_SQLIT3)
   add_subdirectory(database/sqlite3)
+endif()
+if(LCY_BUILD_COMPONENT_REST_SERVER)
+  add_subdirectory(services/rest_server)
 endif()
 # COMPONENTS DIRS INCLUDE - end
 
