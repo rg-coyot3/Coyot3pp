@@ -79,7 +79,7 @@ namespace rtsp{
   CYT3MACRO_model_class_serializable_json_declarations(
     RtspServerConfig
       , 
-      , "1.0"
+      , 
       , ( 
           streams_collection         , "streams_collection"         , RtspStreamConfigStack  
       )

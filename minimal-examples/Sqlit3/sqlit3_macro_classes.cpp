@@ -29,12 +29,13 @@ CYT3MACRO_model_class_set_stack_definitions(SimpleClass,)
 CYT3MACRO_model_class_serializable_sqlit3_definitions(
   SimpleClass
   , ( )
-  , id          , "INTEGER PRIMARY KEY AUTOINCREMENT"     , "id"
-  , name        , "TEXT"                                  , "name"
-  , surname     , "TEXT"                                  , "surname"
-  , age         , "INTEGER"                               , "age"
-  , height      , "REAL"                                  , "height"
+  , id          , "id"        , "INTEGER PRIMARY KEY AUTOINCREMENT"     
+  , name        , "name"      , "TEXT"                                  
+  , surname     , "surname"   , "TEXT"                                  
+  , age         , "age"       , "INTEGER"                               
+  , height      , "height"    , "REAL"                                  
 )
+
 
 
 CYT3MACRO_model_class_serializable_sqlit3_autoinsert_definitions(SimpleClass)

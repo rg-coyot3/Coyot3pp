@@ -13,8 +13,8 @@ std::string  CytStringSetStringify(const CytStringSet& i)
   }
   return res;
 }
-std::string  CytStringSetStringify(const CytStringSet& i,const std::string& joinString)
-{
+std::string  CytStringSetStringify(const CytStringSet& i,
+                                  const std::string& joinString){
   std::string res;
   bool notFirst = false;
   for(const std::string& item : i){
@@ -26,13 +26,22 @@ std::string  CytStringSetStringify(const CytStringSet& i,const std::string& join
   }
   return res;
 }
-CytStringSet CytStringSetCreate(const std::string& input,const char* key)
+
+CytStringSet CytStringSetCreate(const std::string& input,const char key)
 {
   CytStringSet res;
   stringSplit(input,key,res);
   return res;
 }
 
+bool CytStringSetJsIO::json_from_file(const std::string& file_path){
+  return save_json_to_file(file_path.c_str(),to_json());
+}
+bool CytStringSetJsIO::json_to_file(const std::string& file_path){
+  Json::Value js;
+  if(!load_json_from_file(file_path.c_str(),js)== false)return false;
+  return from_json(js);
+}
 
 CytStringSetJsIO::CytStringSetJsIO():CytStringSet(){}
 CytStringSetJsIO::CytStringSetJsIO(const CytStringSet& o):CytStringSet(o){}
@@ -65,6 +74,27 @@ bool CytStringSetJsIO::from_json(const Json::Value& source){
 }
 std::string CytStringSetJsIO::get_serialization_model_template(int l__){
   return indentation(l__) + "[array-of-strings]";
+}
+std::string CytStringSetJsIO::check_input_model(const Json::Value& source, int l__){
+  std::stringstream sstr;
+  if(source.isArray() == false){
+    sstr << coyot3::tools::indentation(l__) << " !!! TYPE ERROR !!! [cyt3stringset] (not array)" << std::endl;
+  }else{
+    Json::ArrayIndex i, s = source.size();
+    bool hasErrors = false;
+    for(i = 0;i < s; ++i){
+      if(source[i].isString() == false){
+        sstr << coyot3::tools::indentation(l__ + 2) 
+        << " !!! TYPE ERROR !!! [cyt3stringset] element(" << i << ") is NOT string" 
+        << std::endl;
+        hasErrors = true;
+      }
+    }
+    if(hasErrors == false){
+      sstr << coyot3::tools::indentation(l__) << " [cyt3stringset] ok" << std::endl;
+    }
+  }
+  return sstr.str();
 }
 
 Json::Value as_json(const coyot3::tools::JsonSerializablePacketBase& src){return src.to_json();}

@@ -56,16 +56,22 @@
   CYT3MACRO_model_class_serializable_qsqlite_definitions(
       ServiceStopDAO
     , ( )
-    , id                  , "INTEGER PRIMARY KEY AUTOINCREMENT"   , "id"
-    , name                , "TEXT"                                , "name"
-    , description         , "TEXT"                                , "description"
-    , active              , "INTEGER"                             , "active"
-    , latitude            , "NUMERIC"                             , "latitude"
-    , longitude           , "NUMERIC"                             , "longitude"
-    , altitude            , "NUMERIC"                             , "altitude"
+    , id                  , "id"                , "INTEGER PRIMARY KEY AUTOINCREMENT"   
+    , name                , "name"              , "TEXT"                                
+    , description         , "description"       , "TEXT"                                
+    , active              , "active"            , "INTEGER"                             
+    , latitude            , "latitude"          , "NUMERIC"                             
+    , longitude           , "longitude"         , "NUMERIC"                             
+    , altitude            , "altitude"          , "NUMERIC"                             
   )
 
 
+  
+  std::string ServiceStopDAO::to_string(){
+    std::stringstream sstr;
+    sstr << id() << "," << name() << "," << active();
+    return sstr.str();
+  }
 
 
 

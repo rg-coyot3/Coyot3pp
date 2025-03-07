@@ -93,6 +93,13 @@ bool JsonSerializablePacketBase::ok() const{
 // rapidjson::Writer<rapidjson::StringBuffer> JsonSerializablePacketBase::to_rjson() const{
 //   return rapidjson::Writer<rapidjson::StringBuffer>();
 // }
-
+bool JsonSerializablePacketBase::json_from_file(const std::string& file_path){
+  return save_json_to_file(file_path.c_str(),to_json());
+}
+bool JsonSerializablePacketBase::json_to_file(const std::string& file_path){
+  Json::Value js;
+  if(!load_json_from_file(file_path.c_str(),js)== false)return false;
+  return from_json(js);
+}
 }
 }

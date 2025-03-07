@@ -115,6 +115,8 @@ class QSqlit3Connector : public QObject{
         bool makeCreateTableQuery(const QString& queryString, std::string& err);
         bool makeSelectQuery(const QString& queryString,QSqlQuery& q, std::string& err);
         bool makeSelectQuery(const QString& queryString,QSqlQuery& q);
+        bool makeQuery(const QString& queryString, std::string& err);
+        bool makeQuery(const QString& queryString);
         bool makeLinkControlQuery();
 
     //bool check_configuration_structure();

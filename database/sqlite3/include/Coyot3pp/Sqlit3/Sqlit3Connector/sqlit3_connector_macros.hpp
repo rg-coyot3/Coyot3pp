@@ -5,16 +5,16 @@
 
 
 
-  #define cyt3macro_model_class_serializable_sqlit3io_coltypes_decs_(cy_var_name,cy_var_type,cy_col_name)\
+  #define cyt3macro_model_class_serializable_sqlit3io_coltypes_decs_(cy_var_name,cy_col_name,cy_var_type)\
     static constexpr const char* cy_var_name = cy_var_type;
 
-  #define cyt3macro_model_class_serializable_sqlit3io_coltypesEn_decs_(cy_var_name,cy_var_type,cy_col_name)\
+  #define cyt3macro_model_class_serializable_sqlit3io_coltypesEn_decs_(cy_var_name,cy_col_name,cy_var_type)\
     DataType cy_var_name;
 
-  #define cyt3macro_model_class_serializable_sqlit3io_colnames_decs_(cy_var_name,cy_var_type,cy_col_name)\
+  #define cyt3macro_model_class_serializable_sqlit3io_colnames_decs_(cy_var_name,cy_col_name,cy_var_type)\
     static constexpr const char* cy_var_name = cy_col_name;
 
-  #define cyt3macro_model_class_serializable_sqlit3io_colactiv_decs_(cy_var_name,cy_var_type,cy_col_name)\
+  #define cyt3macro_model_class_serializable_sqlit3io_colactiv_decs_(cy_var_name,cy_col_name,cy_var_type)\
     bool cy_var_name = true;
 
 
@@ -133,10 +133,10 @@ class CY_class_name##Sqlit3IO : public coyot3::ddbb::sqlite::Sqlit3Connector{\
 
 // HELPERS
 
-    #define cyt3macro_model_class_serializable_sqlit3_def_helpers_gnapa_01(cy_var_name,cy_var_type,cy_col_name)\
+    #define cyt3macro_model_class_serializable_sqlit3_def_helpers_gnapa_01(cy_var_name,cy_col_name,cy_var_type)\
       if(colName.compare(ColName::cy_var_name) == 0) found = (true | (cols_w_act_.cy_var_name = activation));
     
-    #define cyt3macro_model_class_serializable_sqlit3_def_helpers_gnapa_02(cy_var_name,cy_var_type,cy_col_name)\
+    #define cyt3macro_model_class_serializable_sqlit3_def_helpers_gnapa_02(cy_var_name,cy_col_name,cy_var_type)\
       if(colName.compare(ColName::cy_var_name) == 0) found = true;
 
   /**
@@ -145,19 +145,19 @@ class CY_class_name##Sqlit3IO : public coyot3::ddbb::sqlite::Sqlit3Connector{\
    * 
    */
 
-        #define cyt3macro_model_class_serializable_sqlit3_def_insert_colname_it_(cy_var_name,cy_var_type,cy_col_name)\
+        #define cyt3macro_model_class_serializable_sqlit3_def_insert_colname_it_(cy_var_name,cy_col_name,cy_var_type)\
         if(cols_w_act_.cy_var_name == true){if(firstItem==false)sstr << ",";else firstItem=false; sstr << " " cy_col_name ;}
 
-    #define cyt3macro_model_class_serializable_sqlit3_def_insert_colname_(cy_var_name,cy_var_type,cy_col_name,...)\
+    #define cyt3macro_model_class_serializable_sqlit3_def_insert_colname_(cy_var_name,cy_col_name,cy_var_type,...)\
       bool firstItem=true;\
       if(cols_w_act_.cy_var_name == true){firstItem=false;sstr << cy_col_name ;}\
       FOR_EACH_TRIPLES(cyt3macro_model_class_serializable_sqlit3_def_insert_colname_it_,__VA_ARGS__)
 
 
-      #define cyt3macro_model_class_serializable_sqlit3_def_select_colname_iter_(cy_var_name,cy_var_type,cy_col_name)\
+      #define cyt3macro_model_class_serializable_sqlit3_def_select_colname_iter_(cy_var_name,cy_col_name,cy_var_type)\
       sstr << ", " cy_col_name;
 
-    #define cyt3macro_model_class_serializable_sqlit3_def_select_colname_(cy_var_name,cy_var_type,cy_col_name,...)\
+    #define cyt3macro_model_class_serializable_sqlit3_def_select_colname_(cy_var_name,cy_col_name,cy_var_type,...)\
     sstr << cy_col_name;\
     FOR_EACH_TRIPLES(cyt3macro_model_class_serializable_sqlit3_def_select_colname_iter_,__VA_ARGS__)\
       
@@ -206,7 +206,7 @@ class CY_class_name##Sqlit3IO : public coyot3::ddbb::sqlite::Sqlit3Connector{\
 
 // DATA TYPE MATRIX CONFIGURATION
 
-    #define cyt3macro_model_class_serializable_sqlit3_def_conf_item_(cy_var_name,cy_var_type,cy_col_name)\
+    #define cyt3macro_model_class_serializable_sqlit3_def_conf_item_(cy_var_name,cy_col_name,cy_var_type)\
       {\
         bool lf_=false;\
         if(std::string(cy_var_type).find(INTEGER) != std::string::npos)lf_ = (true | static_cast<int>(cols_ttr_.cy_var_name = DataType::INTEGER));\
@@ -228,7 +228,7 @@ class CY_class_name##Sqlit3IO : public coyot3::ddbb::sqlite::Sqlit3Connector{\
 
 
   //INSERT ITEMS
-      #define cyt3macro_model_class_serializable_sqlit3_def_insert_items_iter_(cy_var_name,cy_var_type,cy_col_name)\
+      #define cyt3macro_model_class_serializable_sqlit3_def_insert_items_iter_(cy_var_name,cy_col_name,cy_var_type)\
       if(cols_w_act_.cy_var_name == true){\
         if(firstItem==false)sstr << ", ";else firstItem=false;\
         if(cols_w_str_.cy_var_name == true) sstr << "'";\
@@ -236,7 +236,7 @@ class CY_class_name##Sqlit3IO : public coyot3::ddbb::sqlite::Sqlit3Connector{\
         if(cols_w_str_.cy_var_name == true) sstr << "'";\
       }  
 
-    #define cyt3macro_model_class_serializable_sqlit3_def_insert_items_it_(cy_var_name,cy_var_type,cy_col_name, ...)\
+    #define cyt3macro_model_class_serializable_sqlit3_def_insert_items_it_(cy_var_name,cy_col_name,cy_var_type, ...)\
     if(cols_w_act_.cy_var_name == true){\
       if(cols_w_str_.cy_var_name == true) sstr << "'";\
       sstr << item.cy_var_name();\
@@ -282,7 +282,7 @@ class CY_class_name##Sqlit3IO : public coyot3::ddbb::sqlite::Sqlit3Connector{\
 
 // SELECT QUERY
 
-    #define cyt3macro_model_class_serializable_sqlit3_def_query_items_recv_(cy_var_name,cy_var_type,cy_col_name)\
+    #define cyt3macro_model_class_serializable_sqlit3_def_query_items_recv_(cy_var_name,cy_col_name,cy_var_type)\
       if(coyot3::ddbb::sqlite::sqlit3_get_col(q,index++,buffer.cy_var_name()) == false){\
         log_warn(o() << "select-table-items : error reading (col=" << (index-1) << "[" #cy_var_name "]");\
         cleanread = false;\
@@ -355,10 +355,10 @@ class CY_class_name##Sqlit3IO : public coyot3::ddbb::sqlite::Sqlit3Connector{\
 // CHECK TABLE
 
 
-      #define cyt3macro_model_class_serializable_sqlit3_def_check_table_elems_it_(cy_var_name,cy_var_type,cy_col_name)\
+      #define cyt3macro_model_class_serializable_sqlit3_def_check_table_elems_it_(cy_var_name,cy_col_name,cy_var_type)\
       sstr << ", `" cy_col_name "` " cy_var_type; 
     
-    #define cyt3macro_model_class_serializable_sqlit3_def_check_table_elems_(cy_var_name,cy_var_type,cy_col_name,...)\
+    #define cyt3macro_model_class_serializable_sqlit3_def_check_table_elems_(cy_var_name,cy_col_name,cy_var_type,...)\
     sstr << " `" cy_col_name "` " cy_var_type;\
     FOR_EACH_TRIPLES(cyt3macro_model_class_serializable_sqlit3_def_check_table_elems_it_,__VA_ARGS__)
 

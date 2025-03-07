@@ -8,8 +8,11 @@ set(COYOT3PPCOMPONENTVERSION   1.0)
 include_directories(include)
 include_directories(${COYOT3PPCOR3_INCLUDE_DIRS})
 
-file(GLOB LC3_SRCS_MQTT
-          src/${PROJECT_NAME}/${COYOT3PPCOMPONENT}/Gateway/*.cpp)
+file(GLOB_RECURSE
+          LC3_SRCS_MQTT
+          src/${PROJECT_NAME}/${COYOT3PPCOMPONENT}/Gateway/*.cpp
+          src/${PROJECT_NAME}/${COYOT3PPCOMPONENT}/Client/*.cpp
+          )
 
 
 

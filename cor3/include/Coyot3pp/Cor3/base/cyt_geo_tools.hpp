@@ -24,6 +24,7 @@
 #include <jsoncpp/json/json.h>
 #include <list>
 
+
 namespace coyot3{
 namespace tools{
 namespace geo{

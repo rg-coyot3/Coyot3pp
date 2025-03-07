@@ -86,6 +86,29 @@ void SqliteDBStopsManager::timer_check_status_callback(){
   }else{
     CLOG_INFO("pushed " << numitems << " items")
   }
+  delete_random_line();
+  update_random_line();
+}
+void SqliteDBStopsManager::update_random_line(){
+  ServiceStopDAO oneItem;
+  oneItem.id(std::rand() % stop_data().size());
+  oneItem.name("he sido actualizado");
+  oneItem.active(true);
+  oneItem.description("he sido actualizado");
+  oneItem.latitude(1.1),
+  oneItem.altitude(3.3);
+  oneItem.longitude(2.2);
+  std::string err;
+  if(!serviceStopsIO->update_table_item(oneItem,err)){
+    CLOG_WARN("error updating item : " << err)
+  }
+}
+void SqliteDBStopsManager::delete_random_line(){
+  ServiceStopDAO oneItem(stop_data()[std::rand() % stop_data().size()]);
+  std::string err;
+  if(!serviceStopsIO->delete_table_item(oneItem,err)){
+    CLOG_WARN("error deleting random item [" << oneItem.to_string() << "] : error [" << err << "]")
+  }
 }
 
 

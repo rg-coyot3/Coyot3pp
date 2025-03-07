@@ -97,9 +97,6 @@ This macro will extend the `Sqlit3IO` class to make it capable to automatically 
 
 Needs for the `<name-of-the-class>SqliteIO` class be declared.
 
-```cpp
 
-
-```
 
 

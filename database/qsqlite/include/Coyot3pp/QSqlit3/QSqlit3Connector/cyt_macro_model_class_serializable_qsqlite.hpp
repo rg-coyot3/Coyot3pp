@@ -16,17 +16,17 @@
 
 
 
-  #define cyt3macro_model_class_serializable_sqliteio_coltypes_decs_(cy_var_name,cy_var_type,cy_col_name)\
+  #define cyt3macro_model_class_serializable_sqliteio_coltypes_decs_(cy_var_name,cy_col_name,cy_var_type)\
     static constexpr const char* cy_var_name = cy_var_type;
 
-  #define cyt3macro_model_class_serializable_sqliteio_coltypesEn_decs_(cy_var_name,cy_var_type,cy_col_name)\
+  #define cyt3macro_model_class_serializable_sqliteio_coltypesEn_decs_(cy_var_name,cy_col_name,cy_var_type)\
     DataType cy_var_name;
 
 
-  #define cyt3macro_model_class_serializable_sqliteio_colnames_decs_(cy_var_name,cy_var_type,cy_col_name)\
+  #define cyt3macro_model_class_serializable_sqliteio_colnames_decs_(cy_var_name,cy_col_name,cy_var_type)\
     static constexpr const char* cy_var_name = cy_col_name;
 
-  #define cyt3macro_model_class_serializable_sqliteio_colactiv_decs_(cy_var_name,cy_var_type,cy_col_name)\
+  #define cyt3macro_model_class_serializable_sqliteio_colactiv_decs_(cy_var_name,cy_col_name,cy_var_type)\
     bool cy_var_name = true;
 
 
@@ -60,6 +60,10 @@ class CY_class_name##QSqliteIO : public coyot3::ddbb::sqlite::QSqlit3Connector{\
     \
     bool              select_table_items(std::string& err,const std::string& where = std::string());\
     bool              insert_table_items(std::string& err);\
+    bool              update_table_items(std::string& err);\
+    bool              update_table_item(const CY_class_name& item, std::string& err);\
+    bool              delete_table_items(std::string& err);\
+    bool              delete_table_item(const CY_class_name& item, std::string& err);\
     bool              insertion_field_activation(const std::string& colName,bool activation);\
     std::string       table_name(const std::string& name);\
     std::string       table_name() const;\
@@ -74,6 +78,7 @@ class CY_class_name##QSqliteIO : public coyot3::ddbb::sqlite::QSqlit3Connector{\
     ColsFlags               cols_w_act_;\
     ColsFlags               cols_w_str_;\
     ColsTypeE               cols_ttr_;\
+    std::string             primary_key_field_;\
     bool                    cols_params_calculated_;\
     bool                    volatile_stack_;\
     \
@@ -98,6 +103,7 @@ class CY_class_name##QSqliteIO : public coyot3::ddbb::sqlite::QSqlit3Connector{\
     static constexpr const char* NULL_T = "NULL";\
     static constexpr const char* NOT_NULL = "NOT NULL";\
     static constexpr const char* AUTOINCREMENT = "AUTOINCREMENT";\
+    static constexpr const char* PRIMARY_KEY = "PRIMARY KEY";\
     static bool extract(const QVariant& source,bool& destination);\
     static bool extract(const QVariant& source,int& destination);\
     static bool extract(const QVariant& source,uint& destination);\
@@ -120,6 +126,7 @@ class CY_class_name##QSqliteIO : public coyot3::ddbb::sqlite::QSqlit3Connector{\
     ,stack_exch_()\
     ,cols_w_act_()\
     ,cols_w_str_()\
+    ,primary_key_field_()\
     ,cols_params_calculated_()\
     ,volatile_stack_(true)\
     ,query_iq_prefix_()\
@@ -134,7 +141,7 @@ class CY_class_name##QSqliteIO : public coyot3::ddbb::sqlite::QSqlit3Connector{\
     CY_class_name##QSqliteIO::~CY_class_name##QSqliteIO(){}
 
 
-    #define cyt3macro_model_class_serializable_qsqlite_def_supp_calc_str_w_(cy_var_name,cy_var_type,cy_col_nw_ame)\
+    #define cyt3macro_model_class_serializable_qsqlite_def_supp_calc_str_w_(cy_var_name,cy_col_name,cy_var_type)\
       (std::string(cy_var_type).find("TEXT") != std::string::npos ? cols_w_str_.cy_var_name = true : cols_w_str_.cy_var_name = false);
 
   #define cyt3macro_model_class_serializable_qsqlite_def_supp_(CY_class_name, ...)\
@@ -145,21 +152,18 @@ class CY_class_name##QSqliteIO : public coyot3::ddbb::sqlite::QSqlit3Connector{\
     }
 
     
-      #define cyt3macro_model_class_serializable_qsqlite_def_insert_colname_it_(cy_var_name,cy_var_type,cy_col_name)\
+      #define cyt3macro_model_class_serializable_qsqlite_def_insert_colname_it_(cy_var_name,cy_col_name,cy_var_type)\
         if(cols_w_act_.cy_var_name == true){if(firstItem==false)sstr << ",";else firstItem=false; sstr << " " cy_col_name ;}
 
-    #define cyt3macro_model_class_serializable_qsqlite_def_insert_colname_(cy_var_name,cy_var_type,cy_col_name,...)\
+    #define cyt3macro_model_class_serializable_qsqlite_def_insert_colname_(cy_var_name,cy_col_name,cy_var_type,...)\
       bool firstItem=true;\
       if(cols_w_act_.cy_var_name == true){firstItem=false;sstr << cy_col_name ;}\
       FOR_EACH_TRIPLES(cyt3macro_model_class_serializable_qsqlite_def_insert_colname_it_,__VA_ARGS__)
 
-  #define cyt3macro_model_class_serializable_qsqlite_def_insert_(CY_class_name, ...)\
-  bool CY_class_name##QSqliteIO::insert_table_items(std::string& err){\
-    std::stringstream sstr; sstr << query_iq_prefix_;\
-  }
 
 
-    #define cyt3macro_model_class_serializable_qsqlite_def_helpers_gnapa_01(cy_var_name,cy_var_type,cy_col_name)\
+
+    #define cyt3macro_model_class_serializable_qsqlite_def_helpers_gnapa_01(cy_var_name,cy_col_name,cy_var_type)\
       if(colName.compare(ColName::cy_var_name) == 0) found = (true | (cols_w_act_.cy_var_name = activation));
 
   /**
@@ -168,10 +172,10 @@ class CY_class_name##QSqliteIO : public coyot3::ddbb::sqlite::QSqlit3Connector{\
    * 
    */
 
-      #define cyt3macro_model_class_serializable_qsqlite_def_select_colname_iter_(cy_var_name,cy_var_type,cy_col_name)\
+      #define cyt3macro_model_class_serializable_qsqlite_def_select_colname_iter_(cy_var_name,cy_col_name,cy_var_type)\
       sstr << ", " cy_col_name;
 
-    #define cyt3macro_model_class_serializable_qsqlite_def_select_colname_(cy_var_name,cy_var_type,cy_col_name,...)\
+    #define cyt3macro_model_class_serializable_qsqlite_def_select_colname_(cy_var_name,cy_col_name,cy_var_type,...)\
     sstr << cy_col_name;\
     FOR_EACH_TRIPLES(cyt3macro_model_class_serializable_qsqlite_def_select_colname_iter_,__VA_ARGS__)\
       
@@ -212,7 +216,7 @@ class CY_class_name##QSqliteIO : public coyot3::ddbb::sqlite::QSqlit3Connector{\
   bool CY_class_name##QSqliteIO::volatile_stack(bool v){return (volatile_stack_ = v);}
 
 
-    #define cyt3macro_model_class_serializable_qsqlite_def_conf_item_(cy_var_name,cy_var_type,cy_col_name)\
+    #define cyt3macro_model_class_serializable_qsqlite_def_conf_item_(cy_var_name,cy_col_name,cy_var_type)\
       {\
         bool lf_=false;\
         if(std::string(cy_var_type).find(INTEGER) != std::string::npos)lf_ = (true | static_cast<int>(cols_ttr_.cy_var_name = DataType::INTEGER));\
@@ -222,6 +226,7 @@ class CY_class_name##QSqliteIO : public coyot3::ddbb::sqlite::QSqlit3Connector{\
         done_ok&=lf_;\
         \
         if(std::string(cy_var_type).find(AUTOINCREMENT) != std::string::npos)cols_w_act_.cy_var_name = false;\
+        if(std::string(cy_var_type).find(PRIMARY_KEY) != std::string::npos)primary_key_field_ = cy_col_name;\
       }
 
   #define cyt3macro_model_class_serializable_qsqlite_def_conf_(CY_class_name, ...)\
@@ -234,7 +239,7 @@ class CY_class_name##QSqliteIO : public coyot3::ddbb::sqlite::QSqlit3Connector{\
 
 
   //INSERT ITEMS
-      #define cyt3macro_model_class_serializable_qsqlite_def_insert_items_iter_(cy_var_name,cy_var_type,cy_col_name)\
+      #define cyt3macro_model_class_serializable_qsqlite_def_insert_items_iter_(cy_var_name,cy_col_name,cy_var_type)\
       if(cols_w_act_.cy_var_name == true){\
         if(firstItem==false)sstr << ", ";else firstItem=false;\
         if(cols_w_str_.cy_var_name == true) sstr << "'";\
@@ -242,7 +247,7 @@ class CY_class_name##QSqliteIO : public coyot3::ddbb::sqlite::QSqlit3Connector{\
         if(cols_w_str_.cy_var_name == true) sstr << "'";\
       }  
 
-    #define cyt3macro_model_class_serializable_qsqlite_def_insert_items_it_(cy_var_name,cy_var_type,cy_col_name, ...)\
+    #define cyt3macro_model_class_serializable_qsqlite_def_insert_items_it_(cy_var_name,cy_col_name,cy_var_type, ...)\
     if(cols_w_act_.cy_var_name == true){\
       if(cols_w_str_.cy_var_name == true) sstr << "'";\
       sstr << item.cy_var_name();\
@@ -280,13 +285,100 @@ class CY_class_name##QSqliteIO : public coyot3::ddbb::sqlite::QSqlit3Connector{\
     return result;\
   }
 
+  //DELETE ITEM
+    #define cytemacro_model_class_serializable_qsqlite_def_delete_item_from_pk_field_value_(cy_var_name,cy_col_name,cy_var_type)\
+        if(std::string(cy_var_type).find(PRIMARY_KEY) != std::string::npos){\
+          if(cols_w_str_.cy_var_name == true) sstr << "'";\
+          sstr << i.cy_var_name();\
+          if(cols_w_str_.cy_var_name == true) sstr << "'";\
+        }  
+
+  #define citemacro_model_class_serializable_qsqlite_def_delete_item_(CY_class_name, ...)\
+  bool CY_class_name##QSqliteIO::delete_table_item(const CY_class_name& i, std::string& err){\
+    if(primary_key_field_.size() == 0){err = "error : this table has no primary key field;"; return false;}\
+    std::stringstream sstr;\
+    sstr << "DELETE FROM " << tablename_ << " WHERE " << primary_key_field_ << " = ";\
+    FOR_EACH_TRIPLES(cytemacro_model_class_serializable_qsqlite_def_delete_item_from_pk_field_value_,__VA_ARGS__)\
+    sstr << ";";\
+    bool result = makeQuery(QString::fromStdString(sstr.str()),err);\
+    if(result==false){CLOG_WARN("cyt3macro-qsqlite-io : error = " << err << " : query[" << sstr.str() << "]")}\
+    return result;\
+  }
+
+  #define citemacro_model_class_serializable_qsqlite_def_delete_items_stack_(CY_class_name, ...)\
+  bool CY_class_name##QSqliteIO::delete_table_items(std::string& err){\
+    std::size_t s = stack.size();\
+    std::size_t ok = \
+    stack.for_each([&](const CY_class_name& i){\
+     std::string errItem;\
+     if(delete_table_item(i,errItem) == false){err+=errItem; err+=":"; return false;}\
+     return true;\
+    });\
+    if((s == ok) && (volatile_stack_ == true))stack.clear();\
+    return s == ok;\
+  }
+
+    
+
+  //UPDATE ITEM
+      #define cytemacro_model_class_serializable_qsqlite_def_update_item_field_each_(cy_var_name,cy_col_name,cy_var_type)\
+      if(cols_w_act_.cy_var_name == true){\
+        if(firstItem==false)sstr << ", ";else firstItem=false;\
+        sstr << cy_col_name << " = ";\
+        if(cols_w_str_.cy_var_name == true) sstr << "'";\
+        sstr << i.cy_var_name();\
+        if(cols_w_str_.cy_var_name == true) sstr << "'";\
+      }  
+
+    #define cytemacro_model_class_serializable_qsqlite_def_update_item_field_first_(cy_var_name,cy_col_name,cy_var_type, ...)\
+    if(cols_w_act_.cy_var_name == true){\
+      sstr << cy_col_name << " = ";\
+      if(cols_w_str_.cy_var_name == true) sstr << "'";\
+      sstr << i.cy_var_name();\
+      if(cols_w_str_.cy_var_name == true) sstr << "'";\
+      firstItem=false;\
+    }\
+    FOR_EACH_TRIPLES(cytemacro_model_class_serializable_qsqlite_def_update_item_field_each_,__VA_ARGS__)
+
+    #define cytemacro_model_class_serializable_qsqlite_def_update_item_field_write_pk(cy_var_name, cy_col_name, cy_var_type)\
+    if(std::string(cy_var_type).find("PRIMARY KEY") != std::string::npos) sstr << i.cy_var_name();\
+
+  #define cyt3macro_model_class_serializable_qsqlite_def_update_item_(CY_class_name, ...)\
+  bool CY_class_name##QSqliteIO::update_table_item(const CY_class_name& i, std::string& err){\
+    if(primary_key_field_.size() == 0){err = "error : this table has no primary key field;"; return false;}\
+    std::stringstream sstr;\
+    sstr << "UPDATE " << tablename_ << " SET ";\
+    bool firstItem = true;\
+    cytemacro_model_class_serializable_qsqlite_def_update_item_field_first_(__VA_ARGS__)\
+    sstr << " WHERE " << primary_key_field_ << " = ";\
+    FOR_EACH_TRIPLES(cytemacro_model_class_serializable_qsqlite_def_update_item_field_write_pk, __VA_ARGS__)\
+    sstr << ";";\
+    bool result; result = makeQuery(QString::fromStdString(sstr.str()), err);\
+    if(result == false){CLOG_WARN("cyt3macro-qsqlite-io : error = " << err << " : query[" << sstr.str() << "]")}\
+    return result;\
+  }
 
 
-    #define cyt3macro_model_class_serializable_qsqlite_def_query_items_ctl_(cy_var_name,cy_var_type,cy_col_name)\
+  #define cytemacro_model_class_serializable_qsqlite_def_update_items_stack_(CY_class_name, ...)\
+  bool CY_class_name##QSqliteIO::update_table_items(std::string& err){\
+    std::size_t s = stack.size();\
+    std::size_t ok = \
+    stack.for_each([&](const CY_class_name& item){\
+      std::string errItem;\
+      if(update_table_item(item,errItem) == false){err+=errItem; err+=":"; return false;}\
+      return true;\
+    });\
+    if((s == ok) && (volatile_stack_ == true))stack.clear();\
+    return s == ok;\
+  }
+
+
+
+    #define cyt3macro_model_class_serializable_qsqlite_def_query_items_ctl_(cy_var_name,cy_col_name,cy_var_type)\
     int index_##cy_var_name = q.record().indexOf(cy_col_name);\
     if(index_##cy_var_name ==  -1){err += "COLUMN '" cy_col_name "' DOES NOT EXIST IN TABLE;";result = false;}
 
-    #define cyt3macro_model_class_serializable_qsqlite_def_query_items_recv_(cy_var_name,cy_var_type,cy_col_name)\
+    #define cyt3macro_model_class_serializable_qsqlite_def_query_items_recv_(cy_var_name,cy_col_name,cy_var_type)\
       result &= extract(q.value(index_##cy_var_name),buffer.cy_var_name());
 
   #define cyt3macro_model_class_serializable_qsqlite_def_query_items_(CY_class_name, ...)\
@@ -336,10 +428,10 @@ class CY_class_name##QSqliteIO : public coyot3::ddbb::sqlite::QSqlit3Connector{\
     destination = source.toString().toStdString();return true;\
   }
 
-      #define cyt3macro_model_class_serializable_qsqlite_def_check_table_elems_it_(cy_var_name,cy_var_type,cy_col_name)\
+      #define cyt3macro_model_class_serializable_qsqlite_def_check_table_elems_it_(cy_var_name,cy_col_name,cy_var_type)\
       sstr << ", `" cy_col_name "` " cy_var_type; 
     
-    #define cyt3macro_model_class_serializable_qsqlite_def_check_table_elems_(cy_var_name,cy_var_type,cy_col_name,...)\
+    #define cyt3macro_model_class_serializable_qsqlite_def_check_table_elems_(cy_var_name,cy_col_name,cy_var_type,...)\
     sstr << " `" cy_col_name "` " cy_var_type;\
     FOR_EACH_TRIPLES(cyt3macro_model_class_serializable_qsqlite_def_check_table_elems_it_,__VA_ARGS__)
 
@@ -356,6 +448,14 @@ class CY_class_name##QSqliteIO : public coyot3::ddbb::sqlite::QSqlit3Connector{\
 
 
 #define CYT3MACRO_model_class_serializable_qsqlite_definitions(CY_class_name,CY_options, ...)\
+\
+cyt3macro_model_class_serializable_qsqlite_def_update_item_(CY_class_name, __VA_ARGS__)\
+\
+cytemacro_model_class_serializable_qsqlite_def_update_items_stack_(CY_class_name, __VA_ARGS__)\
+\
+citemacro_model_class_serializable_qsqlite_def_delete_item_(CY_class_name, __VA_ARGS__)\
+\
+citemacro_model_class_serializable_qsqlite_def_delete_items_stack_(CY_class_name, __VA_ARGS__)\
 \
 cyt3macro_model_class_serializable_qsqlite_def_constr_destr_(CY_class_name, __VA_ARGS__)\
 \

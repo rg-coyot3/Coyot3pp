@@ -443,7 +443,7 @@ bool json_contains_member(const Json::Value& source,const std::string& property)
 {
   std::vector<std::string> fields;
   Json::Value inner = source;
-  string_split(property,".",fields);
+  string_split(property,'.',fields);
 
 
   for(auto field : fields)
@@ -478,7 +478,7 @@ Json::Value json_get_member(const Json::Value& source,const std::string& propert
   
   Json::Value inner = source;
   
-  string_split(property,".",fields);
+  string_split(property,'.',fields);
   for(auto field : fields)
   {
     if(inner.isMember(field))
@@ -497,7 +497,8 @@ Json::Value json_get_member(const Json::Value& source,const std::string& propert
 bool json_import_value(const Json::Value& source, const std::string& property, std::string& destination)
 {
   Json::Value v;
-  v = json_get_member(source,property);
+  if(property.size() == 0)v = source;
+  else v = json_get_member(source,property);
   if(v.type() == Json::nullValue)
   {
     destination.clear();
@@ -515,7 +516,8 @@ bool json_import_value(const Json::Value& source, const std::string& property, s
 bool json_import_value(const Json::Value& source, const std::string& property, double& destination)
 {
   Json::Value v;
-  v = json_get_member(source,property);
+  if(property.size() == 0)v = source;
+  else v = json_get_member(source,property);
   if(v.type() == Json::nullValue)
   {
     destination = 0;
@@ -533,7 +535,8 @@ bool json_import_value(const Json::Value& source, const std::string& property, d
 bool json_import_value(const Json::Value& source, const std::string& property, int& destination)
 {
   Json::Value v;
-  v = json_get_member(source,property);
+  if(property.size() == 0)v = source;
+  else v = json_get_member(source,property);
   if(v.type() == Json::nullValue)
   {
     destination = 0;
@@ -551,7 +554,8 @@ bool json_import_value(const Json::Value& source, const std::string& property, i
 bool json_import_value(const Json::Value& source, const std::string& property, int64_t& destination)
 {
   Json::Value v;
-  v = json_get_member(source,property);
+  if(property.size() == 0)v = source;
+  else v = json_get_member(source,property);
   if(v.type() == Json::nullValue)
   {
     destination = 0;
@@ -570,7 +574,8 @@ bool json_import_value(const Json::Value& source, const std::string& property, i
 bool json_import_value(const Json::Value& source, const std::string& property, uint& destination)
 {
   Json::Value v;
-  v = json_get_member(source,property);
+  if(property.size() == 0)v = source;
+  else v = json_get_member(source,property);
   if(v.type() == Json::nullValue)
   {
     destination = 0;
@@ -588,7 +593,8 @@ bool json_import_value(const Json::Value& source, const std::string& property, u
 bool json_import_value(const Json::Value& source, const std::string& property, uint64_t& destination)
 {
   Json::Value v;
-  v = json_get_member(source,property);
+  if(property.size() == 0)v = source;
+  else v = json_get_member(source,property);
   if(v.type() == Json::nullValue)
   {
     destination = 0;
@@ -606,7 +612,8 @@ bool json_import_value(const Json::Value& source, const std::string& property, u
 bool json_import_value(const Json::Value& source, const std::string& property, bool& destination)
 {
   Json::Value v;
-  v = json_get_member(source,property);
+  if(property.size() == 0)v = source;
+  else v = json_get_member(source,property);
   if(v.type() == Json::nullValue)
   {
     destination = false;
@@ -625,7 +632,8 @@ bool json_import_value(const Json::Value& source, const std::string& property, b
 bool json_import_value(const Json::Value& source, const std::string& property, Json::Value& destination)
 {
   Json::Value v;
-  v = json_get_member(source,property);
+  if(property.size() == 0)v = source;
+  else v = json_get_member(source,property);
   if(v.type() == Json::nullValue)
   {
     destination = false;
@@ -818,7 +826,7 @@ ModuleState ModuleStateFromString(const std::string& s)
   return ModuleState::UNKNOWN_WRONG_STATE;
 }
 
-size_t string_split(const std::string& str,const char* delim, std::vector<std::string>& out)
+size_t string_split(const std::string& str,const char delim, std::vector<std::string>& out)
 {
   //from [https://www.codegrepper.com/code-examples/cpp/std+string+split+c%2B%2B+17]
   std::string scopy = str;
