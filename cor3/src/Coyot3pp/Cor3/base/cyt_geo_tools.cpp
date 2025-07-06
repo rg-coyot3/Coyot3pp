@@ -1101,6 +1101,7 @@ bool ProjectorLlhMgrs::forward(const GeoPoint& in, ProjectionPoint& out){
       }
     return true;
   }
+
   CYT3MACRO_model_class_set_stack_definitions(GeoPoint,)
   CYT3MACRO_model_class_definitions(
     ProjectionPoint

@@ -18,6 +18,7 @@ namespace coyot3::communication::mqtt{
           log_warn(o() << "controller- : pulse : connecting for too long("
           << config_.timeout() << "). forcing reconnection");
           model.ts_last_transition(now);
+
           full_reset_connection();
         }
         break;

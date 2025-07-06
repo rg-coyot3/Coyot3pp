@@ -18,6 +18,7 @@ int main(int argv, char** argc){
   
   coyot3::communication::mqtt::ClientConfiguration conf;
   coyot3::communication::mqtt::Client c("cliente");
+
   c.modlog_verbosity(9);
 
   conf.host_address("localhost");
@@ -27,6 +28,7 @@ int main(int argv, char** argc){
   c.config(conf);
 
   int64_t regid;
+
   c.register_subscription("hello/subscription",0,on_message,regid);
 
   CLOG_INFO("initiating")

@@ -24,6 +24,7 @@
 #include <jsoncpp/json/json.h>
 #include <list>
 
+
 // typedef boost::geometry::model::point<
 //     double, 2, boost::geometry::cs::spherical_equatorial<boost::geometry::degree>
 // > spherical_point;

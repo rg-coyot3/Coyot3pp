@@ -73,6 +73,7 @@ void Client::on_mosq_client_message(const struct mosquitto_message* message){
   bool 
   Client::register_subscription(const std::string& topic,
                                 int mqttQos,
+
                                 MqttClientOnMessageCallback cb,
                                 int64_t& id){
     Subscription sub;
@@ -84,7 +85,6 @@ void Client::on_mosq_client_message(const struct mosquitto_message* message){
     sub.callback(cb);
     sub.active(true);
     id = sub.id(__subscription_id_patch++);
-    
     if(model.subscriptions_config().is_member(topic)){
       log_info(o() << "register-subscription : topic [" << topic << "] : "
         "adding callback to existing topic.");
@@ -301,7 +301,6 @@ void Client::on_mosq_client_message(const struct mosquitto_message* message){
       return true;
     });
     message_stack_prim_.clear();
-
     connect_to_broker_();
     return true;
   }

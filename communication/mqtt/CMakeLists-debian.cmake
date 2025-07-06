@@ -70,6 +70,7 @@ if(LCY_BUILD_WITH_MINIMAL_EXAMPLES)
     Cor3
   )
 
+
   add_executable(mqtt_simple_client_v2_example
     ${COYOT3PP_MINIMAL_EXAMPLES_SRC_DIR}/Mqtt/mqtt_client_v2_example.cpp
   )
@@ -77,6 +78,7 @@ if(LCY_BUILD_WITH_MINIMAL_EXAMPLES)
     ${COYOT3PPCOMPONENT}
     Cor3
   )
+
 
 endif()
 

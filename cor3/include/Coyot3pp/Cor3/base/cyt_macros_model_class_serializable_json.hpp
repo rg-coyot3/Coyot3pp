@@ -44,6 +44,7 @@
       virtual Json::Value   to_json() const override;\
       virtual bool          from_json(const Json::Value& source) override;\
       static std::string    get_serialization_model_template(int l__ = 0);\
+
       std::string           check_input_model(const Json::Value& source, int l__ = 0);\
       protected:\
         static const char* version_;\
@@ -57,6 +58,7 @@
 
 // removed rapidjson support
 //      virtual bool          from_json(const rapidjson::Value& source) override;
+
 
 
 

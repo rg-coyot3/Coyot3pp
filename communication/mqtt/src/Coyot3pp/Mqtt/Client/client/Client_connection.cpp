@@ -287,6 +287,7 @@ namespace mqtt{
 
   bool
   Client::disconnect_from_broker_(){
+
     if(client_ == nullptr){
       log_debug(5,"disconnect-from-broker- : mosquitto client not "
       "instantiated");

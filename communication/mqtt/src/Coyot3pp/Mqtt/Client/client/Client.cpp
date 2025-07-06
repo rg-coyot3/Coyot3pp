@@ -2,6 +2,7 @@
 
 
 
+
 namespace coyot3::communication::mqtt{
 
   Client::Client(const std::string& name)
@@ -33,6 +34,8 @@ namespace coyot3::communication::mqtt{
     log_warn("destroying instance. forcing end.");
     End(true);
   }
+
+
 
 
 }

@@ -66,6 +66,7 @@ CYT3MACRO_model_class_serializable_json_definitions(
     , ciphers                           , "ciphers"                           , 
 )
 
+
 void ClientConfiguration::print_current_config_state(){
   CLOG_INFO(" - config state: ")
   CLOG_INFO("   debug_mode                        :" << debug_mode() )

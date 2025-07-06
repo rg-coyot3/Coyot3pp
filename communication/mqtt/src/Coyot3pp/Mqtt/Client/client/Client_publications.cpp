@@ -4,8 +4,8 @@
 namespace  cm = coyot3::mod;
 namespace  ct = coyot3::tools;
 
-namespace coyot3::communication::mqtt{
 
+namespace coyot3::communication::mqtt{
 
 
 bool 

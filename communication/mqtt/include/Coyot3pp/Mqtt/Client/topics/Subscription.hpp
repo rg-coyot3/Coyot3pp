@@ -3,6 +3,7 @@
 #include <Coyot3pp/Cor3/Coyot3.hpp>
 
 
+
 namespace coyot3::communication::mqtt{
 
   typedef std::function<bool(const std::string&, 

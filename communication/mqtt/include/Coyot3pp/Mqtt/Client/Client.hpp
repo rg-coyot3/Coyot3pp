@@ -18,10 +18,12 @@ namespace coyot3::communication::mqtt{
 
 
 
+
 int  mosq_on_tls_certs_password_callback_v3(char *buff, 
                               int size, 
                               int rwflag, 
                               void *userdata);
+
 
 void mosq_on_client_connects_v3(struct mosquitto* client,
                               void* userdata,
@@ -30,10 +32,12 @@ void mosq_on_client_disconnects_v3(struct mosquitto* c,
                               void* userdata, 
                               int rc);
 void mosq_on_subscribe_v3(struct mosquitto* c, 
+
                               void* userdata, 
                               int mid, 
                               int qos_count, 
                               const int* granted_qos);
+
 void mosq_on_unsubscribe_v3(struct mosquitto* c,
                               void* userdata,
                               int mid);
@@ -58,11 +62,13 @@ std::string mqtt_on_connect_return_code_version_5(int rc);
 //mqtt client
   class Client : public coyot3::mod::ModuleBase{
 
+
     friend int  mosq_on_tls_certs_password_callback_v3(char *buff, 
                                   int size, 
                                   int rwflag, 
                                   void *userdata);
     
+
     friend void mosq_on_client_connects_v3(struct mosquitto* client,
                                   void* userdata,
                                   int resutl);
@@ -74,6 +80,7 @@ std::string mqtt_on_connect_return_code_version_5(int rc);
                                   int mid, 
                                   int qos_count, 
                                   const int* granted_qos);
+
     friend void mosq_on_unsubscribe_v3(struct mosquitto* c,
                                   void* userdata,
                                   int mid);
@@ -107,6 +114,7 @@ std::string mqtt_on_connect_return_code_version_5(int rc);
       bool register_subscription(const std::string& topic,
                                     int mqttQos,
                                     MqttClientOnMessageCallback cb);
+
       /**
        * @brief registers a subscription and 
        * 
@@ -136,12 +144,12 @@ std::string mqtt_on_connect_return_code_version_5(int rc);
        * @return true : publication taken in count OK.
        * @return false : error publishing. (mainly because the client is not connected.)
        */
+
       
       bool publish(const std::string& topic, 
                   const uint8_t* payload,
                   std::size_t length,
                   int qos = 0);
-
 
       template<typename T>
       bool publish(const std::string& topic,
@@ -212,7 +220,9 @@ std::string mqtt_on_connect_return_code_version_5(int rc);
       bool connect_to_broker_();
       bool disconnect_from_broker_();
 
+
       bool full_reset_connection_(); // no mutex locks
+
 
 
       bool prepare_subscriptions_();
@@ -220,7 +230,6 @@ std::string mqtt_on_connect_return_code_version_5(int rc);
         bool all_subscriptions_are_done_();
 
       
-
       bool publish_(const std::string& topic, 
                   const uint8_t* payload,
                   std::size_t length,

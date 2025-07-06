@@ -391,6 +391,7 @@
   //def insert
   #define cyt3macro_model_class_set_mapped_def_insert_(CY_class_name,CY_member_index_property)\
     bool              CY_class_name##MappedSet::insert(const CY_class_name & o){\
+      std::lock_guard<std::mutex> guard(mtx_);\
       if(is_member(o.CY_member_index_property()) == true)return false;\
       std::lock_guard<std::mutex> guard(mtx_);\
       map_.insert(std::make_pair(o.CY_member_index_property(),o));\
