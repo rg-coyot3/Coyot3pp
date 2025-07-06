@@ -60,6 +60,7 @@ Each component has included its own documentation file:
 * [Sqlit3](./database/sqlite3/doc/README.md)
 * [Imag3](./av/image_content/doc/README.md)
 * [H264RtspServer](./av/rtsp_server/doc/README.md)
+* [StateMachin3](./extended-tools/state-machine/doc/README.md)
 
 ## INSTALLATION
 

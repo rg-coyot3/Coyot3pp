@@ -16,6 +16,7 @@ echo " "
 echo " - now launching them."
 for v_installer in ${v_installers_list};do
   echo " - for component at [$(dirname ${v_installer})] : "
+  chmod +x ${v_installer}
   ${v_installer}
 done
 
