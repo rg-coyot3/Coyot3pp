@@ -6,7 +6,7 @@
 
 
   #define cyt3macro_model_class_serializable_json_field_dec_(CY_prop_source,CY_json_tag,CY_prop_jscast_type)\
-    static const char* CY_prop_source;
+    static constexpr const char* CY_prop_source = CY_json_tag;
 
 
   #define cyt3macro_model_class_serializable_json_field_derived_dec_(...)\
@@ -44,7 +44,7 @@
       virtual Json::Value   to_json() const override;\
       virtual bool          from_json(const Json::Value& source) override;\
       static std::string    get_serialization_model_template(int l__ = 0);\
-      std::string    check_input_model(const Json::Value& source, int l__ = 0);\
+      std::string           check_input_model(const Json::Value& source, int l__ = 0);\
       protected:\
         static const char* version_;\
   };\
@@ -61,9 +61,9 @@
 
 
 
-
-  #define cytemacro_model_class_serializable_json_def_json_field_(CY_class_name, CY_prop_source, CY_json_tag, CY_prop_type) \
-    const char* CY_class_name::JsFields::CY_prop_source = CY_json_tag;
+  // included as [static constexpr const char*]
+  // #define cytemacro_model_class_serializable_json_def_json_field_(CY_class_name, CY_prop_source, CY_json_tag, CY_prop_type) \
+  //   const char* CY_class_name::JsFields::CY_prop_source = CY_json_tag;
 
 
   #define cyt3macro_model_class_serializable_json_def_tojson_jsioitem_(CY_prop_source, CY_json_tag, CY_jsio_type)\
@@ -269,12 +269,6 @@
                                                             CY_props_enum_classes,\
                                                             ...) \
   \
-  IFN(CY_props_jsios)(FOR_EACH_TRIPLES_WITH_01_STATIC(cytemacro_model_class_serializable_json_def_json_field_, CY_class_name##JsIO, PASS_PARAMETERS(CY_props_jsios))) \
-  \
-  FOR_EACH_TRIPLES_WITH_01_STATIC(cytemacro_model_class_serializable_json_def_json_field_, CY_class_name##JsIO, PASS_PARAMETERS(CY_props_enum_classes)) \
-  \
-  FOR_EACH_TRIPLES_WITH_01_STATIC(cytemacro_model_class_serializable_json_def_json_field_, CY_class_name##JsIO, __VA_ARGS__) \
-  \
   cyt3macro_model_class_serializable_json_def_constructors_(CY_class_name)\
   \
   cyt3macro_model_class_serializable_json_def_to_json_(CY_class_name, CY_jsio_parent, CY_jsonizations_postfuncs_suffix, CY_props_jsios,CY_props_enum_classes,__VA_ARGS__);\
@@ -295,6 +289,13 @@
   
 // REMOVED RAPIDJSON SUPPORT
 //  cyt3macro_model_class_serializable_json_def_fromrapidjson_(CY_class_name, CY_jsio_parent, CY_jsonizations_postfuncs_suffix, CY_props_jsios,CY_props_enum_classes,__VA_ARGS__);
+// --- included as [static constexpr const char*]
+// IFN(CY_props_jsios)(FOR_EACH_TRIPLES_WITH_01_STATIC(cytemacro_model_class_serializable_json_def_json_field_, CY_class_name##JsIO, PASS_PARAMETERS(CY_props_jsios))) \
+// ---
+// FOR_EACH_TRIPLES_WITH_01_STATIC(cytemacro_model_class_serializable_json_def_json_field_, CY_class_name##JsIO, PASS_PARAMETERS(CY_props_enum_classes)) \
+// ---
+// FOR_EACH_TRIPLES_WITH_01_STATIC(cytemacro_model_class_serializable_json_def_json_field_, CY_class_name##JsIO, __VA_ARGS__) \
+
   
 
 

@@ -29,7 +29,6 @@ namespace mqtt{
   int MOSQUITTO_LIB_INITIATED = false;
 
   bool Client::connect_to_broker_(){
-    std::lock_guard<std::mutex> guard(client_tx_mtx_);
     
     if(config_.debug_mode() == true){
       log_warn("client in debug mode.");
@@ -114,7 +113,7 @@ namespace mqtt{
         nullptr,
         config_.certificates_cert().c_str(),
         config_.certificates_key().c_str(),
-        mosq_on_tls_certs_password_callback
+        mosq_on_tls_certs_password_callback_v3
       );
       switch(rc){
         case MOSQ_ERR_SUCCESS:
@@ -170,13 +169,13 @@ namespace mqtt{
     }
     
     log_debug(7,"connect-to-broker- : setting callbacks");
-    mosquitto_connect_callback_set(client_,mosq_on_client_connects);
-    mosquitto_disconnect_callback_set(client_,mosq_on_client_disconnects);
-    mosquitto_message_callback_set(client_,mosq_on_message_received);
-    mosquitto_log_callback_set(client_,mosq_on_log);
-    mosquitto_subscribe_callback_set(client_,mosq_on_subscribe);
-    mosquitto_unsubscribe_callback_set(client_,mosq_on_unsubscribe);
-    mosquitto_publish_callback_set(client_,mosq_on_publish);
+    mosquitto_connect_callback_set(client_,mosq_on_client_connects_v3);
+    mosquitto_disconnect_callback_set(client_,mosq_on_client_disconnects_v3);
+    mosquitto_message_callback_set(client_,mosq_on_message_received_v3);
+    mosquitto_log_callback_set(client_,mosq_on_log_v3);
+    mosquitto_subscribe_callback_set(client_,mosq_on_subscribe_v3);
+    mosquitto_unsubscribe_callback_set(client_,mosq_on_unsubscribe_v3);
+    mosquitto_publish_callback_set(client_,mosq_on_publish_v3);
     log_debug(5,"connect-to-broker- : launching mosquitto-loop-");
     rc = mosquitto_loop_start(client_);
 
@@ -288,7 +287,6 @@ namespace mqtt{
 
   bool
   Client::disconnect_from_broker_(){
-    std::lock_guard<std::mutex> guard(client_tx_mtx_);
     if(client_ == nullptr){
       log_debug(5,"disconnect-from-broker- : mosquitto client not "
       "instantiated");

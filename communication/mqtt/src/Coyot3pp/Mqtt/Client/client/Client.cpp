@@ -2,9 +2,7 @@
 
 
 
-namespace coyot3{
-namespace communication{
-namespace mqtt{
+namespace coyot3::communication::mqtt{
 
   Client::Client(const std::string& name)
   :ModuleBase(name)
@@ -37,6 +35,4 @@ namespace mqtt{
   }
 
 
-}
-}
 }

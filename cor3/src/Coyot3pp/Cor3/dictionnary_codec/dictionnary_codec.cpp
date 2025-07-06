@@ -1249,7 +1249,7 @@ bool EvaluationGroup::calculate(const CevalSetMap& source,EvaluationGroupCalcula
   
   for(const std::string& id : identifiers)
   {
-    if(coyot3::tools::stringSplit(id,".",secitemid) != 2)
+    if(coyot3::tools::stringSplit(id,'.',secitemid) != 2)
     {
       CLOG_WARN("evaluation-group : calculate : error extracting section-id and item-id from [" << id << "]");
       return false;

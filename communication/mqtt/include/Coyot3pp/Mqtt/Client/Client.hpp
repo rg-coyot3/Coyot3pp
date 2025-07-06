@@ -18,33 +18,33 @@ namespace coyot3::communication::mqtt{
 
 
 
-int  mosq_on_tls_certs_password_callback(char *buff, 
+int  mosq_on_tls_certs_password_callback_v3(char *buff, 
                               int size, 
                               int rwflag, 
                               void *userdata);
 
-void mosq_on_client_connects(struct mosquitto* client,
+void mosq_on_client_connects_v3(struct mosquitto* client,
                               void* userdata,
                               int resutl);
-void mosq_on_client_disconnects(struct mosquitto* c,
+void mosq_on_client_disconnects_v3(struct mosquitto* c,
                               void* userdata, 
                               int rc);
-void mosq_on_subscribe(struct mosquitto* c, 
+void mosq_on_subscribe_v3(struct mosquitto* c, 
                               void* userdata, 
                               int mid, 
                               int qos_count, 
                               const int* granted_qos);
-void mosq_on_unsubscribe(struct mosquitto* c,
+void mosq_on_unsubscribe_v3(struct mosquitto* c,
                               void* userdata,
                               int mid);
-void mosq_on_message_received(struct mosquitto* mosq,
+void mosq_on_message_received_v3(struct mosquitto* mosq,
                               void* userdata,
                               const struct mosquitto_message* message);
-void mosq_on_log(struct mosquitto* client,
+void mosq_on_log_v3(struct mosquitto* client,
                               void* userdata,
                               int level,
                               const char* msg);
-void mosq_on_publish(struct mosquitto* client,
+void mosq_on_publish_v3(struct mosquitto* client,
                               void* userdata,
                               int mid);
 
@@ -58,33 +58,33 @@ std::string mqtt_on_connect_return_code_version_5(int rc);
 //mqtt client
   class Client : public coyot3::mod::ModuleBase{
 
-    friend int  mosq_on_tls_certs_password_callback(char *buff, 
+    friend int  mosq_on_tls_certs_password_callback_v3(char *buff, 
                                   int size, 
                                   int rwflag, 
                                   void *userdata);
     
-    friend void mosq_on_client_connects(struct mosquitto* client,
+    friend void mosq_on_client_connects_v3(struct mosquitto* client,
                                   void* userdata,
                                   int resutl);
-    friend void mosq_on_client_disconnects(struct mosquitto* c,
+    friend void mosq_on_client_disconnects_v3(struct mosquitto* c,
                                   void* userdata, 
                                   int rc);
-    friend void mosq_on_subscribe(struct mosquitto* c, 
+    friend void mosq_on_subscribe_v3(struct mosquitto* c, 
                                   void* userdata, 
                                   int mid, 
                                   int qos_count, 
                                   const int* granted_qos);
-    friend void mosq_on_unsubscribe(struct mosquitto* c,
+    friend void mosq_on_unsubscribe_v3(struct mosquitto* c,
                                   void* userdata,
                                   int mid);
-    friend void mosq_on_message_received(struct mosquitto* mosq,
+    friend void mosq_on_message_received_v3(struct mosquitto* mosq,
                                   void* userdata,
                                   const struct mosquitto_message* message);
-    friend void mosq_on_log(struct mosquitto* client,
+    friend void mosq_on_log_v3(struct mosquitto* client,
                                   void* userdata,
                                   int level,
                                   const char* msg);
-    friend void mosq_on_publish(struct mosquitto* client,
+    friend void mosq_on_publish_v3(struct mosquitto* client,
                                   void* userdata,
                                   int mid);
     
@@ -107,10 +107,20 @@ std::string mqtt_on_connect_return_code_version_5(int rc);
       bool register_subscription(const std::string& topic,
                                     int mqttQos,
                                     MqttClientOnMessageCallback cb);
+      /**
+       * @brief registers a subscription and 
+       * 
+       * @param topic 
+       * @param mqttQos 
+       * @param id 
+       * @param cb 
+       * @return true 
+       * @return false 
+       */
       bool register_subscription(const std::string& topic,
                                     int mqttQos,
-                                    int64_t& id,
-                                    MqttClientOnMessageCallback cb);
+                                    MqttClientOnMessageCallback cb,
+                                    int64_t& id);
       bool register_publisher(const std::string& topic, int mqttQos,int64_t& id);
 
       
@@ -126,29 +136,17 @@ std::string mqtt_on_connect_return_code_version_5(int rc);
        * @return true : publication taken in count OK.
        * @return false : error publishing. (mainly because the client is not connected.)
        */
+      
       bool publish(const std::string& topic, 
                   const uint8_t* payload,
                   std::size_t length,
-                  ec::MessagePriorityLevel priority = ec::MessagePriorityLevel::DEFAULT);
-      bool publish(const std::string& topic, 
-                  const uint8_t* payload,
-                  std::size_t length,
-                  int qos);
+                  int qos = 0);
 
 
       template<typename T>
       bool publish(const std::string& topic,
                   const T& payload,
-                  ec::MessagePriorityLevel priority = ec::MessagePriorityLevel::DEFAULT){
-        std::stringstream sstr;
-        sstr << payload;
-        return publish(topic, (uint8_t*)sstr.str().c_str(), sstr.str().size(), priority);
-      }
-
-      template<typename T>
-      bool publish(const std::string& topic,
-                  const T& payload,
-                  int qos){
+                  int qos = 0){
         std::stringstream sstr;
         sstr << payload;
         return publish(topic, (uint8_t*)sstr.str().c_str(), sstr.str().size(), qos);
@@ -191,7 +189,8 @@ std::string mqtt_on_connect_return_code_version_5(int rc);
        */
       MessageStack     message_stack_repub_; 
       void             backup_stack_prim_to_repub_();
-
+      
+      bool             full_reset_connection(); // mutex locks
     private:
       
       struct mosquitto*   client_;
@@ -213,7 +212,7 @@ std::string mqtt_on_connect_return_code_version_5(int rc);
       bool connect_to_broker_();
       bool disconnect_from_broker_();
 
-      bool full_reset_connection_();
+      bool full_reset_connection_(); // no mutex locks
 
 
       bool prepare_subscriptions_();
@@ -221,10 +220,7 @@ std::string mqtt_on_connect_return_code_version_5(int rc);
         bool all_subscriptions_are_done_();
 
       
-      bool publish_(const std::string& topic, 
-                  const uint8_t* payload,
-                  std::size_t length,
-                  ec::MessagePriorityLevel priority);
+
       bool publish_(const std::string& topic, 
                   const uint8_t* payload,
                   std::size_t length,

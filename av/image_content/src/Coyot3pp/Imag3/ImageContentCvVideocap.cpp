@@ -76,6 +76,8 @@ namespace image{
     }
     if(cvcap->isOpened() == false){
       log_warn("imc-cvvideocap : task error opening source! ");
+      delete cvcap;
+      cvcap = nullptr;
       return;
     }
     is_active_ = true;

@@ -2,9 +2,7 @@
 
 
 
-namespace coyot3{
-namespace communication{
-namespace mqtt{
+namespace coyot3::communication::mqtt{
 
 
 CYT3MACRO_model_class_definitions(
@@ -68,7 +66,30 @@ CYT3MACRO_model_class_serializable_json_definitions(
     , ciphers                           , "ciphers"                           , 
 )
 
+void ClientConfiguration::print_current_config_state(){
+  CLOG_INFO(" - config state: ")
+  CLOG_INFO("   debug_mode                        :" << debug_mode() )
+  CLOG_INFO("   host_address                      :" << host_address() )
+  CLOG_INFO("   host_port                         :" << host_port() )
+  CLOG_INFO("   qos                               :" << qos() )
+  CLOG_INFO("   qos_max                           :" << qos_max() )
+  CLOG_INFO("   timeout                           :" << timeout() )
+  CLOG_INFO("   show_debug_msgs                   :" << show_debug_msgs() )
+  CLOG_INFO("   important_messages_timeout_ms     :" << important_messages_timeout_ms() )
+  CLOG_INFO("   important_messages_max_retries    :" << important_messages_max_retries() )
+  CLOG_INFO("   clean_session                     :" << clean_session() )
+  CLOG_INFO("   client_id                         :" << client_id() )
+  CLOG_INFO("   client_id_postfix_rand_str_length :" << client_id_postfix_rand_str_length() )
+  CLOG_INFO("   user                              :" << user() )
+  CLOG_INFO("   password                          :" << password() )
+  CLOG_INFO("   base_path                         :" << base_path() )
+  CLOG_INFO("   certificates_relative_path        :" << certificates_relative_path() )
+  CLOG_INFO("   certificates_ca                   :" << certificates_ca() )
+  CLOG_INFO("   certificates_cert                 :" << certificates_cert() )
+  CLOG_INFO("   certificates_key                  :" << certificates_key() )
+  CLOG_INFO("   certificates_passphrase           :" << certificates_passphrase() )
+  CLOG_INFO("   tls_version                       :" << tls_version() )
+  CLOG_INFO("   ciphers                           :" << ciphers() )
+}
 
-}
-}
 }

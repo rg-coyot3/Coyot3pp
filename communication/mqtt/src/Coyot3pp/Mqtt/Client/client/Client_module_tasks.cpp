@@ -6,7 +6,6 @@ namespace coyot3::communication::mqtt{
 
 
   bool Client::init_(){
-    
     th_main_ = new(std::nothrow) ct::ControlThread(
       std::bind(&Client::task_controller,this),
       "controller-" + name());
@@ -16,6 +15,7 @@ namespace coyot3::communication::mqtt{
     }
     th_main_->setInterval(CONTROLLER_INTERVAL_NORMAL);
     log_debug(3,"init- : created main controller thread instance");
+    model.state(ec::MosqClientState::DISCONNECTED);
     return true;
   }
 

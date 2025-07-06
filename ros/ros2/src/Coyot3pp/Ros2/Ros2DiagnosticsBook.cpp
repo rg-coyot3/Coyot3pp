@@ -82,7 +82,7 @@ bool DiagnosticsBookRos2::update(const diagnostic_msgs::msg::DiagnosticStatus& r
 
   // CLOG_INFO("diagnostics-book-ros : update : updating for ["<<rdiag.name << "]");
   std::vector<std::string> tags;
-  if(milla::connapp::stringSplit(rdiag.name,"/",tags) == 0){
+  if(milla::connapp::stringSplit(rdiag.name,'/',tags) == 0){
     CLOG_WARN("diagnostic-data-source : update(diag-status) : error obtaining name!");
     return false;
   }

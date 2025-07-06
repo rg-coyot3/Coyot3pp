@@ -3,9 +3,8 @@
 #include <Coyot3pp/Cor3/Coyot3.hpp>
 
 
-namespace coyot3{
-namespace communication{
-namespace mqtt{
+namespace coyot3::communication::mqtt{
+
   typedef std::function<bool(const std::string&, 
                                  const uint8_t*, 
                                  std::size_t)>   MqttClientOnMessageCallback;
@@ -51,6 +50,4 @@ namespace mqtt{
 
     CYT3MACRO_model_class_set_mapped_declarations(cmqc_subscriptions_tree, topic)
 
-}
-}
 }

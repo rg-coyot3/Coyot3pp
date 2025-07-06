@@ -391,8 +391,8 @@
   //def insert
   #define cyt3macro_model_class_set_mapped_def_insert_(CY_class_name,CY_member_index_property)\
     bool              CY_class_name##MappedSet::insert(const CY_class_name & o){\
-      std::lock_guard<std::mutex> guard(mtx_);\
       if(is_member(o.CY_member_index_property()) == true)return false;\
+      std::lock_guard<std::mutex> guard(mtx_);\
       map_.insert(std::make_pair(o.CY_member_index_property(),o));\
       return true;\
     }
@@ -543,8 +543,12 @@
       std::size_t  max_size(std::size_t v);\
       bool    push_front(const CY_class_name & o);\
       bool    push_front(const CY_class_name##Stack& o);\
+      bool    push(const CY_class_name & o);\
+      bool    push(const CY_class_name##Stack& o);\
       bool    push_back(const CY_class_name & o);\
       bool    push_back(const CY_class_name##Stack& o);\
+      CY_class_name front() const;\
+      CY_class_name back() const;\
       void    clear();\
       CY_class_name##Stack& operator=(const CY_class_name##Stack& o);\
       bool                  operator==(const CY_class_name##Stack& o) const;\
@@ -651,12 +655,18 @@
         });\
         return result == o.size();\
       }\
+      bool    CY_class_name##Stack::push(const CY_class_name & o){ \
+        return push_back(o);\
+      }\
       bool    CY_class_name##Stack::push_back(const CY_class_name & o){ \
         stack_.push_back(o); \
         if(stack_.size()>= default_max_size_){ \
           stack_.erase(stack_.begin()); \
         }\
         return true;\
+      }\
+      bool    CY_class_name##Stack::push(const CY_class_name##Stack& o){ \
+        return push_back(o);\
       }\
       bool    CY_class_name##Stack::push_back(const CY_class_name##Stack& o){ \
         o.for_each([&](const CY_class_name & item){\
@@ -671,7 +681,9 @@
       void          CY_class_name##Stack::resize(std::size_t sz){stack_.resize(sz);}\
       std::size_t   CY_class_name##Stack::max_size() const{return default_max_size_;} \
       std::size_t   CY_class_name##Stack::max_size(std::size_t v){return (default_max_size_ = v);} \
-      void          CY_class_name##Stack::clear(){stack_.clear();} 
+      void          CY_class_name##Stack::clear(){stack_.clear();} \
+      CY_class_name CY_class_name##Stack::front() const{return stack_.front();} \
+      CY_class_name CY_class_name##Stack::back() const{return stack_.back();} \
 
     #define cyt3macro_model_class_def_set_stack_constrdestr_(CY_class_name, CY_default_max_size) \
       CY_class_name##Stack::CY_class_name##Stack():stack_(){\

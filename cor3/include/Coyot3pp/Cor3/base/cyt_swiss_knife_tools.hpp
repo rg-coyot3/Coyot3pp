@@ -250,7 +250,7 @@ std::string get_real_path(const std::string relativePath);
 constexpr auto getRealPath = get_real_path;
 
 
-size_t      string_split(const std::string& str,const char delim, std::vector<std::string>& out);
+size_t      string_split(const std::string& str,const char& delim, std::vector<std::string>& out);
 constexpr auto stringSplit = string_split;
 
 std::string string_replace(std::string str,const std::string& from,const std::string& to);

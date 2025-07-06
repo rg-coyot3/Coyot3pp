@@ -31,7 +31,7 @@ namespace mod{
   ,_modconf_stops(false)
   ,_modconf_ends(false)
   {
-    log_debug(3,"here i am");
+    //log_debug(3,"here i am");
     state_ = ec::CytModuleState::CREATED;
   }
 

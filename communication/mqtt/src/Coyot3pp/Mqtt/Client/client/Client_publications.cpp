@@ -4,19 +4,10 @@
 namespace  cm = coyot3::mod;
 namespace  ct = coyot3::tools;
 
-namespace coyot3{
-namespace communication{
-namespace mqtt{
+namespace coyot3::communication::mqtt{
 
 
-bool 
-Client::publish(
-  const std::string& topic, 
-  const uint8_t* payload, 
-  std::size_t length, 
-  ec::MessagePriorityLevel priority){
-    return publish_(topic,payload,length,priority);
-}
+
 bool 
 Client::publish(
   const std::string& topic, 
@@ -24,58 +15,6 @@ Client::publish(
   std::size_t length, 
   int qos){
     return publish_(topic,payload,length,qos);
-}
-
-bool 
-Client::publish_(
-  const std::string& topic, 
-  const uint8_t* payload, 
-  std::size_t length, 
-  ec::MessagePriorityLevel priority){
-    
-    int mid;
-    int qos;
-    switch (priority)
-    {
-      case ec::MessagePriorityLevel::LOW: qos = 0; break;
-      case ec::MessagePriorityLevel::MEDIUM: qos = 1; break;
-      case ec::MessagePriorityLevel::HIGH: 
-      case ec::MessagePriorityLevel::HIGH_WHEN_AVAILABLE: qos = 2; break;
-      case ec::MessagePriorityLevel::DEFAULT: qos = config_.qos(); break;
-    }    
-
-    if(qos == 0){
-      //nothing to do. do not follow even the message publication.
-      return publish_(topic,payload,static_cast<int>(length),qos);
-    }
-
-    Message msg(topic,payload,length);
-
-    if(
-      publish_payload_v3_(topic,payload,static_cast<int>(length),qos,&mid) 
-      == false){
-      if(priority == ec::MessagePriorityLevel::HIGH_WHEN_AVAILABLE){
-        // the user wants it to be sent when it is connected.
-        message_stack_repub_.push_back(msg);
-        return true;
-      }
-      //tell the user that it did not work
-      return false;
-    }
-
-    msg.id(mid);
-    msg.last_activity(ct::get_current_timestamp());
-    msg.priority(priority);
-    if(message_stack_prim_.is_member(mid) == true){
-      log_warn(o() << "publish- : " << priority << " : mqtt message id already "
-      "exists... removing old!");
-      message_stack_prim_[mid] = msg;
-    }else{
-      //saved to check ack from broker.
-      message_stack_prim_.insert(msg);
-    }
-
-    return true;
 }
 
 bool
@@ -155,7 +94,8 @@ Client::on_mosq_client_published(int message_id){
     //nothing to do.
     return;
   }
-  log_debug(5,o() << "on-mosq-msg-published- : ");
+  log_debug(5,o() << "on-mosq-msg-published- : confirmed arrival to broker of "
+  "msg id [" << message_id << "]");
   message_stack_prim_.remove(message_id);
 }
 
@@ -171,6 +111,4 @@ void Client::backup_stack_prim_to_repub_(){
 }
 
 
-}
-}
 }

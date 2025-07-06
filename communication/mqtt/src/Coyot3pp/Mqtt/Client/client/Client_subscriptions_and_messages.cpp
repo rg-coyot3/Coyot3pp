@@ -67,14 +67,14 @@ void Client::on_mosq_client_message(const struct mosquitto_message* message){
                                 MqttClientOnMessageCallback cb){
     log_debug(5,o() << "register-subscription : no-reg-id : [" << topic << "]");
     int64_t id;
-    return register_subscription(topic,mqttQos,id,cb);
+    return register_subscription(topic,mqttQos,cb,id);
   }
   
   bool 
   Client::register_subscription(const std::string& topic,
                                 int mqttQos,
-                                int64_t& id,
-                                MqttClientOnMessageCallback cb){
+                                MqttClientOnMessageCallback cb,
+                                int64_t& id){
     Subscription sub;
     bool         taskDone = false;
     log_info(o() << "register-subscription : topic [" << topic << "] : begin");
@@ -84,7 +84,7 @@ void Client::on_mosq_client_message(const struct mosquitto_message* message){
     sub.callback(cb);
     sub.active(true);
     id = sub.id(__subscription_id_patch++);
-
+    
     if(model.subscriptions_config().is_member(topic)){
       log_info(o() << "register-subscription : topic [" << topic << "] : "
         "adding callback to existing topic.");
@@ -94,7 +94,6 @@ void Client::on_mosq_client_message(const struct mosquitto_message* message){
         model.subscriptions_config().get(topic).subs().size() << "]");
       return true;
     }
-
     std::string topicbuf;
     bool inputIsRoot = false;
     if(topic.find_first_of('#') != std::string::npos){
@@ -103,7 +102,6 @@ void Client::on_mosq_client_message(const struct mosquitto_message* message){
     }else{
       topicbuf = topic;
     }
-    
     //searching if incoming subscription is already included in some other sub
     model.subscriptions_config().for_each([&](cmqc_subscriptions_tree& tt){
       std::string ttp;std::size_t s;
@@ -122,7 +120,6 @@ void Client::on_mosq_client_message(const struct mosquitto_message* message){
     if(taskDone == true){
       return true;
     }
-
 
     //checking if incoming subscription includes any other existent
     if(inputIsRoot){
@@ -159,7 +156,6 @@ void Client::on_mosq_client_message(const struct mosquitto_message* message){
       }
     }
     if(taskDone == true)return true;
-
     //no equal, no included in other, this one does not include other... then
     // it is a new one
     cmqc_subscriptions_tree tr;
@@ -289,20 +285,26 @@ void Client::on_mosq_client_message(const struct mosquitto_message* message){
     return true;
   }
 
-
+  bool
+  Client::full_reset_connection(){
+    std::lock_guard<std::mutex> guard1(client_tx_mtx_);
+    std::lock_guard<std::mutex> guard2(client_models_mtx_);
+    return full_reset_connection_();
+  }
 
   bool 
   Client::full_reset_connection_(){
-    std::lock_guard<std::mutex> guard1(client_tx_mtx_);
-    std::lock_guard<std::mutex> guard2(client_models_mtx_);
+    
+    disconnect_from_broker_();
     message_stack_prim_.for_each([&](const Message& m){
       message_stack_repub_.push_back(m);
       return true;
     });
     message_stack_prim_.clear();
 
-    disconnect_from_broker_();
+    connect_to_broker_();
     return true;
   }
+
 
 }

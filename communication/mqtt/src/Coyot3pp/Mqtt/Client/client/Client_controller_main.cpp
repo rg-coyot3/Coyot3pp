@@ -11,14 +11,14 @@ namespace coyot3::communication::mqtt{
       case ec::MosqClientState::DISCONNECTED:
         allsubscribed = false;
         log_info("controller- : disconnected : invoking connection");
-        full_reset_connection_();
+        full_reset_connection();
         break;
       case ec::MosqClientState::CONNECTING:
         if(now - model.ts_last_transition() > (config_.timeout() * 1000)){
           log_warn(o() << "controller- : pulse : connecting for too long("
           << config_.timeout() << "). forcing reconnection");
           model.ts_last_transition(now);
-          full_reset_connection_();
+          full_reset_connection();
         }
         break;
       case ec::MosqClientState::CONNECTED:
@@ -26,7 +26,7 @@ namespace coyot3::communication::mqtt{
         break;
       case ec::MosqClientState::ERROR:
         log_warn("controller- : error state : forcing reconnection");
-        full_reset_connection_();
+        full_reset_connection();
         break;
     }
 
