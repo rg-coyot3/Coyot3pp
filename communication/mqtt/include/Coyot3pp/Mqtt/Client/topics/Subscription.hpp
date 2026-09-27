@@ -9,7 +9,7 @@ namespace coyot3::communication::mqtt{
                                  const uint8_t*, 
                                  std::size_t)>   MqttClientOnMessageCallback;
 
-  CYT3MACRO_model_class_declarations(
+  COYOT3PP_MODEL_CLASS_DECLARATIONS(
     Subscription
     ,
     , ( )
@@ -26,11 +26,11 @@ namespace coyot3::communication::mqtt{
   )
 
 
-    CYT3MACRO_model_class_set_mapped_declarations(Subscription,id)
+    COYOT3PP_MODEL_CLASS_SET_MAPPED_DECLARATIONS(Subscription,id)
 
 
 
-  CYT3MACRO_model_class_declarations(
+  COYOT3PP_MODEL_CLASS_DECLARATIONS(
     cmqc_subscriptions_tree
     ,
     , ( )
@@ -48,6 +48,6 @@ namespace coyot3::communication::mqtt{
       , subs                  , SubscriptionMappedSet       , 
   )
 
-    CYT3MACRO_model_class_set_mapped_declarations(cmqc_subscriptions_tree, topic)
+    COYOT3PP_MODEL_CLASS_SET_MAPPED_DECLARATIONS(cmqc_subscriptions_tree, topic)
 
 }

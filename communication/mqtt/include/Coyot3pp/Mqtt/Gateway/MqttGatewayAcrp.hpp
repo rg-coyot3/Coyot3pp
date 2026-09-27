@@ -8,7 +8,7 @@ namespace coyot3{
 namespace communication{
 namespace mqtt{
 
-CYT3MACRO_model_class_declarations(
+COYOT3PP_MODEL_CLASS_DECLARATIONS(
   AcrpConfigObject
   , 
     , ( )
@@ -27,7 +27,7 @@ CYT3MACRO_model_class_declarations(
 
 
 
-CYT3MACRO_model_class_serializable_json_declarations(
+COYOT3PP_MODEL_CLASS_SERIALIZABLE_JSON_DECLARATIONS(
   AcrpConfigObject
   , 
   , 
@@ -48,7 +48,7 @@ CYT3MACRO_model_class_serializable_json_declarations(
 
 
 
-CYT3MACRO_model_class_declarations(
+COYOT3PP_MODEL_CLASS_DECLARATIONS(
   MqttGatewayAcrpConfig
     , MqttGatewayConfigObject
     , ( )
@@ -56,7 +56,7 @@ CYT3MACRO_model_class_declarations(
     , acrp   , AcrpConfigObject , 
 )
 
-CYT3MACRO_model_class_serializable_json_declarations(
+COYOT3PP_MODEL_CLASS_SERIALIZABLE_JSON_DECLARATIONS(
   MqttGatewayAcrpConfig
   , MqttGatewayConfigObject
   , 

@@ -14,9 +14,21 @@ function (cyt_show_list cmessage cinput)
 endfunction()
 
 
+
+# Remember : need to have defined :
+#
+# PROJECT_NAME      : the standard cmake variable to define the name of the project
+# COYOT3PPCOMPONENT : the name of the component, that will be installed at 
+#         install-dir/include/<PROJECT_NAME>
+#         install-dir/lib/cmake/<PROJECT_NAME> 
+#         install-dir/lib/<PROJECT_NAME>
+
 macro(cmak3_make_package)
 set(CMAKE_INSTALL_PREFIX ${COYOT3_INSTALL_PREFIX})
-install(  DIRECTORY   ${CMAKE_CURRENT_SOURCE_DIR}/include/${PROJECT_NAME}/${COYOT3PPCOMPONENT}
+if(NOT DEFINED COYOT3PP_MODULE_INCLUDE_PREFIX)
+  set(COYOT3PP_MODULE_INCLUDE_PREFIX ${COYOT3PPCOMPONENT})
+endif()
+install(  DIRECTORY   ${CMAKE_CURRENT_SOURCE_DIR}/include/${PROJECT_NAME}/${COYOT3PP_MODULE_INCLUDE_PREFIX}
           DESTINATION include/${PROJECT_NAME}
 )
 install(  TARGETS     ${COYOT3PPCOMPONENT}
@@ -53,4 +65,5 @@ install(FILES
         "${CMAKE_BINARY_DIR}/${PROJECT_NAME}${COYOT3PPCOMPONENT}ConfigVersion.cmake"
         DESTINATION lib/cmake/${PROJECT_NAME}
 )
+unset(COYOT3PP_MODULE_INCLUDE_PREFIX)
 endmacro()

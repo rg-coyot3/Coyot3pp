@@ -7,7 +7,7 @@ namespace communication{
 namespace mqtt{
 
 
-  CYT3MACRO_enum_class_definitions(
+  COYOT3PP_ENUM_CLASS_DEFINITIONS(
     CMessagePriority
     ,
     , LOW
@@ -18,7 +18,7 @@ namespace mqtt{
 
 
 
-CYT3MACRO_model_class_definitions(
+COYOT3PP_MODEL_CLASS_DEFINITIONS(
   CMqttMessage
   ,
   , ( 
@@ -44,7 +44,7 @@ CYT3MACRO_model_class_definitions(
 
 
 
-  CYT3MACRO_model_class_set_mapped_definitions(CMqttMessage, id)
+  COYOT3PP_MODEL_CLASS_SET_MAPPED_DEFINITIONS(CMqttMessage, id)
   
 
   CMqttMessage::CMqttMessage(const uint8_t* p, std::size_t s){

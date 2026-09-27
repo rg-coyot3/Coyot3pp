@@ -20,7 +20,7 @@ namespace mqtt{
 
 //ec::GatewayState
 
-CYT3MACRO_enum_class_definitions(
+COYOT3PP_ENUM_CLASS_DEFINITIONS(
   GatewayState
   ,
     ,NOT_CONFIGURED
@@ -37,7 +37,7 @@ CYT3MACRO_enum_class_definitions(
 //ec::MessagePriority
 
 
-CYT3MACRO_enum_class_definitions(
+COYOT3PP_ENUM_CLASS_DEFINITIONS(
   MessagePriority
   ,
     ,DEFAULT

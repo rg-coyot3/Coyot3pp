@@ -56,7 +56,7 @@ CYT3MACRO_boost_statechart_state_declarations(
     , EvConfig      , Configuring
 )
 
-CYT3MACRO_model_class_declarations(
+COYOT3PP_MODEL_CLASS_DECLARATIONS(
   CameraModel
   , 
   , ( )

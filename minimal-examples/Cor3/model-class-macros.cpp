@@ -385,7 +385,7 @@ const char* example_json_long=R"JSONLONGEXAMPLE(
 )JSONLONGEXAMPLE";
 
 
-CYT3MACRO_model_class_declarations(
+COYOT3PP_MODEL_CLASS_DECLARATIONS(
   MqttClientConfigObject
   , 
     , ( virtual void print_current_config_state())
@@ -417,7 +417,7 @@ CYT3MACRO_model_class_declarations(
 )
 
 
-CYT3MACRO_model_class_serializable_json_declarations(
+COYOT3PP_MODEL_CLASS_SERIALIZABLE_JSON_DECLARATIONS(
   MqttClientConfigObject
   ,
   , 
@@ -447,13 +447,13 @@ CYT3MACRO_model_class_serializable_json_declarations(
     , ciphers                           , "ciphers"                           , 
 )
 
-CYT3MACRO_model_class_set_stack_declarations(MqttClientConfigObject,)
-CYT3MACRO_model_class_set_stack_serializable_json_declarations(MqttClientConfigObject)
-CYT3MACRO_model_class_set_stack_definitions(MqttClientConfigObject,)
-CYT3MACRO_model_class_set_stack_serializable_json_definitions(MqttClientConfigObject)
+COYOT3PP_MODEL_CLASS_SET_STACK_DECLARATIONS(MqttClientConfigObject,)
+COYOT3PP_MODEL_CLASS_SET_STACK_SERIALIZABLE_JSON_DECLARATIONS(MqttClientConfigObject)
+COYOT3PP_MODEL_CLASS_SET_STACK_DEFINITIONS(MqttClientConfigObject,)
+COYOT3PP_MODEL_CLASS_SET_STACK_SERIALIZABLE_JSON_DEFINITIONS(MqttClientConfigObject)
 
 
-CYT3MACRO_model_class_definitions(
+COYOT3PP_MODEL_CLASS_DEFINITIONS(
   MqttClientConfigObject
   , 
     , ( virtual void print_current_config_state())
@@ -484,7 +484,7 @@ CYT3MACRO_model_class_definitions(
 
 )
 
-CYT3MACRO_model_class_serializable_json_definitions(
+COYOT3PP_MODEL_CLASS_SERIALIZABLE_JSON_DEFINITIONS(
   MqttClientConfigObject
   ,
   , 
@@ -542,24 +542,24 @@ void MqttClientConfigObject::print_current_config_state()
 
 
 
-CYT3MACRO_enum_class_declarations(
+COYOT3PP_ENUM_CLASS_DECLARATIONS(
   EnumExample1
   ,
-    , MY_STATE_0 = 0
-    , MY_STATE_1 = 1
-    , MY_STATE_2 = 2
+    , MY_STATE_0 , 0
+    , MY_STATE_1 , 1
+    , MY_STATE_2 , 2
 )
 
 
-CYT3MACRO_enum_class_definitions(
+COYOT3PP_ENUM_CLASS_DEFINITIONS(
   EnumExample1
   ,
-    , MY_STATE_0 
-    , MY_STATE_1 
-    , MY_STATE_2 
+    , MY_STATE_0 ,
+    , MY_STATE_1 ,
+    , MY_STATE_2 ,
 )
 
-CYT3MACRO_model_class_declarations(
+COYOT3PP_MODEL_CLASS_DECLARATIONS(
   MyClassPriv_
   , 
   , ( )
@@ -568,7 +568,7 @@ CYT3MACRO_model_class_declarations(
     , cadena          , std::string     , ""
 )
 
-CYT3MACRO_model_class_definitions(
+COYOT3PP_MODEL_CLASS_DEFINITIONS(
   MyClassPriv_
   , 
   , ( )
@@ -578,23 +578,19 @@ CYT3MACRO_model_class_definitions(
 )
 
 
-class MyClass : public MyClassPriv_{
-  public:
-    MyClass():MyClassPriv_(){}
-    MyClass(const MyClassPriv_& o):MyClassPriv_(o){}
-    virtual ~MyClass(){}
 
-    CYT3MACRO_enum_class_declarations(
+
+    COYOT3PP_ENUM_CLASS_DECLARATIONS(
       EnumExample3
-      , MyClass
-      , MY_STATE_0 = 0
-      , MY_STATE_1 = 1
-      , MY_STATE_2 = 2
+      , 
+      , MY_STATE_0 , 0
+      , MY_STATE_1 , 1
+      , MY_STATE_2 , 2
     )
-};
 
 
-CYT3MACRO_model_class_declarations(
+
+COYOT3PP_MODEL_CLASS_DECLARATIONS(
   JsonDevSubclase
   , 
   , ( )
@@ -602,7 +598,7 @@ CYT3MACRO_model_class_declarations(
     , seis          , int       , -1
 )
 
-CYT3MACRO_model_class_serializable_json_declarations(
+COYOT3PP_MODEL_CLASS_SERIALIZABLE_JSON_DECLARATIONS(
   JsonDevSubclase
   ,
   ,
@@ -611,7 +607,7 @@ CYT3MACRO_model_class_serializable_json_declarations(
     , seis        , "seis"      , 
 )
 
-CYT3MACRO_model_class_declarations(
+COYOT3PP_MODEL_CLASS_DECLARATIONS(
   JsonDev
   ,
   , ( )
@@ -624,7 +620,7 @@ CYT3MACRO_model_class_declarations(
 )
 
 
-CYT3MACRO_model_class_serializable_json_declarations(
+COYOT3PP_MODEL_CLASS_SERIALIZABLE_JSON_DECLARATIONS(
   JsonDev
   , 
   ,
@@ -641,7 +637,7 @@ CYT3MACRO_model_class_serializable_json_declarations(
 
 
 
-CYT3MACRO_model_class_definitions(
+COYOT3PP_MODEL_CLASS_DEFINITIONS(
   JsonDevSubclase
   , 
   , ( )
@@ -649,7 +645,7 @@ CYT3MACRO_model_class_definitions(
     , seis          , int       , -1
 )
 
-CYT3MACRO_model_class_serializable_json_definitions(
+COYOT3PP_MODEL_CLASS_SERIALIZABLE_JSON_DEFINITIONS(
   JsonDevSubclase
   ,
   ,
@@ -658,7 +654,7 @@ CYT3MACRO_model_class_serializable_json_definitions(
     , seis        , "seis"      , 
 )
 
-CYT3MACRO_model_class_definitions(
+COYOT3PP_MODEL_CLASS_DEFINITIONS(
   JsonDev
   ,
   , ( )
@@ -670,7 +666,7 @@ CYT3MACRO_model_class_definitions(
     , cinco       , JsonDevSubclase    , 
 )
 
-CYT3MACRO_model_class_serializable_json_definitions(
+COYOT3PP_MODEL_CLASS_SERIALIZABLE_JSON_DEFINITIONS(
   JsonDev
   , 
   ,

@@ -7,7 +7,7 @@ namespace communication{
 namespace mqtt{
 
 
-  CYT3MACRO_enum_class_definitions(
+  COYOT3PP_ENUM_CLASS_DEFINITIONS(
     AcrpTopicRole
     , 
     , SUBSCRIBER
@@ -16,7 +16,7 @@ namespace mqtt{
 
 
 
-  CYT3MACRO_model_class_definitions(
+  COYOT3PP_MODEL_CLASS_DEFINITIONS(
     AcrpTopicInformation
     ,
     , ( 

@@ -227,7 +227,7 @@ geographic_msgs/GeoPoint map_origin
 */
 
 
-  CYT3MACRO_model_class_declarations(
+  COYOT3PP_MODEL_CLASS_DECLARATIONS(
     GeoPoint
     , 
     , ( 
@@ -241,9 +241,9 @@ geographic_msgs/GeoPoint map_origin
     , heading       , double    , 0.0
     , dist_tolerance, double    , 1.0
   )
-    CYT3MACRO_model_class_set_stack_declarations(GeoPoint,)
+    COYOT3PP_MODEL_CLASS_SET_STACK_DECLARATIONS(GeoPoint,)
 
-  CYT3MACRO_model_class_declarations(
+  COYOT3PP_MODEL_CLASS_DECLARATIONS(
     ProjectionPoint
     , 
     , ( std::string to_string() const)
@@ -252,10 +252,10 @@ geographic_msgs/GeoPoint map_origin
     , y , double , 0.
     , z , double , 0.
   )
-    CYT3MACRO_model_class_set_stack_declarations(ProjectionPoint, )
+    COYOT3PP_MODEL_CLASS_SET_STACK_DECLARATIONS(ProjectionPoint, )
 
 
-  CYT3MACRO_model_class_declarations(
+  COYOT3PP_MODEL_CLASS_DECLARATIONS(
     ProjectorInformation
     , 
     , ( 

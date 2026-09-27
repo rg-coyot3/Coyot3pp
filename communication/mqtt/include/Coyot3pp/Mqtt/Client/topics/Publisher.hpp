@@ -7,7 +7,7 @@ namespace coyot3{
 namespace communication{
 namespace mqtt{
 
-  CYT3MACRO_model_class_declarations(
+  COYOT3PP_MODEL_CLASS_DECLARATIONS(
     Publisher
     ,
     , ( 
@@ -23,7 +23,7 @@ namespace mqtt{
   )
     
 
-    CYT3MACRO_model_class_set_mapped_declarations(Publisher,topic)
+    COYOT3PP_MODEL_CLASS_SET_MAPPED_DECLARATIONS(Publisher,topic)
 
 }
 }

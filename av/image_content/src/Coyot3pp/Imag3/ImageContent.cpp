@@ -20,7 +20,7 @@ namespace image{
     __CYT_OPENCV_PREVIEWS_ARE_INTIIALIZED=true;
   }
 
-  CYT3MACRO_model_class_definitions(
+  COYOT3PP_MODEL_CLASS_DEFINITIONS(
     SourceImageConfig
       ,
       , ()
@@ -35,14 +35,14 @@ namespace image{
   );
 
   // vector like from SourceImageConfig = SourceImageConfigStack
-  CYT3MACRO_model_class_set_stack_definitions(
+  COYOT3PP_MODEL_CLASS_SET_STACK_DEFINITIONS(
     SourceImageConfig, 100);
 
 
   // JSON - 
 
           // serialization for SourceImageConfig
-        CYT3MACRO_model_class_serializable_json_definitions( 
+        COYOT3PP_MODEL_CLASS_SERIALIZABLE_JSON_DEFINITIONS( 
           SourceImageConfig
           , 
           ,
@@ -58,7 +58,7 @@ namespace image{
         );
 
   // serialization for SourceImageConfigStack = SourceImageConfigStackJsIO
-  CYT3MACRO_model_class_set_stack_serializable_json_definitions(SourceImageConfig);
+  COYOT3PP_MODEL_CLASS_SET_STACK_SERIALIZABLE_JSON_DEFINITIONS(SourceImageConfig);
 
 
 
@@ -70,7 +70,7 @@ namespace image{
  * 
  */
 
-CYT3MACRO_model_class_definitions(
+COYOT3PP_MODEL_CLASS_DEFINITIONS(
   ImageContentEffectsParams
   , 
   , ( std::string to_string() const)
@@ -95,7 +95,7 @@ std::string ImageContentEffectsParams::to_string() const{
 }
 
 
-CYT3MACRO_model_class_definitions(
+COYOT3PP_MODEL_CLASS_DEFINITIONS(
   ImageContentParams
   , 
   , ( void cross_image_dimensions_with_rels(int dest_width, 

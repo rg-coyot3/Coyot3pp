@@ -38,7 +38,7 @@ namespace image{
 
 
     // SourceImageConfig
-  CYT3MACRO_model_class_declarations(
+  COYOT3PP_MODEL_CLASS_DECLARATIONS(
     SourceImageConfig
       ,
       , ( )
@@ -53,14 +53,14 @@ namespace image{
   );
 
   // vector like from SourceImageConfig = SourceImageConfigStack
-  CYT3MACRO_model_class_set_stack_declarations(
+  COYOT3PP_MODEL_CLASS_SET_STACK_DECLARATIONS(
     SourceImageConfig, 100);
 
 
   // JSON - 
 
           // serialization for SourceImageConfig
-        CYT3MACRO_model_class_serializable_json_declarations( 
+        COYOT3PP_MODEL_CLASS_SERIALIZABLE_JSON_DECLARATIONS( 
           SourceImageConfig
           , 
           ,
@@ -76,10 +76,10 @@ namespace image{
         );
 
   // serialization for SourceImageConfigStack = SourceImageConfigStackJsIO
-  CYT3MACRO_model_class_set_stack_serializable_json_declarations(SourceImageConfig);
+  COYOT3PP_MODEL_CLASS_SET_STACK_SERIALIZABLE_JSON_DECLARATIONS(SourceImageConfig);
 
 
-CYT3MACRO_model_class_declarations(
+COYOT3PP_MODEL_CLASS_DECLARATIONS(
   ImageContentEffectsParams
   , 
   , ( std::string to_string() const)
@@ -93,7 +93,7 @@ CYT3MACRO_model_class_declarations(
 )
 
 
-CYT3MACRO_model_class_declarations(
+COYOT3PP_MODEL_CLASS_DECLARATIONS(
   ImageContentParams
   , 
   , ( void cross_image_dimensions_with_rels(int dest_width COMMA() 

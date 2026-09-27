@@ -4,7 +4,7 @@ set(COYOT3PPCOMPONENTVERSION   1.0)
 
 
 
-
+set(COYOT3PPCOMPONENTINCLUDEDIR R3st)
 
 include_directories(include)
 include_directories(${COYOT3PPCOR3_INCLUDE_DIRS})
@@ -36,53 +36,55 @@ target_link_libraries(${COYOT3PPCOMPONENT}
 )
 
 
-set(CMAKE_INSTALL_PREFIX ${COYOT3_INSTALL_PREFIX})
-install(  DIRECTORY   ${CMAKE_CURRENT_SOURCE_DIR}/include/${PROJECT_NAME}/${COYOT3PPCOMPONENT}
-          DESTINATION include/${PROJECT_NAME}
-)
+# set(CMAKE_INSTALL_PREFIX ${COYOT3_INSTALL_PREFIX})
+# install(  DIRECTORY   ${CMAKE_CURRENT_SOURCE_DIR}/include/${PROJECT_NAME}/${COYOT3PP_INCLUDE_TARGET}
+#           DESTINATION include/${COYOT3PPCOMPONENTINCLUDEDIR}
+# )
 
 
-install(  TARGETS     ${COYOT3PPCOMPONENT}
+# install(  TARGETS     ${COYOT3PPCOMPONENT}
 
-          EXPORT      ${PROJECT_NAME}${COYOT3PPCOMPONENT}Targets
-          FILE_SET    HEADERS
-          LIBRARY     DESTINATION     lib/${PROJECT_NAME}
-          ARCHIVE     DESTINATION     lib/${PROJECT_NAME}
-          RUNTIME     DESTINATION     bin/${PROJECT_NAME}
-          INCLUDES    DESTINATION     include
-)
+#           EXPORT      ${PROJECT_NAME}${COYOT3PPCOMPONENT}Targets
+#           FILE_SET    HEADERS
+#           LIBRARY     DESTINATION     lib/${PROJECT_NAME}
+#           ARCHIVE     DESTINATION     lib/${PROJECT_NAME}
+#           RUNTIME     DESTINATION     bin/${PROJECT_NAME}
+#           INCLUDES    DESTINATION     include
+# )
 
-install(  EXPORT      ${PROJECT_NAME}${COYOT3PPCOMPONENT}Targets
-          FILE        ${PROJECT_NAME}${COYOT3PPCOMPONENT}Targets.cmake
-          NAMESPACE   ${PROJECT_NAME}::
-          DESTINATION lib/cmake/${PROJECT_NAME}
-          COMPONENT   ${COYOT3PPCOMPONENT}
-)
-
-
-file(WRITE  ${CMAKE_BINARY_DIR}/${COYOT3PPCOMPONENT}Config.cmake.in "")
-file(APPEND ${CMAKE_BINARY_DIR}/${COYOT3PPCOMPONENT}Config.cmake.in
-            "include(\$\{CMAKE_CURRENT_LIST_DIR\}/${PROJECT_NAME}${COYOT3PPCOMPONENT}ConfigVersion.cmake)\n"
-            "include(\$\{CMAKE_CURRENT_LIST_DIR\}/${PROJECT_NAME}${COYOT3PPCOMPONENT}Targets.cmake)\n"
-)
-
-configure_file(${CMAKE_BINARY_DIR}/${COYOT3PPCOMPONENT}Config.cmake.in
-            "${CMAKE_BINARY_DIR}/${PROJECT_NAME}${COYOT3PPCOMPONENT}Config.cmake"
-            @ONLY)
-
-write_basic_package_version_file(
-            ${CMAKE_BINARY_DIR}/${PROJECT_NAME}${COYOT3PPCOMPONENT}ConfigVersion.cmake
-            VERSION ${COYOT3PPCOMPONENTVERSION}
-            COMPATIBILITY AnyNewerVersion
-)
-
-install(FILES 
-        "${CMAKE_BINARY_DIR}/${PROJECT_NAME}${COYOT3PPCOMPONENT}Config.cmake"
-        "${CMAKE_BINARY_DIR}/${PROJECT_NAME}${COYOT3PPCOMPONENT}ConfigVersion.cmake"
-        DESTINATION lib/cmake/${PROJECT_NAME}
-)
+# install(  EXPORT      ${PROJECT_NAME}${COYOT3PPCOMPONENT}Targets
+#           FILE        ${PROJECT_NAME}${COYOT3PPCOMPONENT}Targets.cmake
+#           NAMESPACE   ${PROJECT_NAME}::
+#           DESTINATION lib/cmake/${PROJECT_NAME}
+#           COMPONENT   ${COYOT3PPCOMPONENT}
+# )
 
 
+# file(WRITE  ${CMAKE_BINARY_DIR}/${COYOT3PPCOMPONENT}Config.cmake.in "")
+# file(APPEND ${CMAKE_BINARY_DIR}/${COYOT3PPCOMPONENT}Config.cmake.in
+#             "include(\$\{CMAKE_CURRENT_LIST_DIR\}/${PROJECT_NAME}${COYOT3PPCOMPONENT}ConfigVersion.cmake)\n"
+#             "include(\$\{CMAKE_CURRENT_LIST_DIR\}/${PROJECT_NAME}${COYOT3PPCOMPONENT}Targets.cmake)\n"
+# )
+
+# configure_file(${CMAKE_BINARY_DIR}/${COYOT3PPCOMPONENT}Config.cmake.in
+#             "${CMAKE_BINARY_DIR}/${PROJECT_NAME}${COYOT3PPCOMPONENT}Config.cmake"
+#             @ONLY)
+
+# write_basic_package_version_file(
+#             ${CMAKE_BINARY_DIR}/${PROJECT_NAME}${COYOT3PPCOMPONENT}ConfigVersion.cmake
+#             VERSION ${COYOT3PPCOMPONENTVERSION}
+#             COMPATIBILITY AnyNewerVersion
+# )
+
+# install(FILES 
+#         "${CMAKE_BINARY_DIR}/${PROJECT_NAME}${COYOT3PPCOMPONENT}Config.cmake"
+#         "${CMAKE_BINARY_DIR}/${PROJECT_NAME}${COYOT3PPCOMPONENT}ConfigVersion.cmake"
+#         DESTINATION lib/cmake/${PROJECT_NAME}
+# )
+
+set(COYOT3PP_MODULE_INCLUDE_PREFIX R3st)
+
+cmak3_make_package()
 
 if(LCY_BUILD_WITH_MINIMAL_EXAMPLES)
   add_executable(rest_component_example

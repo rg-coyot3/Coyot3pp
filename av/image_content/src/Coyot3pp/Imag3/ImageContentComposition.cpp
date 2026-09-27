@@ -9,18 +9,18 @@ namespace av{
 namespace image{
 
 
-  CYT3MACRO_enum_class_definitions(
+  COYOT3PP_ENUM_CLASS_DEFINITIONS(
     ImcTreeOrganization
     ,
-      , MOSAIC             
-      , TARGETED_LIST_RIGHT
-      , TARGETED_LIST_DOWN 
-      , TARGETED_LIST_UP   
-      , TARGETED_LIST_LEFT 
-      , TARGETED_LIST_AUTO
-      , CASCADE            
-      , FROM_SOURCE_PARAMS 
-      , SINGLE_SOURCE
+      , MOSAIC              , 1
+      , TARGETED_LIST_RIGHT , 2
+      , TARGETED_LIST_DOWN  , 3
+      , TARGETED_LIST_UP    , 4
+      , TARGETED_LIST_LEFT  , 5
+      , TARGETED_LIST_AUTO  , 6
+      , CASCADE             , 7
+      , FROM_SOURCE_PARAMS  , 8
+      , SINGLE_SOURCE       , 9
   )
 
 

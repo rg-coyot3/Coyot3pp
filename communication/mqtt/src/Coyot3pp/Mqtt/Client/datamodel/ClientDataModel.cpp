@@ -19,18 +19,19 @@ namespace mqtt{
 
 
 
-  CYT3MACRO_enum_class_definitions(
+  COYOT3PP_ENUM_CLASS_DEFINITIONS(
     MosqClientState
     ,
-      , DISCONNECTED
-      , CONNECTING
-      , CONNECTED
-      , ERROR
+      , DISCONNECTED  ,
+      , CONNECTING    ,
+      , CONNECTED     ,
+      , ERROR         ,
   )
   
 
 
-  CYT3MACRO_model_class_definitions_no_opsoverload(
+
+  COYOT3PP_MODEL_CLASS_DEFINITIONS_no_opsoverload(
     ClientDataModel
     ,
     , ( 

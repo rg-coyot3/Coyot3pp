@@ -1066,7 +1066,7 @@ bool ProjectorLlhMgrs::forward(const GeoPoint& in, ProjectionPoint& out){
 
 
   // interface
-  CYT3MACRO_model_class_definitions(
+  COYOT3PP_MODEL_CLASS_DEFINITIONS(
     GeoPoint
     , 
     , ( 
@@ -1101,8 +1101,9 @@ bool ProjectorLlhMgrs::forward(const GeoPoint& in, ProjectionPoint& out){
       }
     return true;
   }
-  CYT3MACRO_model_class_set_stack_definitions(GeoPoint,)
-  CYT3MACRO_model_class_definitions(
+  COYOT3PP_MODEL_CLASS_SET_STACK_DEFINITIONS(GeoPoint,)
+  
+  COYOT3PP_MODEL_CLASS_DEFINITIONS(
     ProjectionPoint
     , 
     , ( std::string to_string() const)
@@ -1118,13 +1119,13 @@ bool ProjectorLlhMgrs::forward(const GeoPoint& in, ProjectionPoint& out){
     return sst.str();
   }
 
-  CYT3MACRO_model_class_set_stack_definitions(ProjectionPoint, )
+  COYOT3PP_MODEL_CLASS_SET_STACK_DEFINITIONS(ProjectionPoint, )
 
 
 
 
 
-  CYT3MACRO_model_class_definitions(
+  COYOT3PP_MODEL_CLASS_DEFINITIONS(
     ProjectorInformation
     , 
     , ( 

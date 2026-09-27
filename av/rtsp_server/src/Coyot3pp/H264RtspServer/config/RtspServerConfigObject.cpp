@@ -7,7 +7,7 @@ namespace av{
 namespace rtsp{
 
 
-  CYT3MACRO_model_class_definitions(
+  COYOT3PP_MODEL_CLASS_DEFINITIONS(
     RtspStreamConfig
       ,
       , ( )
@@ -23,7 +23,7 @@ namespace rtsp{
         , gst_pipeline_chain    , coyot3::tools::CytStringSet        ,
   );
 
-  CYT3MACRO_model_class_serializable_json_definitions(
+  COYOT3PP_MODEL_CLASS_SERIALIZABLE_JSON_DEFINITIONS(
     RtspStreamConfig
     ,
     ,
@@ -41,15 +41,15 @@ namespace rtsp{
   
 
 
-  CYT3MACRO_model_class_set_stack_definitions(
+  COYOT3PP_MODEL_CLASS_SET_STACK_DEFINITIONS(
     RtspStreamConfig,100);
   
-  CYT3MACRO_model_class_set_stack_serializable_json_definitions(
+  COYOT3PP_MODEL_CLASS_SET_STACK_SERIALIZABLE_JSON_DEFINITIONS(
     RtspStreamConfig);
 
 
 
-  CYT3MACRO_model_class_definitions(
+  COYOT3PP_MODEL_CLASS_DEFINITIONS(
     RtspServerConfig
       , 
       , ( )
@@ -77,7 +77,7 @@ namespace rtsp{
       
 
 
-  CYT3MACRO_model_class_serializable_json_definitions(
+  COYOT3PP_MODEL_CLASS_SERIALIZABLE_JSON_DEFINITIONS(
     RtspServerConfig
       , 
       , 

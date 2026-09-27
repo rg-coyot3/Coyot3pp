@@ -8,25 +8,25 @@ namespace coyot3{
 namespace av{
 namespace image{
 
-  CYT3MACRO_enum_class_declarations(
+  COYOT3PP_ENUM_CLASS_DECLARATIONS(
     TextHorizontalAlign
     ,
-      , UNDEFINED =0
-      , RIGHT = 1
-      , CENTER = 2
-      , LEFT = 3
+      , UNDEFINED   , 0
+      , RIGHT       , 1
+      , CENTER      , 2
+      , LEFT        , 3
   );
 
-  CYT3MACRO_enum_class_declarations(
+  COYOT3PP_ENUM_CLASS_DECLARATIONS(
     TextVerticalAlign
     ,
-      , UNDEFINED = 0
-      , TOP = 1
-      , MIDDLE = 2
-      , BOTTOM = 3
+      , UNDEFINED , 0
+      , TOP       , 1
+      , MIDDLE    , 2
+      , BOTTOM    , 3
   );
 
-  CYT3MACRO_model_class_declarations(
+  COYOT3PP_MODEL_CLASS_DECLARATIONS(
     ImageTextContent
     , 
     , ( )
@@ -62,7 +62,7 @@ namespace image{
       , transparency    , double                , 0.0
   )
 
-  CYT3MACRO_model_class_set_mapped_declarations(ImageTextContent,id);
+  COYOT3PP_MODEL_CLASS_SET_MAPPED_DECLARATIONS(ImageTextContent,id);
 
 
 

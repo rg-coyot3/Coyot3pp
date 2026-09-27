@@ -3,7 +3,7 @@
 
 namespace csq = coyot3::ddbb::sqlite;
 
-CYT3MACRO_model_class_declarations(
+COYOT3PP_MODEL_CLASS_DECLARATIONS(
   SimpleClass
   ,
   , ( std::string to_string() const )
@@ -15,7 +15,7 @@ CYT3MACRO_model_class_declarations(
     , height  , double          ,   
   )
 
-CYT3MACRO_model_class_set_stack_declarations(SimpleClass,)
+COYOT3PP_MODEL_CLASS_SET_STACK_DECLARATIONS(SimpleClass,)
 
 
 CYT3MACRO_model_class_serializable_sqlit3_declarations(

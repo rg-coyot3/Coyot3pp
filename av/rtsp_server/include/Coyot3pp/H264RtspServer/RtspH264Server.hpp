@@ -16,7 +16,7 @@ namespace av{
 namespace rtsp{
   
 
-   CYT3MACRO_model_class_declarations(
+   COYOT3PP_MODEL_CLASS_DECLARATIONS(
     RtspServerParams
       , 
       , ( )

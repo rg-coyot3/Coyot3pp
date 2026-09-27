@@ -6,13 +6,13 @@
 namespace coyot3::communication::mqtt{
 
 
-  CYT3MACRO_enum_class_declarations(
+  COYOT3PP_ENUM_CLASS_DECLARATIONS(
     MosqClientState
     ,
-      , DISCONNECTED = 0
-      , CONNECTING = 1
-      , CONNECTED = 2
-      , ERROR = 3
+      , DISCONNECTED  , 0
+      , CONNECTING    , 1
+      , CONNECTED     , 2
+      , ERROR         , 3
   )
 
   typedef coyot3::tools::ControlThread ControlThread;
@@ -31,7 +31,7 @@ namespace coyot3::communication::mqtt{
       char const* what() const noexcept { return text; }
   };
 
-  CYT3MACRO_model_class_declarations(
+  COYOT3PP_MODEL_CLASS_DECLARATIONS(
     ClientDataModel
     ,
     , ( 

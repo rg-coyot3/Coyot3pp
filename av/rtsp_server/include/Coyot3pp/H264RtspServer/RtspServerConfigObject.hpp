@@ -6,7 +6,7 @@ namespace coyot3{
 namespace av{
 namespace rtsp{
 
-  CYT3MACRO_model_class_declarations(
+  COYOT3PP_MODEL_CLASS_DECLARATIONS(
     RtspStreamConfig
       ,
       , ( )
@@ -22,7 +22,7 @@ namespace rtsp{
         , gst_pipeline_chain    , coyot3::tools::CytStringSet        ,
   );
 
-  CYT3MACRO_model_class_serializable_json_declarations(
+  COYOT3PP_MODEL_CLASS_SERIALIZABLE_JSON_DECLARATIONS(
     RtspStreamConfig
     ,
     ,
@@ -40,15 +40,15 @@ namespace rtsp{
   
 
 
-  CYT3MACRO_model_class_set_stack_declarations(
+  COYOT3PP_MODEL_CLASS_SET_STACK_DECLARATIONS(
     RtspStreamConfig,100);
   
-  CYT3MACRO_model_class_set_stack_serializable_json_declarations(
+  COYOT3PP_MODEL_CLASS_SET_STACK_SERIALIZABLE_JSON_DECLARATIONS(
     RtspStreamConfig);
 
 
 
-  CYT3MACRO_model_class_declarations(
+  COYOT3PP_MODEL_CLASS_DECLARATIONS(
     RtspServerConfig
       , 
       , ( )
@@ -76,7 +76,7 @@ namespace rtsp{
       
 
 
-  CYT3MACRO_model_class_serializable_json_declarations(
+  COYOT3PP_MODEL_CLASS_SERIALIZABLE_JSON_DECLARATIONS(
     RtspServerConfig
       , 
       , 

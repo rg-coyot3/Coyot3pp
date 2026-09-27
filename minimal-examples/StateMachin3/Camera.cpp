@@ -61,7 +61,7 @@ CYT3MACRO_boost_statechart_machine_definitions(
 
 
 
-CYT3MACRO_model_class_definitions(
+COYOT3PP_MODEL_CLASS_DEFINITIONS(
   CameraModel
   , 
   , ( )

@@ -6,7 +6,7 @@ namespace communication{
 namespace mqtt{
 
 
-  CYT3MACRO_model_class_definitions(
+  COYOT3PP_MODEL_CLASS_DEFINITIONS(
     Publisher
     ,
     , ( 
@@ -22,7 +22,7 @@ namespace mqtt{
   )
 
 
-    CYT3MACRO_model_class_set_mapped_definitions(Publisher,topic)
+    COYOT3PP_MODEL_CLASS_SET_MAPPED_DEFINITIONS(Publisher,topic)
 
 
 }

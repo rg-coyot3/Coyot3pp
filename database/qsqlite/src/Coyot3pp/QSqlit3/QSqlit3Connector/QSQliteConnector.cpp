@@ -6,7 +6,7 @@ namespace coyot3{
 namespace ddbb{
 namespace sqlite{
 
-CYT3MACRO_model_class_definitions(
+COYOT3PP_MODEL_CLASS_DEFINITIONS(
   QSqlit3ConnectorConfigObject
   , 
   , ( )
@@ -16,7 +16,7 @@ CYT3MACRO_model_class_definitions(
     , check_state_interval, int64_t               , 60000
 )
 
-  CYT3MACRO_model_class_serializable_json_definitions(
+  COYOT3PP_MODEL_CLASS_SERIALIZABLE_JSON_DEFINITIONS(
     QSqlit3ConnectorConfigObject
     , 
     , 

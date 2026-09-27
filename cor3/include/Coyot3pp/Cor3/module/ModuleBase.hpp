@@ -7,22 +7,22 @@ namespace coyot3{
 namespace mod{
 
 
-  CYT3MACRO_enum_class_declarations(
+  COYOT3PP_ENUM_CLASS_DECLARATIONS(
     CytModuleState
     ,
-      , CREATED 
-      , INITIALIZING
-      , INITIALIZED
-      , STARTING
-      , STARTED 
-      , PAUSING
-      , PAUSED 
-      , STOPPING
-      , STOPPED
-      , ENDING
-      , END_OF_LIFE
-      , MAINTENANCE
-      , MODULE_ERROR
+      , CREATED       ,
+      , INITIALIZING  ,
+      , INITIALIZED   ,
+      , STARTING      ,
+      , STARTED       ,
+      , PAUSING       ,
+      , PAUSED        ,
+      , STOPPING      ,
+      , STOPPED       ,
+      , ENDING        ,
+      , END_OF_LIFE   ,
+      , MAINTENANCE   ,
+      , MODULE_ERROR  ,
   )
   
 

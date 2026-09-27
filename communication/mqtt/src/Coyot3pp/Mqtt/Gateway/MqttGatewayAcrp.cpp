@@ -7,7 +7,7 @@ namespace mqtt{
 
 
 
-CYT3MACRO_model_class_definitions(
+COYOT3PP_MODEL_CLASS_DEFINITIONS(
   AcrpConfigObject
   , 
     , ( )
@@ -24,7 +24,7 @@ CYT3MACRO_model_class_definitions(
       , default_postfix_response            , std::string       , 
 )
 
-CYT3MACRO_model_class_serializable_json_definitions(
+COYOT3PP_MODEL_CLASS_SERIALIZABLE_JSON_DEFINITIONS(
   AcrpConfigObject
   , 
   , 
@@ -43,7 +43,7 @@ CYT3MACRO_model_class_serializable_json_definitions(
 )
 
 
-CYT3MACRO_model_class_definitions(
+COYOT3PP_MODEL_CLASS_DEFINITIONS(
   MqttGatewayAcrpConfig
     , MqttGatewayConfigObject
     , ( )
@@ -51,7 +51,7 @@ CYT3MACRO_model_class_definitions(
     , acrp   , AcrpConfigObject , 
 )
 
-CYT3MACRO_model_class_serializable_json_definitions(
+COYOT3PP_MODEL_CLASS_SERIALIZABLE_JSON_DEFINITIONS(
   MqttGatewayAcrpConfig
   , MqttGatewayConfigObject
   , 

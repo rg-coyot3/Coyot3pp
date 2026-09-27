@@ -65,7 +65,7 @@ namespace communication{
 namespace mqtt{
 
 
-CYT3MACRO_model_class_declarations(
+COYOT3PP_MODEL_CLASS_DECLARATIONS(
   MqttGatewayConfigObject
   , 
     , ( virtual void print_current_config_state())
@@ -96,7 +96,7 @@ CYT3MACRO_model_class_declarations(
 
 )
 
-CYT3MACRO_model_class_serializable_json_declarations(
+COYOT3PP_MODEL_CLASS_SERIALIZABLE_JSON_DECLARATIONS(
   MqttGatewayConfigObject
   ,
   , 
@@ -127,27 +127,27 @@ CYT3MACRO_model_class_serializable_json_declarations(
 )
 
 
-CYT3MACRO_enum_class_declarations(
+COYOT3PP_ENUM_CLASS_DECLARATIONS(
   GatewayState
   ,
-    ,NOT_CONFIGURED  = 1
-    ,CONFIGURED      = 2
-    ,CONNECTING      = 3
-    ,CONNECTED       = 4
-    ,DISCONNECTED    = 5
-    ,CLOSED          = 6
-    ,END_OF_LIFE     = 7
-    ,ERROR           = 8
+    ,NOT_CONFIGURED  , 1
+    ,CONFIGURED      , 2
+    ,CONNECTING      , 3
+    ,CONNECTED       , 4
+    ,DISCONNECTED    , 5
+    ,CLOSED          , 6
+    ,END_OF_LIFE     , 7
+    ,ERROR           , 8
 )
 
 
-CYT3MACRO_enum_class_declarations(
+COYOT3PP_ENUM_CLASS_DECLARATIONS(
   MessagePriority
   ,
-    ,DEFAULT =10
-    ,LOW     = 0
-    ,MEDIUM  = 1
-    ,HIGH    = 2
+    ,DEFAULT , 10
+    ,LOW     ,  0
+    ,MEDIUM  ,  1
+    ,HIGH    ,  2
 )
 
 

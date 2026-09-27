@@ -6,18 +6,17 @@ namespace coyot3{
 namespace ddbb{
 namespace postgresql{
 
-CYT3MACRO_enum_class_definitions(
+COYOT3PP_ENUM_CLASS_DEFINITIONS(
   ModuleState
   ,
-    ,CREATED            
-    ,CONFIGURED         
-    ,LAUNCHING          
-    ,LAUNCHED           
-    ,STOPPED            
-    ,SHUTDOWN           
-    ,DISCONNECTED       
-    ,CONNECTED          
-    ,ERROR              
+    ,CREATED             , 1
+    ,CONFIGURED          , 2
+    ,LAUNCHING           , 3
+    ,LAUNCHED            , 4
+    ,STOPPED             , 5
+    ,SHUTDOWN            , 6
+    ,DISCONNECTED        , 7
+    ,CONNECTED           , 8
 )
 
 
@@ -73,7 +72,7 @@ bool PostgreSqlConnector::Init(){
   if((!controlThreadPri) || (!controlThreadSec))
   {
     CLOG_ERROR("psql-connector : init : ERROR CREATING CONTROL THREADS! nomem?");
-    state = State::ERROR;
+    state = State::INTERNAL_ERROR;
     if(databaseConnectorError_)databaseConnectorError_();
     return false;
   }
@@ -101,7 +100,7 @@ bool PostgreSqlConnector::Stop()
     {
 
       case State::CREATED:
-      case State::ERROR:
+      case State::INTERNAL_ERROR:
       default:
         CLOG_WARN("psql-connector : stop : connector state is not stoppable."
           " state[" << state << "]");
@@ -166,7 +165,7 @@ bool PostgreSqlConnector::openDatabase()
     {
       CLOG_ERROR("psql-connector : open database : unable to create : NO MEM?");
       if(databaseConnectorError_)databaseConnectorError_();
-      state = State::ERROR;
+      state = State::INTERNAL_ERROR;
       return false;
     }
     CLOG_DEBUG(5,"psql-connector : open database : instance creation success");
@@ -213,7 +212,7 @@ bool PostgreSqlConnector::closeDatabase()
     case State::DISCONNECTED:
       break;
     case State::CREATED:
-    case State::ERROR:
+    case State::INTERNAL_ERROR:
     default:
       CLOG_WARN("psql-connector : close database : the connector state does not"
         " permit this operation [" << state << "]");
@@ -389,7 +388,7 @@ bool PostgreSqlConnector::sendQuery(const std::string& q,pqxx::result& r)
     case State::DISCONNECTED:
       break;
     case State::CREATED:
-    case State::ERROR:
+    case State::INTERNAL_ERROR:
     default:
       //not in a proper state to make a test
       CLOG_DEBUG(5,"psql-connector : make test transaction : not in a proper state : " 

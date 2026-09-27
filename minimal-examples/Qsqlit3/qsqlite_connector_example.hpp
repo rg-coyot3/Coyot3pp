@@ -2,7 +2,7 @@
 
 
 
-  CYT3MACRO_model_class_declarations(
+  COYOT3PP_MODEL_CLASS_DECLARATIONS(
     DatabaseEntityDAO
     , 
     , ( )
@@ -13,7 +13,7 @@
       , metadata            , std::string       , ""
   )
 
-    CYT3MACRO_model_class_serializable_json_declarations(
+    COYOT3PP_MODEL_CLASS_SERIALIZABLE_JSON_DECLARATIONS(
       DatabaseEntityDAO
       , 
       , 
@@ -29,7 +29,7 @@
 
 // service-stop-dao : begin 
 
-  CYT3MACRO_model_class_declarations(
+  COYOT3PP_MODEL_CLASS_DECLARATIONS(
     ServiceStopDAO
     , DatabaseEntityDAO
     , ( std::string to_string())
@@ -39,9 +39,9 @@
       , longitude           , double                       , 0.0
       , altitude            , double                       , 0.0
   )
-    CYT3MACRO_model_class_set_stack_declarations(ServiceStopDAO,)
+    COYOT3PP_MODEL_CLASS_SET_STACK_DECLARATIONS(ServiceStopDAO,)
 
-    CYT3MACRO_model_class_serializable_json_declarations(
+    COYOT3PP_MODEL_CLASS_SERIALIZABLE_JSON_DECLARATIONS(
     ServiceStopDAO
     , DatabaseEntityDAO
     ,
@@ -52,7 +52,7 @@
       , longitude           , "longitude"                         ,
       , altitude            , "altitude"                          ,
     )
-    CYT3MACRO_model_class_set_stack_serializable_json_declarations(ServiceStopDAO)
+    COYOT3PP_MODEL_CLASS_SET_STACK_SERIALIZABLE_JSON_DECLARATIONS(ServiceStopDAO)
 
 
   CYT3MACRO_model_class_serializable_qsqlite_declarations(

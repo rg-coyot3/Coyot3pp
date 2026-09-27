@@ -206,18 +206,18 @@ namespace image{
 
 //- misc end;
 
-  CYT3MACRO_enum_class_definitions(
+  COYOT3PP_ENUM_CLASS_DEFINITIONS(
     ImageContentImgSequenceMode
     , 
-      , SEQUENCE_NORMAL
-      , RANDOM
-      , SEQUENCE_INVERSE
-      , STATIC
+      , SEQUENCE_NORMAL   , 0
+      , RANDOM            , 1
+      , SEQUENCE_INVERSE  , 2
+      , STATIC            , 3
   )
 
 
 
-  CYT3MACRO_model_class_definitions(
+  COYOT3PP_MODEL_CLASS_DEFINITIONS(
     ImageContentImgSequenceParamsImage
     , 
     , ( )
@@ -227,10 +227,10 @@ namespace image{
     , interval  , int               , -1
   )
 
-  CYT3MACRO_model_class_set_stack_definitions(
+  COYOT3PP_MODEL_CLASS_SET_STACK_DEFINITIONS(
     ImageContentImgSequenceParamsImage,100)
 
-  CYT3MACRO_model_class_definitions(
+  COYOT3PP_MODEL_CLASS_DEFINITIONS(
     ImageContentImgSequenceParams
     , 
     , ( )
@@ -243,7 +243,7 @@ namespace image{
   )
 
 
-  CYT3MACRO_model_class_serializable_json_definitions(
+  COYOT3PP_MODEL_CLASS_SERIALIZABLE_JSON_DEFINITIONS(
     ImageContentImgSequenceParamsImage
     , 
     , 
@@ -253,10 +253,10 @@ namespace image{
     , path            , "path"            , 
     , interval        , "interval"        ,
   )
-  CYT3MACRO_model_class_set_stack_serializable_json_definitions(
+  COYOT3PP_MODEL_CLASS_SET_STACK_SERIALIZABLE_JSON_DEFINITIONS(
     ImageContentImgSequenceParamsImage)
 
-  CYT3MACRO_model_class_serializable_json_definitions(
+  COYOT3PP_MODEL_CLASS_SERIALIZABLE_JSON_DEFINITIONS(
     ImageContentImgSequenceParams
     , 
     , 

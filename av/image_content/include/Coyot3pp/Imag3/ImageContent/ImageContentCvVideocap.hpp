@@ -6,7 +6,7 @@ namespace coyot3{
 namespace av{
 namespace image{
 
-  CYT3MACRO_model_class_declarations(
+  COYOT3PP_MODEL_CLASS_DECLARATIONS(
     ImageContentCvVideocapData
     ,
     , ( )

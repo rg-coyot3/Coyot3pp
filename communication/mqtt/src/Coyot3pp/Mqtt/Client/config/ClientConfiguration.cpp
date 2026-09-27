@@ -5,7 +5,7 @@
 namespace coyot3::communication::mqtt{
 
 
-CYT3MACRO_model_class_definitions(
+COYOT3PP_MODEL_CLASS_DEFINITIONS(
   ClientConfiguration
   , 
     , ( virtual void print_current_config_state())
@@ -36,7 +36,7 @@ CYT3MACRO_model_class_definitions(
 
 )
 
-CYT3MACRO_model_class_serializable_json_definitions(
+COYOT3PP_MODEL_CLASS_SERIALIZABLE_JSON_DEFINITIONS(
   ClientConfiguration
   ,
   , 

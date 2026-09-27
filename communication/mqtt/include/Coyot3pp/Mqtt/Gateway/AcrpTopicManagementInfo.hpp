@@ -15,15 +15,15 @@ namespace communication{
 namespace mqtt{
 
 
-  CYT3MACRO_enum_class_declarations(
+  COYOT3PP_ENUM_CLASS_DECLARATIONS(
     AcrpTopicRole
     , 
-    , SUBSCRIBER = 1
-    , EMITTER    = 2
+    , SUBSCRIBER , 1
+    , EMITTER    , 2
   )
 
 
-  CYT3MACRO_model_class_declarations(
+  COYOT3PP_MODEL_CLASS_DECLARATIONS(
     AcrpTopicInformation
     ,
     , ( 

@@ -6,16 +6,16 @@
 namespace coyot3{
 namespace communication{
 namespace mqtt{
-  CYT3MACRO_enum_class_declarations(
+  COYOT3PP_ENUM_CLASS_DECLARATIONS(
     CMessagePriority
     ,
-    , LOW = 0
-    , MEDIUM = 1
-    , HIGH = 2
-    , DEFAULT = 10
+    , LOW     , 0
+    , MEDIUM  , 1
+    , HIGH    , 2
+    , DEFAULT , 10
   )
 
-  CYT3MACRO_model_class_declarations(
+  COYOT3PP_MODEL_CLASS_DECLARATIONS(
   CMqttMessage
   ,
   , ( 
@@ -39,7 +39,7 @@ namespace mqtt{
     , retries       , int                   , 0
 )
 
-  CYT3MACRO_model_class_set_mapped_declarations(CMqttMessage, id)
+  COYOT3PP_MODEL_CLASS_SET_MAPPED_DECLARATIONS(CMqttMessage, id)
   
 
 }

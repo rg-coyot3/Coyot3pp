@@ -14,7 +14,7 @@ namespace mod{
   
   typedef int64_t rpc_index_t;
 
-  CYT3MACRO_model_class_declarations(
+  COYOT3PP_MODEL_CLASS_DECLARATIONS(
     RpcInvokableStruct
     ,
     , ( )
@@ -24,7 +24,7 @@ namespace mod{
       , method          , RpcInvokableMethod  , 
   )
 
-  CYT3MACRO_model_class_declarations(
+  COYOT3PP_MODEL_CLASS_DECLARATIONS(
     RpcSubmoduleStruct
     ,
     , ( )
@@ -35,7 +35,7 @@ namespace mod{
       , instance        , RpcCapability*  , nullptr
   )
 
-  CYT3MACRO_model_class_set_mapped_declarations(RpcSubmoduleStruct,id)
+  COYOT3PP_MODEL_CLASS_SET_MAPPED_DECLARATIONS(RpcSubmoduleStruct,id)
   
 
   class RpcCapability{

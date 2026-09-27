@@ -13,7 +13,7 @@ namespace mqtt{
 
 
 
-CYT3MACRO_model_class_definitions(
+COYOT3PP_MODEL_CLASS_DEFINITIONS(
   MqttGatewayConfigObject
   , 
   , ( virtual void print_current_config_state() )
@@ -72,7 +72,7 @@ void MqttGatewayConfigObject::print_current_config_state()
   CLOG_INFO("    config : ciphers                           = " << ciphers());
 }
 
-CYT3MACRO_model_class_serializable_json_definitions(
+COYOT3PP_MODEL_CLASS_SERIALIZABLE_JSON_DEFINITIONS(
   MqttGatewayConfigObject
   , 
   , 

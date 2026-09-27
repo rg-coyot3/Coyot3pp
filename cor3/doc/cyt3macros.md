@@ -24,13 +24,13 @@ Creates an enum class with stringification ad de-stringification function/method
 **SYNTAX**
 
 ```cpp
-CYT3MACRO_enum_class_declarations(
+COYOT3PP_ENUM_CLASS_DECLARATIONS(
   name-of-the-enum-class
   , name-of-the-container-class not required
   , ... sequence of items with values if needed
 )
 
-    CYT3MACRO_enum_class_definitions(
+    COYOT3PP_ENUM_CLASS_DEFINITIONS(
 (
   name-of-the-enum-class
   , name-of-the-container-class not required
@@ -39,20 +39,20 @@ CYT3MACRO_enum_class_declarations(
 
 
 EXAMPLE:
-CYT3MACRO_enum_class_declarations(
+COYOT3PP_ENUM_CLASS_DECLARATIONS(
   ExampleEnumClass
   ,
-  , ONE_VALUE = 0
-  , OTHER_VALUE = 1
-  , ANOTHER_VALUE = 2
+  , ONE_VALUE     , 0
+  , OTHER_VALUE   , 1
+  , ANOTHER_VALUE , 2
 )
 
-CYT3MACRO_enum_class_definitions(
+COYOT3PP_ENUM_CLASS_DEFINITIONS(
   ExampleEnumClass
   ,
-  , ONE_VALUE
-  , OTHER_VALUE
-  , ANOTHER_VALUE
+  , ONE_VALUE     , 0
+  , OTHER_VALUE   , 1
+  , ANOTHER_VALUE , 2
 )
 
 ec::ExampleEnumClass example;
@@ -99,7 +99,7 @@ CYT3MACRO_model_class_<declarations | definitions>(
 As an example: 
 
 ```cpp
-CYT3MACRO_model_class_declarations(
+COYOT3PP_MODEL_CLASS_DECLARATIONS(
   Position
   , 
   , ( virtual std::string to_string() const)
@@ -109,7 +109,7 @@ CYT3MACRO_model_class_declarations(
     , altitude      , double      , 0.0
 )
 
-CYT3MACRO_model_class_definitions(
+COYOT3PP_MODEL_CLASS_DEFINITIONS(
   Position
   , 
   , ( virtual std::string to_string() const)
@@ -141,14 +141,14 @@ It is possible to extend the class:
 
 
 ```cpp
-CYT3MACRO_model_class_declarations(
+COYOT3PP_MODEL_CLASS_DECLARATIONS(
   PosOrient
   , Position
   , ( virtual std::string to_string() const)
   , ( )
   , orientation   , double      , 0.0
 )
-CYT3MACRO_model_class_definitions(
+COYOT3PP_MODEL_CLASS_DEFINITIONS(
   PosOrient
   , Position
   , ( virtual std::string to_string() const)
@@ -258,8 +258,8 @@ Basically, it will create a class with the `Stack` suffix that contains the foll
 
 
 ```cpp
-CYT3MACRO_model_class_set_stack_declarations(PosOrient,)
-CYT3MACRO_model_class_set_stack_definitions(PosOrient,)
+COYOT3PP_MODEL_CLASS_SET_STACK_DECLARATIONS(PosOrient,)
+COYOT3PP_MODEL_CLASS_SET_STACK_DEFINITIONS(PosOrient,)
 
 PosOrientStack posstack;
 posstack.push_back(pos);

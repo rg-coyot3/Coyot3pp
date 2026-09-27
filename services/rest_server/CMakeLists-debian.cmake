@@ -22,6 +22,8 @@ target_link_libraries(${COYOT3PPCOMPONENT}
 )
 
 
+set(COYOT3PP_MODULE_INCLUDE_PREFIX R3st)
+
 cmak3_make_package()
 
 

@@ -66,18 +66,17 @@ namespace coyot3{
 namespace ddbb{
 namespace postgresql{
 
-CYT3MACRO_enum_class_declarations(
+COYOT3PP_ENUM_CLASS_DECLARATIONS(
   ModuleState
   ,
-    ,CREATED             = 1
-    ,CONFIGURED          = 2
-    ,LAUNCHING           = 3
-    ,LAUNCHED            = 4
-    ,STOPPED             = 5
-    ,SHUTDOWN            = 6
-    ,DISCONNECTED        = 7
-    ,CONNECTED           = 8
-    ,ERROR               = 0
+    ,CREATED             , 1
+    ,CONFIGURED          , 2
+    ,LAUNCHING           , 3
+    ,LAUNCHED            , 4
+    ,STOPPED             , 5
+    ,SHUTDOWN            , 6
+    ,DISCONNECTED        , 7
+    ,CONNECTED           , 8
 )
   
 class PostgreSqlConnector {

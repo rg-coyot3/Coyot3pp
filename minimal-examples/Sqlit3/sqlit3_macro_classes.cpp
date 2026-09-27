@@ -2,7 +2,7 @@
 
 
 
-CYT3MACRO_model_class_definitions(
+COYOT3PP_MODEL_CLASS_DEFINITIONS(
   SimpleClass
   ,
   , ( std::string to_string() const)
@@ -21,7 +21,7 @@ CYT3MACRO_model_class_definitions(
       "surname=" << surname() << ";age=" << age() << ";height=" << height();
     return sstr.str();
   }
-CYT3MACRO_model_class_set_stack_definitions(SimpleClass,)
+COYOT3PP_MODEL_CLASS_SET_STACK_DEFINITIONS(SimpleClass,)
 
 
 

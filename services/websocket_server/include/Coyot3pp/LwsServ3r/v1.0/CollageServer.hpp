@@ -8,7 +8,7 @@ namespace coyot3::services::webapp{
   
   
   //data.content.desktop.ICON
-  CYT3MACRO_model_class_declarations(
+  COYOT3PP_MODEL_CLASS_DECLARATIONS(
     ModSpecContHtmlDesktopIconObj
     , 
     , ( )
@@ -16,7 +16,7 @@ namespace coyot3::services::webapp{
       , active          , bool        , false 
       , icon            , std::string , ""
   )
-          CYT3MACRO_model_class_serializable_json_declarations(
+          COYOT3PP_MODEL_CLASS_SERIALIZABLE_JSON_DECLARATIONS(
             ModSpecContHtmlDesktopIconObj
             , 
             ,
@@ -27,7 +27,7 @@ namespace coyot3::services::webapp{
           )
 
   //data.content.DESKTOP
-  CYT3MACRO_model_class_declarations(
+  COYOT3PP_MODEL_CLASS_DECLARATIONS(
     ModSpecContHtmlDesktopObj
     , 
     , ( )
@@ -36,7 +36,7 @@ namespace coyot3::services::webapp{
       , toolbar             , bool                              , false
       , desktop_icon        , ModSpecContHtmlDesktopIconObj     , 
   )
-          CYT3MACRO_model_class_serializable_json_declarations(
+          COYOT3PP_MODEL_CLASS_SERIALIZABLE_JSON_DECLARATIONS(
             ModSpecContHtmlDesktopObj, , 
             , (
                desktop_icon         , "desktop_icon"      , ModSpecContHtmlDesktopIconObj
@@ -47,7 +47,7 @@ namespace coyot3::services::webapp{
           )
   
   //data.content.html.FORMAT
-  CYT3MACRO_model_class_declarations(
+  COYOT3PP_MODEL_CLASS_DECLARATIONS(
     ModSpecContHtmlFormatObj
     ,
     , ( )
@@ -60,7 +60,7 @@ namespace coyot3::services::webapp{
       , h                 , std::string                 , "0"
       , classes           , coyot3::tools::CytStringSet , 
   )
-          CYT3MACRO_model_class_serializable_json_declarations(
+          COYOT3PP_MODEL_CLASS_SERIALIZABLE_JSON_DECLARATIONS(
             ModSpecContHtmlFormatObj, , 
             , ( classes     , "classes"       , coyot3::tools::CytStringSet )
             , ( )
@@ -74,7 +74,7 @@ namespace coyot3::services::webapp{
 
 
   //data.content.HTML
-  CYT3MACRO_model_class_declarations(
+  COYOT3PP_MODEL_CLASS_DECLARATIONS(
     ModSpecObjContHtml
     , 
     , ( )
@@ -85,7 +85,7 @@ namespace coyot3::services::webapp{
       , alias             , std::string               , ""
       , format            , ModSpecContHtmlFormatObj  , 
   )
-            CYT3MACRO_model_class_serializable_json_declarations(
+            COYOT3PP_MODEL_CLASS_SERIALIZABLE_JSON_DECLARATIONS(
               ModSpecObjContHtml, , 
               , ( 
                   format            , "format"            , ModSpecContHtmlFormatObj
@@ -98,7 +98,7 @@ namespace coyot3::services::webapp{
             )
 
   //data.content.STYLE_SHEET
-  CYT3MACRO_model_class_declarations(
+  COYOT3PP_MODEL_CLASS_DECLARATIONS(
     ModSpecContStyleSheetsObj
     , 
     , ( )
@@ -106,7 +106,7 @@ namespace coyot3::services::webapp{
       , name              , std::string                 , ""
       , sheets            , coyot3::tools::CytStringSet , 
   )
-            CYT3MACRO_model_class_serializable_json_declarations(
+            COYOT3PP_MODEL_CLASS_SERIALIZABLE_JSON_DECLARATIONS(
               ModSpecContStyleSheetsObj, , 
               , (
                   sheets            ,"sheets"             , coyot3::tools::CytStringSet
@@ -115,14 +115,14 @@ namespace coyot3::services::webapp{
                 , name              , "name"              , 
             )
   //data.content.STYLE_SHEET[]
-  CYT3MACRO_model_class_set_stack_declarations(ModSpecContStyleSheetsObj, 1000)
+  COYOT3PP_MODEL_CLASS_SET_STACK_DECLARATIONS(ModSpecContStyleSheetsObj, 1000)
             
-            CYT3MACRO_model_class_set_stack_serializable_json_declarations(ModSpecContStyleSheetsObj)
+            COYOT3PP_MODEL_CLASS_SET_STACK_SERIALIZABLE_JSON_DECLARATIONS(ModSpecContStyleSheetsObj)
 
 
 
   //data.content.JS
-  CYT3MACRO_model_class_declarations(
+  COYOT3PP_MODEL_CLASS_DECLARATIONS(
     ModSpecContJavascriptObj
     , 
     , ( )
@@ -130,17 +130,17 @@ namespace coyot3::services::webapp{
       , script              , std::string         , ""
       , init                , std::string         , ""
   )
-            CYT3MACRO_model_class_serializable_json_declarations(
+            COYOT3PP_MODEL_CLASS_SERIALIZABLE_JSON_DECLARATIONS(
               ModSpecContJavascriptObj, , , ( ), ( )
                 , script          , "script"          , 
                 , init            , "init"            , 
             )
   //data.content.JS
-  CYT3MACRO_model_class_set_stack_declarations(ModSpecContJavascriptObj, 1000)
+  COYOT3PP_MODEL_CLASS_SET_STACK_DECLARATIONS(ModSpecContJavascriptObj, 1000)
 
-            CYT3MACRO_model_class_set_stack_serializable_json_declarations(ModSpecContJavascriptObj)
+            COYOT3PP_MODEL_CLASS_SET_STACK_SERIALIZABLE_JSON_DECLARATIONS(ModSpecContJavascriptObj)
 
-  CYT3MACRO_model_class_declarations(
+  COYOT3PP_MODEL_CLASS_DECLARATIONS(
     ModSpecContentObject
     , 
     , ( )
@@ -152,7 +152,7 @@ namespace coyot3::services::webapp{
       , data            , coyot3::tools::CytStringSet       , 
   )
 
-            CYT3MACRO_model_class_serializable_json_declarations(
+            COYOT3PP_MODEL_CLASS_SERIALIZABLE_JSON_DECLARATIONS(
               ModSpecContentObject, , 
               , (
                       desktop         , "desktop"         , ModSpecContHtmlDesktopObj
@@ -165,7 +165,7 @@ namespace coyot3::services::webapp{
 
             )
 
-  CYT3MACRO_model_class_declarations(
+  COYOT3PP_MODEL_CLASS_DECLARATIONS(
     WebModuleSpecificationObject
     , 
     , ( )
@@ -177,7 +177,7 @@ namespace coyot3::services::webapp{
       , content         , ModSpecContentObject  , 
   ) 
 
-              CYT3MACRO_model_class_serializable_json_declarations(
+              COYOT3PP_MODEL_CLASS_SERIALIZABLE_JSON_DECLARATIONS(
                 WebModuleSpecificationObject, , 
                 , (
                   content       , "content"         , ModSpecContentObject
@@ -190,7 +190,7 @@ namespace coyot3::services::webapp{
                     , content         , "content"         , 
               )
 
-  CYT3MACRO_model_class_declarations(
+  COYOT3PP_MODEL_CLASS_DECLARATIONS(
     Collag3WebappServerConfObj
     , 
     , ( )

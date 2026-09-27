@@ -139,6 +139,14 @@ if(LCY_BUILD_WITH_MINIMAL_EXAMPLES)
     ${LCOYOT3PPCORE_EXTERNAL_DEPENDENCES}
   )
 
+  add_executable(example_modelclasses_2
+    ${COYOT3PP_MINIMAL_EXAMPLES_SRC_DIR}/${COYOT3PPCOMPONENT}/model-class-light-macros.cpp
+  )
+  target_link_libraries(example_modelclasses_2
+    ${COYOT3PPCOMPONENT}
+    ${LCOYOT3PPCORE_EXTERNAL_DEPENDENCES}
+  )
+
   add_executable(example_module
     ${COYOT3PP_MINIMAL_EXAMPLES_SRC_DIR}/${COYOT3PPCOMPONENT}/module-class-example.cpp
   )

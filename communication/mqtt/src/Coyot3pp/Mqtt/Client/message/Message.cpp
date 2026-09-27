@@ -8,19 +8,19 @@ namespace mqtt{
 
 
 
-  CYT3MACRO_enum_class_definitions(
+  COYOT3PP_ENUM_CLASS_DEFINITIONS(
     MessagePriorityLevel
     ,
-    , LOW
-    , MEDIUM
-    , HIGH
-    , HIGH_WHEN_AVAILABLE
-    , DEFAULT
+    , LOW                 , 0
+    , MEDIUM              , 1
+    , HIGH                , 2
+    , HIGH_WHEN_AVAILABLE , 3
+    , DEFAULT             , 10
   )
 
 
 
-CYT3MACRO_model_class_definitions(
+COYOT3PP_MODEL_CLASS_DEFINITIONS(
   Message
   ,
   , ( 
@@ -47,8 +47,8 @@ CYT3MACRO_model_class_definitions(
 
 
 
-  CYT3MACRO_model_class_set_mapped_definitions(Message, id)
-  CYT3MACRO_model_class_set_stack_definitions(Message, )
+  COYOT3PP_MODEL_CLASS_SET_MAPPED_DEFINITIONS(Message, id)
+  COYOT3PP_MODEL_CLASS_SET_STACK_DEFINITIONS(Message, )
 
 
   Message::Message(const std::string& t, const uint8_t* p, std::size_t s){

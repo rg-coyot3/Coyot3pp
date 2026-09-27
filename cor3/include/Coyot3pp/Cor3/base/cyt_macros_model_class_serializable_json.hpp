@@ -19,7 +19,7 @@
  * @param CY_props_enum_classes: (prope1,EnumClass1."prop_e_1",prope2,EnumClass2,"prop_e_2")
  * @param ... described in sets of triples, [ ]
  */
-#define CYT3MACRO_model_class_serializable_json_declarations(CY_class_name, \
+#define COYOT3PP_MODEL_CLASS_SERIALIZABLE_JSON_DECLARATIONS(CY_class_name, \
   CY_jsio_parent_class, \
   CY_jsonizations_postfuncs_suffix, \
   CY_props_jsios,\
@@ -38,7 +38,7 @@
       CY_class_name##JsIO(); \
       CY_class_name##JsIO(const CY_class_name & o); \
       virtual ~CY_class_name##JsIO();\
-      IFN(CY_jsonizations_postfuncs_suffix)(virtual Json::Value to_json_post_process(Json::Value js) const;)\
+      IFN(CY_jsonizations_postfuncs_suffix)(virtual void to_json_post_process(Json::Value& js) const;)\
       IFN(CY_jsonizations_postfuncs_suffix)(virtual bool from_json_pre_process(const Json::Value& source);)\
       \
       virtual Json::Value   to_json() const override;\
@@ -104,8 +104,8 @@
       FOR_EACH_TRIPLES(cyt3macro_model_class_json_serializable_def_tojson_item_,__VA_ARGS__) \
       IFN(CY_props_jsios)(FOR_EACH_TRIPLES(cyt3macro_model_class_json_serializable_def_tojson_jsio_item_,PASS_PARAMETERS(CY_props_jsios))) \
       IFN(CY_props_enum_classes)(FOR_EACH_TRIPLES(cyt3macro_model_class_json_serializable_def_tojson_enumclass_item_,PASS_PARAMETERS(CY_props_enum_classes))) \
-      IFE(CY_jsonizations_postfuncs_suffix)(return js;)\
-      IFN(CY_jsonizations_postfuncs_suffix)(return to_json_post_process(js);)\
+      IFN(CY_jsonizations_postfuncs_suffix)(to_json_post_process(js);)\
+      return js;\
     }
 
 
@@ -143,11 +143,11 @@
 
     #define cyt3macro_model_class_serializable_json_def_modelcheck_enumclass_item_(CY_prop_source, CY_json_tag, CY_enum_class)\
       if(source.isMember(JsFields::CY_prop_source) == false){\
-       sstr << coyot3::tools::indentation(l__) << #CY_json_tag " : !!! NOT PRESENT !!!" << std::endl;\
+       sstr << coyot3::tools::indentation(l__) << "!!! " #CY_json_tag " : NOT PRESENT !!!" << std::endl;\
       }else{\
         std::string b;\
         if(source[ JsFields::CY_prop_source ].isString() == false){\
-          sstr << coyot3::tools::indentation(l__) << #CY_json_tag " : !!! TYPE ERROR !!!" << std::endl;\
+          sstr << coyot3::tools::indentation(l__) << "!!! " #CY_json_tag " : TYPE ERROR !!!" << std::endl;\
         }else{\
           sstr << coyot3::tools::indentation(l__) << #CY_json_tag " : ok [" << source[ JsFields::CY_prop_source ] << "]" << std::endl;\
         }\
@@ -155,7 +155,7 @@
 
     #define cyt3macro_model_class_serializable_json_def_modelcheck_jsio_item_(CY_prop_source, CY_json_tag, CY_jsio_class)\
       if(source.isMember(JsFields::CY_prop_source) == false){\
-        sstr << coyot3::tools::indentation(l__) << #CY_json_tag " : !!! NOT PRESENT !!!" << std::endl;\
+        sstr << coyot3::tools::indentation(l__) << "!!! " #CY_json_tag " : NOT PRESENT !!!" << std::endl;\
       }else{\
         CY_jsio_class##JsIO CY_prop_source##_jsio_buffer;\
         sstr << coyot3::tools::indentation(l__) << #CY_json_tag " : " << std::endl;\
@@ -165,12 +165,12 @@
 
     #define cyt3macro_model_class_serializable_json_def_modelcheck_item_(CY_prop_source, CY_json_tag, CY_prop_jscast_type)\
       if(source.isMember(JsFields::CY_prop_source) == false){\
-        sstr << coyot3::tools::indentation(l__) << #CY_json_tag  " : !!! NOT PRESENT !!!" << std::endl;\
+        sstr << coyot3::tools::indentation(l__) << "!!! " #CY_json_tag  " :  NOT PRESENT !!!" << std::endl;\
       }else{\
         IFN(CY_prop_jscast_type)(CY_prop_jscast_type b;)\
         IFE(CY_prop_jscast_type)(CY_prop_source##_t b;)\
         if(coyot3::tools::json_import_value(source, CY_json_tag, b) == false){\
-          sstr << coyot3::tools::indentation(l__) <<  #CY_json_tag " : !!! TYPE ERROR !!!" << std::endl;\
+          sstr << coyot3::tools::indentation(l__) <<  "!!! " #CY_json_tag " : TYPE ERROR !!!" << std::endl;\
         }else{\
           sstr << coyot3::tools::indentation(l__) <<  #CY_json_tag " : ok [" << b << "]" << std::endl;\
         }\
@@ -262,7 +262,7 @@
  * @param CY_props_enum_classes : OPTIONAL : if not defined, at least there must be parentheses.
  * @param ... : REQUIRED : in triples
  */
-#define CYT3MACRO_model_class_serializable_json_definitions(CY_class_name, \
+#define COYOT3PP_MODEL_CLASS_SERIALIZABLE_JSON_DEFINITIONS(CY_class_name, \
                                                             CY_jsio_parent, \
                                                             CY_jsonizations_postfuncs_suffix, \
                                                             CY_props_jsios,\
@@ -307,7 +307,7 @@
 ///
 ///
 
-#define CYT3MACRO_model_class_set_mapped_serializable_json_declarations(CY_class_name,CY_member_index_property)\
+#define COYOT3PP_MODEL_CLASS_SET_MAPPED_SERIALIZABLE_JSON_DECLARATIONS(CY_class_name,CY_member_index_property)\
   class CY_class_name##MappedSetJsIO \
     : public coyot3::tools::JsonSerializablePacketBase \
     , public CY_class_name##MappedSet {\
@@ -406,7 +406,7 @@
       return ret;\
     }
 
-#define CYT3MACRO_model_class_set_mapped_serializable_json_definitions(CY_class_name,CY_member_index_property) \
+#define COYOT3PP_MODEL_CLASS_SET_MAPPED_SERIALIZABLE_JSON_DEFINITIONS(CY_class_name,CY_member_index_property) \
   \
   cyt3macro_model_class_set_mapped_serializable_json_def_constrdestr_(CY_class_name,CY_member_index_property) \
   \
@@ -438,7 +438,7 @@
 
 
 
-#define CYT3MACRO_model_class_set_stack_serializable_json_declarations(CY_class_name) \
+#define COYOT3PP_MODEL_CLASS_SET_STACK_SERIALIZABLE_JSON_DECLARATIONS(CY_class_name) \
   class CY_class_name##StackJsIO \
   : public coyot3::tools::JsonSerializablePacketBase\
   , public CY_class_name##Stack {\
@@ -525,7 +525,7 @@
     }
 
 
-#define CYT3MACRO_model_class_set_stack_serializable_json_definitions(CY_class_name) \
+#define COYOT3PP_MODEL_CLASS_SET_STACK_SERIALIZABLE_JSON_DEFINITIONS(CY_class_name) \
   CY_class_name##StackJsIO::CY_class_name##StackJsIO(){}\
   CY_class_name##StackJsIO::CY_class_name##StackJsIO(const CY_class_name##Stack& o):CY_class_name##Stack(o){}\
   CY_class_name##StackJsIO::~CY_class_name##StackJsIO(){}\

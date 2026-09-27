@@ -3,23 +3,25 @@
 namespace coyot3{
 namespace mod{
 
-  CYT3MACRO_enum_class_definitions(
+  COYOT3PP_ENUM_CLASS_DEFINITIONS(
     CytModuleState
     ,
-      , CREATED 
-      , INITIALIZING
-      , INITIALIZED
-      , STARTING
-      , STARTED 
-      , PAUSING
-      , PAUSED 
-      , STOPPING
-      , STOPPED
-      , ENDING
-      , END_OF_LIFE
-      , MAINTENANCE
-      , MODULE_ERROR
+      , CREATED ,
+      , INITIALIZING ,
+      , INITIALIZED ,
+      , STARTING ,
+      , STARTED ,
+      , PAUSING,
+      , PAUSED ,
+      , STOPPING,
+      , STOPPED,
+      , ENDING,
+      , END_OF_LIFE ,
+      , MAINTENANCE ,
+      , MODULE_ERROR ,
   )
+
+  
 
   ModuleBase::ModuleBase(const std::string& name)
   :LoggerCapability(name)

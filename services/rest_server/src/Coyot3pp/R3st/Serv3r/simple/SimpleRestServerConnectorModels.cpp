@@ -5,7 +5,7 @@
 
 namespace coyot3::communication::rest{
 // config
-  CYT3MACRO_model_class_definitions(
+  COYOT3PP_MODEL_CLASS_DEFINITIONS(
     RestServerConnectorConfig
     ,
     , ( )
@@ -13,7 +13,7 @@ namespace coyot3::communication::rest{
       , port          , int                       , 
       , ipbind        , std::string               , 
   )
-    CYT3MACRO_model_class_serializable_json_definitions(
+    COYOT3PP_MODEL_CLASS_SERIALIZABLE_JSON_DEFINITIONS(
       RestServerConnectorConfig
       , 
       , 
@@ -25,7 +25,7 @@ namespace coyot3::communication::rest{
 
 
   //callback infos
-  CYT3MACRO_model_class_definitions_no_opsoverload(
+  COYOT3PP_MODEL_CLASS_DEFINITIONS_no_opsoverload(
     RestPostApiCallbackInfo
     , 
     , ( 
@@ -35,9 +35,9 @@ namespace coyot3::communication::rest{
     , method        , std::string     , 
     
   )
-    CYT3MACRO_model_class_set_mapped_definitions(RestPostApiCallbackInfo,method)
+    COYOT3PP_MODEL_CLASS_SET_MAPPED_DEFINITIONS(RestPostApiCallbackInfo,method)
 
-    CYT3MACRO_model_class_definitions_no_opsoverload(
+    COYOT3PP_MODEL_CLASS_DEFINITIONS_no_opsoverload(
     RestPostJsonApiCallbackInfo
     , 
     , ( 
@@ -47,11 +47,11 @@ namespace coyot3::communication::rest{
     , method        , std::string     , 
     
   )
-    CYT3MACRO_model_class_set_mapped_definitions(RestPostJsonApiCallbackInfo, method)
+    COYOT3PP_MODEL_CLASS_SET_MAPPED_DEFINITIONS(RestPostJsonApiCallbackInfo, method)
 
 
   //
-  CYT3MACRO_model_class_definitions(
+  COYOT3PP_MODEL_CLASS_DEFINITIONS(
     ApiMethodInformation
     , 
     , ( )
@@ -64,7 +64,7 @@ namespace coyot3::communication::rest{
       , num_err       , int64_t           , 0
   )
 
-    CYT3MACRO_model_class_definitions(
+    COYOT3PP_MODEL_CLASS_DEFINITIONS(
       ApiMethodTrace
       , 
       , ( )
@@ -75,7 +75,7 @@ namespace coyot3::communication::rest{
         , res           , std::string       , 
         , ret_code      , int               , 
     )
-      CYT3MACRO_model_class_serializable_json_definitions(
+      COYOT3PP_MODEL_CLASS_SERIALIZABLE_JSON_DEFINITIONS(
         ApiMethodTrace
         ,
         , 
@@ -88,18 +88,18 @@ namespace coyot3::communication::rest{
           , ret_code      , "ret_code"      ,
       )
 
-      CYT3MACRO_model_class_set_stack_definitions(ApiMethodTrace, 200)
-      CYT3MACRO_model_class_set_stack_serializable_json_definitions(ApiMethodTrace)
+      COYOT3PP_MODEL_CLASS_SET_STACK_DEFINITIONS(ApiMethodTrace, 200)
+      COYOT3PP_MODEL_CLASS_SET_STACK_SERIALIZABLE_JSON_DEFINITIONS(ApiMethodTrace)
 
 
-      CYT3MACRO_model_class_definitions(
+      COYOT3PP_MODEL_CLASS_DEFINITIONS(
         ApiMethodTraceStat
         , ApiMethodTrace
         , ( bool update_stat(const ApiMethodTrace& trace) )
         , ( )
           , num_invokations       , int64_t           , 
       )
-        CYT3MACRO_model_class_serializable_json_definitions(
+        COYOT3PP_MODEL_CLASS_SERIALIZABLE_JSON_DEFINITIONS(
           ApiMethodTraceStat
           , ApiMethodTrace
           ,
@@ -108,11 +108,11 @@ namespace coyot3::communication::rest{
             , num_invokations     , "num_invokations"   , 
         )
 
-      CYT3MACRO_model_class_set_mapped_definitions(ApiMethodTraceStat, method)
-      CYT3MACRO_model_class_set_mapped_serializable_json_definitions(ApiMethodTraceStat, method)
+      COYOT3PP_MODEL_CLASS_SET_MAPPED_DEFINITIONS(ApiMethodTraceStat, method)
+      COYOT3PP_MODEL_CLASS_SET_MAPPED_SERIALIZABLE_JSON_DEFINITIONS(ApiMethodTraceStat, method)
 
 
-      CYT3MACRO_model_class_definitions(
+      COYOT3PP_MODEL_CLASS_DEFINITIONS(
         ApiMethodClientTrace
         , ApiMethodTrace
         , ( bool update_stat(const ApiMethodTrace& trace))
@@ -123,7 +123,7 @@ namespace coyot3::communication::rest{
           , total_requests, int64_t                     , 
       )
 
-      CYT3MACRO_model_class_serializable_json_definitions(
+      COYOT3PP_MODEL_CLASS_SERIALIZABLE_JSON_DEFINITIONS(
         ApiMethodClientTrace
         , ApiMethodTrace
         , 
@@ -135,8 +135,8 @@ namespace coyot3::communication::rest{
           , client        , "client"    , 
       )
 
-      CYT3MACRO_model_class_set_mapped_definitions(ApiMethodClientTrace, client)
-      CYT3MACRO_model_class_set_mapped_serializable_json_definitions(ApiMethodClientTrace, client)
+      COYOT3PP_MODEL_CLASS_SET_MAPPED_DEFINITIONS(ApiMethodClientTrace, client)
+      COYOT3PP_MODEL_CLASS_SET_MAPPED_SERIALIZABLE_JSON_DEFINITIONS(ApiMethodClientTrace, client)
       
       
       

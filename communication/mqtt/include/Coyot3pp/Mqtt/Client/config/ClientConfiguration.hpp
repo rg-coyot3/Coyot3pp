@@ -8,7 +8,7 @@ namespace mqtt{
 
 
 
-CYT3MACRO_model_class_declarations(
+COYOT3PP_MODEL_CLASS_DECLARATIONS(
   ClientConfiguration
   , 
     , ( virtual void print_current_config_state())
@@ -39,7 +39,7 @@ CYT3MACRO_model_class_declarations(
 
 )
 
-CYT3MACRO_model_class_serializable_json_declarations(
+COYOT3PP_MODEL_CLASS_SERIALIZABLE_JSON_DECLARATIONS(
   ClientConfiguration
   ,
   , 

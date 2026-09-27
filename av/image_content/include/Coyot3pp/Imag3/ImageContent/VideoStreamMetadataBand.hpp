@@ -16,33 +16,31 @@
 
 #include <Coyot3pp/Cor3/Coyot3.hpp>
 
-namespace coyot3{
-namespace wrappers{
-namespace av{
+namespace coyot3::wrappers::av{
 
-CYT3MACRO_enum_class_declarations(
+COYOT3PP_ENUM_CLASS_DECLARATIONS(
   MetadataBandFormat
   ,
-    , HORIZONTAL = 0
-    , VERTICAL = 1
+    , HORIZONTAL  , 0
+    , VERTICAL    , 1
 )
 
-CYT3MACRO_enum_class_declarations(
+COYOT3PP_ENUM_CLASS_DECLARATIONS(
   MetadataBandMode
   ,
-    , SIN_AUTOGEN
-    , SIN_AUTOGEN_THREADED
-    , EXTERNAL_VALUE
+    , SIN_AUTOGEN           ,
+    , SIN_AUTOGEN_THREADED  ,
+    , EXTERNAL_VALUE        ,
 )
 
-CYT3MACRO_enum_class_declarations(
+COYOT3PP_ENUM_CLASS_DECLARATIONS(
   MetadataBandShiftDirection
   ,
-    , LEFT_TO_RIGHT
-    , RIGHT_TO_LEFT
-    , TOP_TO_DOWN
-    , DOWN_TO_TOP
-    , STATIC
+    , LEFT_TO_RIGHT ,
+    , RIGHT_TO_LEFT ,
+    , TOP_TO_DOWN   ,
+    , DOWN_TO_TOP   ,
+    , STATIC        ,
 )
 
 
@@ -85,8 +83,8 @@ class VideoStreamMetadataBand{
     double updateSpeed();
     double updateSpeed(double s);
 
-    ShiftDirection shiftDirection();
-    ShiftDirection shiftDirection(ShiftDirection s);
+    ec::MetadataBandShiftDirection shiftDirection();
+    ec::MetadataBandShiftDirection shiftDirection(ec::MetadataBandShiftDirection s);
 
     cv::Mat& getImageRef();
     cv::Mat  getImageCopy();
@@ -122,9 +120,9 @@ class VideoStreamMetadataBand{
 
     int    width_;
     int    height_;
-    Format format_;
-    Mode   mode_;
-    ShiftDirection shift_direction_;
+    ec::MetadataBandFormat          format_;
+    ec::MetadataBandMode            mode_;
+    ec::MetadataBandShiftDirection  shift_direction_;
 
 
     cv::Mat image_product_;
@@ -150,9 +148,3 @@ class VideoStreamMetadataBand{
 };
 
 }
-}
-}
-
-std::ostream& operator<<(std::ostream& o,coyot3::wrappers::av::VideoStreamMetadataBand::Format f);
-std::ostream& operator<<(std::ostream& o,coyot3::wrappers::av::VideoStreamMetadataBand::Mode f);
-std::ostream& operator<<(std::ostream& o,coyot3::wrappers::av::VideoStreamMetadataBand::ShiftDirection f);

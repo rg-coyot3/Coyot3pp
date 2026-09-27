@@ -19,7 +19,7 @@ namespace rtsp{
 
   
 
-  CYT3MACRO_model_class_declarations(
+  COYOT3PP_MODEL_CLASS_DECLARATIONS(
     RtspH264PublisherParams
     ,
     , ( )
@@ -47,7 +47,7 @@ namespace rtsp{
   ) 
 
   
-  CYT3MACRO_model_class_declarations(
+  COYOT3PP_MODEL_CLASS_DECLARATIONS(
     RtspClientInformation
     ,
     , ( int64_t client_connection_time_total())
@@ -65,7 +65,7 @@ namespace rtsp{
       , gst_context   , GstRTSPContext*     , nullptr
   )
 
-  CYT3MACRO_model_class_set_mapped_declarations(RtspClientInformation,
+  COYOT3PP_MODEL_CLASS_SET_MAPPED_DECLARATIONS(RtspClientInformation,
                                                 gst_client)
 
 

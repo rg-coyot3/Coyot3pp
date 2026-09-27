@@ -3,7 +3,7 @@
 namespace coyot3::communication::mqtt
 {
   
-  CYT3MACRO_model_class_definitions_no_opsoverload(
+  COYOT3PP_MODEL_CLASS_DEFINITIONS_no_opsoverload(
     Subscription
     ,
     , ( )
@@ -48,9 +48,9 @@ namespace coyot3::communication::mqtt
 
 
 
-CYT3MACRO_model_class_set_mapped_definitions(Subscription, id)
+COYOT3PP_MODEL_CLASS_SET_MAPPED_DEFINITIONS(Subscription, id)
 
-CYT3MACRO_model_class_definitions(
+COYOT3PP_MODEL_CLASS_DEFINITIONS(
   cmqc_subscriptions_tree
   ,  
   , ()
@@ -68,5 +68,5 @@ CYT3MACRO_model_class_definitions(
       , subs                  , SubscriptionMappedSet       , 
 )
 
-CYT3MACRO_model_class_set_mapped_definitions(cmqc_subscriptions_tree, topic)
+COYOT3PP_MODEL_CLASS_SET_MAPPED_DEFINITIONS(cmqc_subscriptions_tree, topic)
 }

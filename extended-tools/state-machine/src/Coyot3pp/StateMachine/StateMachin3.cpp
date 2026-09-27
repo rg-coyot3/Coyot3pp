@@ -2,7 +2,7 @@
 
 
 namespace coyot3::tools::statemachine{
-  CYT3MACRO_model_class_definitions(
+  COYOT3PP_MODEL_CLASS_DEFINITIONS(
     StateMachineLogLine
     , 
     , ( 
@@ -21,7 +21,7 @@ namespace coyot3::tools::statemachine{
   )
 
   
-    CYT3MACRO_model_class_set_stack_definitions(StateMachineLogLine, 2000)
+    COYOT3PP_MODEL_CLASS_SET_STACK_DEFINITIONS(StateMachineLogLine, 2000)
 
     CYT3MACRO_boost_statechart_event_simple_definitions(EvStateMachineTransitionConfirmation ,   , generic state machine confirmation event)
    

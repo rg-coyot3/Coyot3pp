@@ -1,33 +1,31 @@
-#include <libcoyot3/services/rtsp_server/VideoStreamMetadataBand.h>
+#include <Coyot3pp/Imag3/ImageContent/VideoStreamMetadataBand.hpp>
 
 
 
-namespace coyot3{
-namespace wrappers{
+namespace coyot3::wrappers::av{
 
 
-
-CYT3MACRO_enum_class_definitions(
+COYOT3PP_ENUM_CLASS_DEFINITIONS(
   MetadataBandFormat
   ,
-    , HORIZONTAL
-    , VERTICAL
+    , HORIZONTAL  , 0
+    , VERTICAL    , 1
 )
-CYT3MACRO_enum_class_definitions(
+COYOT3PP_ENUM_CLASS_DEFINITIONS(
   MetadataBandMode
   ,
-    , SIN_AUTOGEN
-    , SIN_AUTOGEN_THREADED
-    , EXTERNAL_VALUE
+    , SIN_AUTOGEN           ,
+    , SIN_AUTOGEN_THREADED  ,
+    , EXTERNAL_VALUE        ,
 )
-CYT3MACRO_enum_class_definitions(
+COYOT3PP_ENUM_CLASS_DEFINITIONS(
   MetadataBandShiftDirection
   ,
-    , LEFT_TO_RIGHT
-    , RIGHT_TO_LEFT
-    , TOP_TO_DOWN
-    , DOWN_TO_TOP
-    , STATIC
+    , LEFT_TO_RIGHT ,
+    , RIGHT_TO_LEFT ,
+    , TOP_TO_DOWN   ,
+    , DOWN_TO_TOP   ,
+    , STATIC        ,
 )
 
 
@@ -73,9 +71,9 @@ CYT3MACRO_enum_class_definitions(
     speed_ = 0;
     width_ = 0;
     height_ = 0;
-    format_ = Format::VERTICAL;
-    mode_ = Mode::SIN_AUTOGEN;
-    shift_direction_ = ShiftDirection::RIGHT_TO_LEFT;
+    format_ = ec::MetadataBandFormat::VERTICAL;
+    mode_ = ec::MetadataBandMode::SIN_AUTOGEN;
+    shift_direction_ = ec::MetadataBandShiftDirection::RIGHT_TO_LEFT;
     last_update_ts_ = 0;
     threaded_update_period_ = 0;
     cth_ = nullptr;
@@ -108,8 +106,8 @@ CYT3MACRO_enum_class_definitions(
   double VideoStreamMetadataBand::updateSpeed(){return speed_;}
   double VideoStreamMetadataBand::updateSpeed(double s){return (speed_ = s);}
 
-  VideoStreamMetadataBand::ShiftDirection VideoStreamMetadataBand::shiftDirection(){return shift_direction_;}
-  VideoStreamMetadataBand::ShiftDirection VideoStreamMetadataBand::shiftDirection(VideoStreamMetadataBand::ShiftDirection d){return (shift_direction_ = d);}
+  ec::MetadataBandShiftDirection VideoStreamMetadataBand::shiftDirection(){return shift_direction_;}
+  ec::MetadataBandShiftDirection VideoStreamMetadataBand::shiftDirection(ec::MetadataBandShiftDirection d){return (shift_direction_ = d);}
   
   cv::Mat& VideoStreamMetadataBand::getImageRef(){return image_product_;}
   cv::Mat  VideoStreamMetadataBand::getImageCopy(){
@@ -118,6 +116,7 @@ CYT3MACRO_enum_class_definitions(
       std::lock_guard<std::mutex> guard(mtx_);
       r = image_product_;
     }
+    return r;
   }
   std::mutex& VideoStreamMetadataBand::getMutexRef(){return mtx_;}
 
@@ -163,23 +162,23 @@ CYT3MACRO_enum_class_definitions(
     try{
       switch(shift_direction_)
       {
-        case ShiftDirection::LEFT_TO_RIGHT:
+        case ec::MetadataBandShiftDirection::LEFT_TO_RIGHT:
           image_product_(cv::Rect(0, 0, image_product_.cols, image_product_.rows - num_px))
             .copyTo(tmp(cv::Rect(num_px, 0, tmp.cols, tmp.rows - num_px)));        
           break;
-        case ShiftDirection::RIGHT_TO_LEFT:
+        case ec::MetadataBandShiftDirection::RIGHT_TO_LEFT:
           image_product_(cv::Rect(num_px, 0, image_product_.cols - num_px, image_product_.rows))
             .copyTo(tmp(cv::Rect(0, 0, image_product_.cols - num_px, image_product_.rows)));
           break;
-        case ShiftDirection::TOP_TO_DOWN:
+        case ec::MetadataBandShiftDirection::TOP_TO_DOWN:
           image_product_(cv::Rect(0, 0, image_product_.cols, image_product_.rows - num_px))
             .copyTo(tmp(cv::Rect(0, num_px, image_product_.cols, image_product_.rows - num_px)));
           break;
-        case ShiftDirection::DOWN_TO_TOP:
+        case ec::MetadataBandShiftDirection::DOWN_TO_TOP:
           image_product_(cv::Rect(num_px, 0, image_product_.cols - num_px, image_product_.rows))
             .copyTo(tmp(cv::Rect(0, 0, image_product_.cols - num_px, image_product_.rows)));
           break;
-        case ShiftDirection::STATIC:
+        case ec::MetadataBandShiftDirection::STATIC:
         default:
           CLOG_DEBUG(5,"video-stream-metadata-band : shift-image : mode is STATIC");
           return true;
@@ -190,11 +189,11 @@ CYT3MACRO_enum_class_definitions(
       //from [https://stackoverflow.com/a/21813828/5817105](antonis io)
     }catch(const cv::Exception& e){
       CLOG_WARN("video-stream-metadata-band : shift-image : EXCEPT-RISED "
-        "shifting [" <<shift_direction_ << "](" << num_px << ") : "
+        "shifting [" << shift_direction_ << "](" << num_px << ") : "
         "except((" << e.what() << ")");
     }catch(...){
       CLOG_WARN("video-stream-metadata-band : shift-image : EXCEPT-RISED "
-        "shifting [" <<shift_direction_ << "](" << num_px << ") : "
+        "shifting [" << shift_direction_ << "](" << num_px << ") : "
         "except((UNKNOWN))");
     }
 
@@ -221,27 +220,27 @@ CYT3MACRO_enum_class_definitions(
   {
       int x0,y0,xf,yf;
       switch(shift_direction_){
-        case ShiftDirection::LEFT_TO_RIGHT:
+        case ec::MetadataBandShiftDirection::LEFT_TO_RIGHT:
           x0 = 0;
           y0 = image_product_.rows;
           xf = 0;
           yf = image_product_.rows - static_cast<int>(static_cast<double>(image_product_.rows)* q);
           break;
-        case ShiftDirection::RIGHT_TO_LEFT:
+        case ec::MetadataBandShiftDirection::RIGHT_TO_LEFT:
           
           x0 = (image_product_.cols-1);
           y0 = image_product_.rows-1;
           xf = (image_product_.cols-1);
           yf = image_product_.rows -1 - static_cast<int>(static_cast<double>(image_product_.rows)* q);
           break;
-        case ShiftDirection::TOP_TO_DOWN:
+        case ec::MetadataBandShiftDirection::TOP_TO_DOWN:
           x0 = 0;
           y0 = 0;
           xf = static_cast<int>(static_cast<double>(image_product_.cols) * q);
           yf = 0;
           break;
           break;
-        case ShiftDirection::DOWN_TO_TOP:
+        case ec::MetadataBandShiftDirection::DOWN_TO_TOP:
           x0 = 0;
           y0 = image_product_.rows;
           xf = static_cast<int>(static_cast<double>(image_product_.cols) * q);
@@ -282,20 +281,20 @@ bool VideoStreamMetadataBand::add_mark_point_()
   int x,y;
   switch(shift_direction_)
   {
-    case ShiftDirection::TOP_TO_DOWN:
-    case ShiftDirection::LEFT_TO_RIGHT:
+    case ec::MetadataBandShiftDirection::TOP_TO_DOWN:
+    case ec::MetadataBandShiftDirection::LEFT_TO_RIGHT:
       x = 5;
       y = 5;
       break;
-    case ShiftDirection::RIGHT_TO_LEFT:
+    case ec::MetadataBandShiftDirection::RIGHT_TO_LEFT:
       x = image_product_.cols-5;
       y = 5;
       break;
-    case ShiftDirection::DOWN_TO_TOP:
+    case ec::MetadataBandShiftDirection::DOWN_TO_TOP:
       x = 5;
       y = image_product_.rows-5;
       break;
-    case ShiftDirection::STATIC:
+    case ec::MetadataBandShiftDirection::STATIC:
     default:
       x = image_product_.cols / 2;
       y = image_product_.rows / 2;
@@ -352,8 +351,8 @@ static double _sin_gen_offset_period = 2000.0; // one second = one cycle
 
     switch (mode_)
     {
-      case Mode::SIN_AUTOGEN:
-      case Mode::SIN_AUTOGEN_THREADED:
+      case ec::MetadataBandMode::SIN_AUTOGEN:
+      case ec::MetadataBandMode::SIN_AUTOGEN_THREADED:
         _sin_gen_offset+=dif;
         CLOG_DEBUG(7,"tick : diff = " << dif << " singenoffset : " << _sin_gen_offset);
 
@@ -364,7 +363,7 @@ static double _sin_gen_offset_period = 2000.0; // one second = one cycle
         value_ = ((sin(2*M_PI * (_sin_gen_offset / _sin_gen_offset_period)) + 1.0)/2.0) / 2.0;
         //CLOG_DEBUG(9," refresh-image : value = " << value_);
         break;
-      case Mode::EXTERNAL_VALUE:
+      case ec::MetadataBandMode::EXTERNAL_VALUE:
       default:
         //we do nothing
         value_;
@@ -417,18 +416,5 @@ static double _sin_gen_offset_period = 2000.0; // one second = one cycle
     return true;
   }
 
-}//eons
-}
 
-std::ostream& operator<<(std::ostream& o,coyot3::wrappers::VideoStreamMetadataBand::Format f)
-{
-  return o << coyot3::wrappers::VideoStreamMetadataBand::FormatToString(f);
-}
-std::ostream& operator<<(std::ostream& o,coyot3::wrappers::VideoStreamMetadataBand::Mode f)
-{
-  return o << coyot3::wrappers::VideoStreamMetadataBand::ModeToString(f);
-}
-std::ostream& operator<<(std::ostream& o,coyot3::wrappers::VideoStreamMetadataBand::ShiftDirection f)
-{
-  return o << coyot3::wrappers::VideoStreamMetadataBand::ShiftDirectionToString(f);
 }

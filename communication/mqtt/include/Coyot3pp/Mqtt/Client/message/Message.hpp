@@ -8,18 +8,18 @@ namespace coyot3{
 namespace communication{
 namespace mqtt{
 
-  CYT3MACRO_enum_class_declarations(
+  COYOT3PP_ENUM_CLASS_DECLARATIONS(
     MessagePriorityLevel
     ,
-    , LOW = 0
-    , MEDIUM = 1
-    , HIGH = 2
-    , HIGH_WHEN_AVAILABLE = 3
-    , DEFAULT = 10
+    , LOW                 , 0
+    , MEDIUM              , 1
+    , HIGH                , 2
+    , HIGH_WHEN_AVAILABLE , 3
+    , DEFAULT             , 10
   )
 
 
-  CYT3MACRO_model_class_declarations(
+  COYOT3PP_MODEL_CLASS_DECLARATIONS(
     Message
   ,
   , ( 
@@ -44,8 +44,8 @@ namespace mqtt{
     , token         , int                   , 0
 )
 
-  CYT3MACRO_model_class_set_mapped_declarations(Message, id)
-  CYT3MACRO_model_class_set_stack_declarations(Message, )
+  COYOT3PP_MODEL_CLASS_SET_MAPPED_DECLARATIONS(Message, id)
+  COYOT3PP_MODEL_CLASS_SET_STACK_DECLARATIONS(Message, )
   
 
 

@@ -4,7 +4,7 @@
 #include <Coyot3pp/Cor3/ModuleBase.hpp>
 
 
-    CYT3MACRO_model_class_declarations(
+    COYOT3PP_MODEL_CLASS_DECLARATIONS(
       Position
       , 
       , ( virtual std::string to_string() const)
@@ -14,16 +14,17 @@
         , altitude      , double      , 0.0
     )
 
-    CYT3MACRO_model_class_definitions(
+    COYOT3PP_MODEL_CLASS_DEFINITIONS(
       Position
       , 
       , ( virtual std::string to_string() const)
       , ( )
         , latitude      , double      , 0.0
         , longitude     , double      , 0.0
-        , altitude      , double      , 0.0
+        , altitude     , double      , 0.0
     )
-
+    
+    
     std::string Position::to_string() const{
       std::stringstream sstr;
       sstr << "lat=" << latitude() << ";lon=" << longitude() 
@@ -31,7 +32,7 @@
       return sstr.str();
     }
 
-      CYT3MACRO_model_class_serializable_json_declarations(
+      COYOT3PP_MODEL_CLASS_SERIALIZABLE_JSON_DECLARATIONS(
         Position
         ,
         ,
@@ -42,7 +43,7 @@
           , altitude      , "altitude"      ,
       )
 
-      CYT3MACRO_model_class_serializable_json_definitions(
+      COYOT3PP_MODEL_CLASS_SERIALIZABLE_JSON_DEFINITIONS(
         Position
         ,
         ,
@@ -53,7 +54,7 @@
           , altitude      , "altitude"      ,
       )
 
-    CYT3MACRO_model_class_declarations(
+    COYOT3PP_MODEL_CLASS_DECLARATIONS(
       PosOrient
       , Position
       , ( virtual std::string to_string() const)
@@ -61,7 +62,7 @@
       , orientation   , double      , 0.0
     )
     
-    CYT3MACRO_model_class_definitions(
+    COYOT3PP_MODEL_CLASS_DEFINITIONS(
       PosOrient
       , Position
       , ( virtual std::string to_string() const)
@@ -70,7 +71,7 @@
     )
 
 
-    CYT3MACRO_model_class_serializable_json_declarations(
+    COYOT3PP_MODEL_CLASS_SERIALIZABLE_JSON_DECLARATIONS(
       PosOrient
       ,Position
       , 
@@ -79,7 +80,7 @@
         , orientation   , "orientation"   ,
     )
 
-    CYT3MACRO_model_class_serializable_json_definitions(
+    COYOT3PP_MODEL_CLASS_SERIALIZABLE_JSON_DEFINITIONS(
       PosOrient
       ,Position
       , 
@@ -90,17 +91,17 @@
 
 
 
-CYT3MACRO_model_class_set_stack_declarations(PosOrient,)
-CYT3MACRO_model_class_set_stack_definitions(PosOrient,)
+COYOT3PP_MODEL_CLASS_SET_STACK_DECLARATIONS(PosOrient,)
+COYOT3PP_MODEL_CLASS_SET_STACK_DEFINITIONS(PosOrient,)
 
-CYT3MACRO_model_class_set_stack_serializable_json_declarations(PosOrient)
-CYT3MACRO_model_class_set_stack_serializable_json_definitions(PosOrient)
+COYOT3PP_MODEL_CLASS_SET_STACK_SERIALIZABLE_JSON_DECLARATIONS(PosOrient)
+COYOT3PP_MODEL_CLASS_SET_STACK_SERIALIZABLE_JSON_DEFINITIONS(PosOrient)
 
-CYT3MACRO_model_class_set_mapped_declarations(PosOrient,latitude)
-CYT3MACRO_model_class_set_mapped_definitions(PosOrient,latitude)
+COYOT3PP_MODEL_CLASS_SET_MAPPED_DECLARATIONS(PosOrient,latitude)
+COYOT3PP_MODEL_CLASS_SET_MAPPED_DEFINITIONS(PosOrient,latitude)
 
-CYT3MACRO_model_class_set_mapped_serializable_json_declarations(PosOrient,latitude)
-CYT3MACRO_model_class_set_mapped_serializable_json_definitions(PosOrient,latitude)
+COYOT3PP_MODEL_CLASS_SET_MAPPED_SERIALIZABLE_JSON_DECLARATIONS(PosOrient,latitude)
+COYOT3PP_MODEL_CLASS_SET_MAPPED_SERIALIZABLE_JSON_DEFINITIONS(PosOrient,latitude)
 
 
 

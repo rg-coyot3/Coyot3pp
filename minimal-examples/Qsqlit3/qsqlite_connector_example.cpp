@@ -1,6 +1,6 @@
 #include "qsqlite_connector_example.hpp"
 
-  CYT3MACRO_model_class_definitions(
+  COYOT3PP_MODEL_CLASS_DEFINITIONS(
     DatabaseEntityDAO
     , 
     , ( )
@@ -11,7 +11,7 @@
       , metadata            , std::string       , ""
   )
 
-    CYT3MACRO_model_class_serializable_json_definitions(
+    COYOT3PP_MODEL_CLASS_SERIALIZABLE_JSON_DEFINITIONS(
       DatabaseEntityDAO
       , 
       , 
@@ -27,7 +27,7 @@
 
 // service-stop-dao : begin 
 
-  CYT3MACRO_model_class_definitions(
+  COYOT3PP_MODEL_CLASS_DEFINITIONS(
     ServiceStopDAO
     , DatabaseEntityDAO
     , ( )
@@ -37,9 +37,9 @@
       , longitude           , double                       , 0.0
       , altitude            , double                       , 0.0
   )
-    CYT3MACRO_model_class_set_stack_definitions(ServiceStopDAO,)
+    COYOT3PP_MODEL_CLASS_SET_STACK_DEFINITIONS(ServiceStopDAO,)
 
-    CYT3MACRO_model_class_serializable_json_definitions(
+    COYOT3PP_MODEL_CLASS_SERIALIZABLE_JSON_DEFINITIONS(
     ServiceStopDAO
     , DatabaseEntityDAO
     ,
@@ -50,7 +50,7 @@
       , longitude           , "longitude"                         ,
       , altitude            , "altitude"                          ,
     )
-    CYT3MACRO_model_class_set_stack_serializable_json_definitions(ServiceStopDAO)
+    COYOT3PP_MODEL_CLASS_SET_STACK_SERIALIZABLE_JSON_DEFINITIONS(ServiceStopDAO)
 
 
   CYT3MACRO_model_class_serializable_qsqlite_definitions(
